@@ -1,0 +1,347 @@
+﻿@page "/Home"
+@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Net.Http.Json
+@using Domain.Dtos
+@using IoC.Constants
+@using Microsoft.Extensions.Localization
+@using UI.FormEntities
+@using UI.Services
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject NavigationManager NavManager
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject IDialogService DialogService
+
+<NavBar/>
+
+<MudContainer Style="width: 100%">
+    <MudGrid JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Height="100%" Style="width: 100%">
+
+        @if (_isAdmin)
+        {
+        <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+            <MudExpansionPanel Text="@Localization["HomePage_AdminPart_Title"]">
+                <MudItem Style="width: 100%">
+                    <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%" Class="mb-2">
+                        @Localization["HomePage_AdminPart_Title"]
+                    </MudText>
+                    <MudPaper Class="d-flex justify-start flex-grow-1 gap-2" Elevation="0">
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                                   OnClick="manageShipTypes">
+                            @Localization["HomePage_AdminPart_ManageShipTypesButton"]
+                        </MudButton>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                                   OnClick="manageSubscriptions">
+                            @Localization["HomePage_AdminPart_ManageSubscriptionsButton"]
+                        </MudButton>
+                    </MudPaper>
+                </MudItem>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+        }
+        <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+            <MudExpansionPanel Text="@Localization["HomePage_UserPart_ShipPart_Title"]">
+                <MudItem Style="width: 100%">
+                    <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%">@Localization["HomePage_UserPart_ShipPart_Title"]</MudText>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info"
+                                OnClick="createShip" Class="mt-2">
+                        @Localization["HomePage_UserPart_ShipPart_CreateShipButton"]
+                    </MudButton>
+                    <MudPaper Class="d-flex flex-row flex-wrap flex-grow-1 gap-4 ma-2 pa-2" Elevation="0">
+                        @foreach (var ship in _ships)
+                        {
+                            <MudPaper Class="d-flex flex-column flex-grow-1 gap-2 pa-2" MaxWidth="400" Elevation="1"
+                                      @onclick="() => shipDetails(ship)" Style="cursor: pointer">
+                                <MudPaper Class="d-flex justify-start gap-2" Elevation="0">
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                                               OnClick="() => getStatistics(ship)">
+                                        @Localization["HomePage_UserPart_GetStatisticsButton"]
+                                    </MudButton>
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                                               OnClick="() => getBookingsForShip(ship)">
+                                        @Localization["HomePage_UserPart_GetBookingsButton"]
+                                    </MudButton>
+                                </MudPaper>
+                                <MudPaper Class="d-flex flex-row flex-grow-1 gap-2" MaxWidth="400" Elevation="0">
+                                    <MudImage Src="@ship.PhotoUrl" Height="120" Width="120" ObjectFit="ObjectFit.Fill"/>
+                                    <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+                                        <MudText Typo="@Typo.h6">
+                                            @Localization["HomePage_UserPart_ShipNameText"]:
+                                            @ship.DisplayName
+                                        </MudText>
+                                        <MudText Typo="@Typo.subtitle2">
+                                            @Localization["HomePage_UserPart_ShipTypeText"]:
+                                            @ship.ShipTypeName
+                                        </MudText>
+                                        <MudText Typo="@Typo.subtitle2">
+                                            @Localization["HomePage_UserPart_ShipTypeDescriptionText"]:
+                                            @ship.ShipTypeDescription
+                                        </MudText>
+                                    </MudPaper>
+                                </MudPaper>
+                                <MudPaper Class="d-flex justify-start gap-2" MaxWidth="400" Elevation="0">
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning"
+                                               OnClick="() => editShip(ship)">
+                                        @Localization["HomePage_UserPart_EditShipButton"]
+                                    </MudButton>
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                                               OnClick="() => deleteShip(ship)">
+                                        @Localization["HomePage_UserPart_DeleteShipButton"]
+                                    </MudButton>
+                                </MudPaper>
+                            </MudPaper>
+                        }
+                    </MudPaper>
+                </MudItem>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+        <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+            <MudExpansionPanel Text="@Localization["HomePage_UserPart_HarborPart_Title"]">
+                <MudItem Style="width: 100%">
+                    <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%">
+                        @Localization["HomePage_UserPart_HarborPart_Title"]
+                    </MudText>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info" Class="mt-2"
+                               OnClick="createHarbor" Disabled="_currentSubscription.MaxHarborAmount <= _harbors.Count">
+                        @if (_currentSubscription.MaxHarborAmount <= _harbors.Count)
+                        {
+                            @string.Format(Localization["HomePage_UserPart_HarborPart_CreateButton_Disabled"], 
+                                _currentSubscription.MaxHarborAmount,
+                                _harbors.Count)
+                        }
+                        else
+                        {
+                            @Localization["HomePage_UserPart_HarborPart_CreateButton_Enable"]
+                        }
+                    </MudButton>
+                    <MudPaper Class="d-flex flex-row flex-wrap gap-4 ma-2 pa-2" Elevation="0">
+                        @foreach (var harbor in _harbors)
+                        {
+                            <MudPaper Class="d-flex flex-column flex-grow-1 gap-2 pa-2" Elevation="1"
+                                      @onclick="() => harborDetails(harbor)" Style="cursor: pointer">
+                                <MudPaper Class="d-flex flex-row gap-1" MaxHeight="180" Elevation="0">
+                                    <MudPaper Class="d-flex flex-column align-content-center gap-1" 
+                                              MaxHeight="180" MaxWidth="80" Elevation="0">
+                                        @for (int i = 0; i < harbor.Photos.Count && i < 3; i++)
+                                        {
+                                            <MudImage Src="@harbor.Photos[i]" Height="50" Width="50" ObjectFit="ObjectFit.Fill"/>
+                                        }
+                                    </MudPaper>
+                                    <MudPaper Class="d-flex flex-column gap-2" Style="width: 100%" Elevation="0">
+                                        <MudPaper Class="d-flex justify-space-between gap-2" Elevation="0">
+                                            <MudText Typo="@Typo.h5">@harbor.DisplayName</MudText>
+                                            <MudPaper Class="d-flex flex-column align-center gap-1" Elevation="0">
+                                                <MudRating ReadOnly="true" SelectedValue="@((int)(harbor.AverageRate))"/>
+                                                <MudText Typo="@Typo.subtitle2">
+                                                    @Localization["HomePage_UserPart_HarborPart_ReviewAmountText"]:
+                                                    @harbor.ReviewsAmount
+                                                </MudText>
+                                            </MudPaper>
+                                        </MudPaper>
+                                        <MudText Typo="@Typo.subtitle2">@harbor.Description</MudText>
+                                        <MudText Typo="@Typo.subtitle2">
+                                            @Localization["HomePage_UserPart_HarborPart_SupportEmailText"]:
+                                            @harbor.SupportEmail
+                                        </MudText>
+                                        <MudText Typo="@Typo.subtitle2">
+                                            @Localization["HomePage_UserPart_HarborPart_SupportPhoneNumberText"]:
+                                            @harbor.SupportPhoneNumber
+                                        </MudText>
+                                    </MudPaper>
+                                </MudPaper>
+                                <MudPaper Class="d-flex justify-start gap-2" MaxWidth="400" Elevation="0">
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning"
+                                               OnClick="() => editHarbor(harbor)">
+                                        @Localization["HomePage_UserPart_HarborPart_EditButton"]
+                                    </MudButton>
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                                               OnClick="() => deleteHarbor(harbor)">
+                                        @Localization["HomePage_UserPart_HarborPart_DeleteButton"]
+                                    </MudButton>
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                                               OnClick="() => getBookingsForHarbor(harbor)">
+                                        @Localization["HomePage_UserPart_HarborPart_GetBookingsButton"]
+                                    </MudButton>
+                                </MudPaper>
+                            </MudPaper>
+                        }
+                    </MudPaper>
+                </MudItem>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+    private bool _isAdmin = false;
+    private string _username = "";
+    private List<ShipPreviewDataDto> _ships { get; set; } = new List<ShipPreviewDataDto>();
+    private List<HarborPreviewDataDto> _harbors { get; set; } = new List<HarborPreviewDataDto>();
+    private SubscriptionDto _currentSubscription { get; set; } = new SubscriptionDto();
+
+    private void manageShipTypes() => NavManager.NavigateTo(PageNavigateConstants.ShipTypesManagePage);
+
+    private void manageSubscriptions() => NavManager.NavigateTo(PageNavigateConstants.SubscriptionsManagePage);
+
+    private void getStatistics(ShipPreviewDataDto ship) => NavManager.NavigateTo(string.Format(
+        "{0}/{1}",
+        PageNavigateConstants.StatisticsPage,
+        ship.Id));
+
+    private void getBookingsForShip(ShipPreviewDataDto ship) => NavManager.NavigateTo(
+        string.Format("{0}/{1}/{2}", 
+            PageNavigateConstants.BookingHistoryPage,
+            (int)BookingHistoryPageType.BookingsForShip,
+            ship.Id));
+    
+    private void getBookingsForHarbor(HarborPreviewDataDto harbor) => NavManager.NavigateTo(
+        string.Format("{0}/{1}/{2}", 
+            PageNavigateConstants.BookingHistoryPage,
+            (int)BookingHistoryPageType.BookingsForHarbor,
+            harbor.Id));
+
+    private void shipDetails(ShipPreviewDataDto ship) => NavManager.NavigateTo((string.Format("{0}/{1}",
+        PageNavigateConstants.ShipPage,
+        ship.Id)));
+    
+    private void harborDetails(HarborPreviewDataDto harbor) => NavManager.NavigateTo((string.Format("{0}/{1}",
+        PageNavigateConstants.HarborPage,
+        harbor.Id)));
+
+    private void createShip() => NavManager.NavigateTo(PageNavigateConstants.ShipFormPage);
+
+    private void createHarbor() => NavManager.NavigateTo(PageNavigateConstants.HarborFormPage);
+
+    private void editShip(ShipPreviewDataDto ship) => NavManager.NavigateTo((string.Format("{0}/{1}",
+        PageNavigateConstants.ShipPage,
+        ship.Id)));
+
+    private async Task deleteShip(ShipPreviewDataDto ship)
+    {
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+        
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+            Localization["HomePage_ShipPart_DeleteDialog_Title"],
+            parameters, options)).Result;
+
+        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        {
+            var response = await Client.DeleteAsync(string.Format(
+                "{0}?id={1}",
+                ApiRoutes.Ship.Controller,
+                ship.Id));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["HomePage_ShipPart_ErrorDialog_Title"],
+                    parameters, options)).Result;
+            }
+
+            response = await Client.GetAsync(ApiRoutes.Ship.Controller);
+
+            _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+
+            StateHasChanged();
+        }
+    }
+
+    private void editHarbor(HarborPreviewDataDto harbor) => NavManager.NavigateTo((string.Format("{0}/{1}",
+        PageNavigateConstants.HarborPage,
+        harbor.Id)));
+
+    private async Task deleteHarbor(HarborPreviewDataDto harbor)
+    {
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+        
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+            Localization["HomePage_HarborPart_DeleteDialog_Title"],
+            parameters, options)).Result;
+
+        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        {
+            var response = await Client.DeleteAsync(string.Format(
+                "{0}?id={1}",
+                ApiRoutes.Harbor.Controller,
+                harbor.Id));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["HomePage_HarborPart_ErrorDialog_Title"],
+                    parameters, options)).Result;
+            }
+
+            response = await Client.GetAsync(ApiRoutes.Harbor.OwnHarbors + "?username=" + _username);
+
+            _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        if (string.IsNullOrEmpty(token))
+        {
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+        
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+        if (userDto == null)
+        {
+            await LocalStorageService.RemoveAsync("token");
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+
+        _isAdmin = userDto.IsAdmin;
+        _username = userDto.Username;
+
+        response = await Client.GetAsync(ApiRoutes.Ship.Controller);
+
+        _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+
+        response = await Client.GetAsync(ApiRoutes.Harbor.OwnHarbors + "?username=" + _username);
+
+        _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+        
+        response = await Client.GetAsync(ApiRoutes.Subscription.CurrentSubscription + "?username=" + _username);
+
+        _currentSubscription = await response.Content.ReadFromJsonAsync<SubscriptionDto>();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+}

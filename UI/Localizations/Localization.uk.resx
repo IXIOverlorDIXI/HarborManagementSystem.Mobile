@@ -1,0 +1,2173 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AuthorizationPage_LoginTab_LoginErrorAlert" xml:space="preserve">
+        <value>Помилка авторизації</value>
+    </data>
+    <data name="LocalizationsComponent_MudSelect_Label" xml:space="preserve">
+        <value>Мова</value>
+    </data>
+    <data name="NavBarComponent_Authorization" xml:space="preserve">
+        <value>Увійти | Зареєструватись</value>
+    </data>
+    <data name="NavBarComponent_Home" xml:space="preserve">
+        <value>Домашня сторінка</value>
+    </data>
+    <data name="NavBarComponent_Logout" xml:space="preserve">
+        <value>Вийти</value>
+    </data>
+    <data name="NavBarComponent_MainPage" xml:space="preserve">
+        <value>Головна сторінка</value>
+    </data>
+    <data name="NavBarComponent_Map" xml:space="preserve">
+        <value>Мапа</value>
+    </data>
+    <data name="NavBarComponent_Profile" xml:space="preserve">
+        <value>Профіль</value>
+    </data>
+    <data name="NavBarComponent_SubscriptionPage" xml:space="preserve">
+        <value>Підписка</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginSuccessAlert" xml:space="preserve">
+        <value>Успішна авторизація</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterErrorAlert" xml:space="preserve">
+        <value>Помилка реєстрації</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterSuccessAlert" xml:space="preserve">
+        <value>Успішна реєстрація</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_InvalidEmailFormat" xml:space="preserve">
+        <value>Невірний формат пошти</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_InvalidPasswordMaximalLength" xml:space="preserve">
+        <value>Пароль має бути коротшим за {0} символів</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_InvalidPasswordMinimalLength" xml:space="preserve">
+        <value>Пароль має бути довшим за {0} символів</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_RequiredEmail" xml:space="preserve">
+        <value>Пошта є обов'зковою</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_RequiredPassword" xml:space="preserve">
+        <value>Пароль є обов'зкововим</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginButton" xml:space="preserve">
+        <value>Увійти</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterButton" xml:space="preserve">
+        <value>Зареєструватись</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_ConfirmPasswordHelperText" xml:space="preserve">
+        <value>Повторіть пароль</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_ConfirmPasswordLabel" xml:space="preserve">
+        <value>Підтвердження паролю</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Ім'я для відображення можна буде змінити пізніше</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_DisplayNameLabel" xml:space="preserve">
+        <value>Ім'я для відображення</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_EmailHelperText" xml:space="preserve">
+        <value>Пошту можна бути змінити пізніше</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_EmailLabel" xml:space="preserve">
+        <value>Пошта</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_PasswordHelperText" xml:space="preserve">
+        <value>Оберіть сильний пароль</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_PasswordLabel" xml:space="preserve">
+        <value>Пароль</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_UsernameHelperText" xml:space="preserve">
+        <value>Ім'я користувача не можна буде змінити пізніше</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_UsernameLabel" xml:space="preserve">
+        <value>Ім'я користувача</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_EmailLabel" xml:space="preserve">
+        <value>Пошта</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_EmailHelperText" xml:space="preserve">
+        <value>Введіть пошту</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_PasswordHelperText" xml:space="preserve">
+        <value>Введіть пароль</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_PasswordLabel" xml:space="preserve">
+        <value>Пароль</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_EqualPasswordConfirm" xml:space="preserve">
+        <value>Паролі не співпадають</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidDisplayNameMaximalLength" xml:space="preserve">
+        <value>Ім'я для відображення має бути більшим за {0} символів</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidDisplayNameMinimalLength" xml:space="preserve">
+        <value>Ім'я для відображення має бути коротшим за {0} символів</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidEmailFormat" xml:space="preserve">
+        <value>Невірний формат пошти</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidPasswordMaximalLength" xml:space="preserve">
+        <value>Пароль має бути більшим за {0} символів</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidPasswordMinimalLength" xml:space="preserve">
+        <value>Пароль має бути коротшим за {0} символів</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidUsernameMaximalLength" xml:space="preserve">
+        <value>Ім'я користувача має бути більшим за {0} символів</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidUsernameMinimalLength" xml:space="preserve">
+        <value>Ім'я користувача має бути коротшим за {0} символів</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Ім'я для відображення є обов'зковим</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredEmail" xml:space="preserve">
+        <value>Пошта є обов'зковою</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredPassword" xml:space="preserve">
+        <value>Пароль є обов'зковим</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredPasswordConfirm" xml:space="preserve">
+        <value>Підтвердження паролю є обов'зковим</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredUsername" xml:space="preserve">
+        <value>Ім'я користувача є обов'зковим</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_TabTitle" xml:space="preserve">
+        <value>Авторизація</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_TabTitle" xml:space="preserve">
+        <value>Реєстрація</value>
+    </data>
+    <data name="DeleteComponent_DialogCancelButton" xml:space="preserve">
+        <value>Відмінити</value>
+    </data>
+    <data name="DeleteComponent_DialogConfirmButton" xml:space="preserve">
+        <value>Підтвердити</value>
+    </data>
+    <data name="DeleteComponent_DialogMessage" xml:space="preserve">
+        <value>Ви впевнені?</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_InvalidPasswordMaximalLength" xml:space="preserve">
+        <value>Пароль має бути більшим за {0} символів</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_InvalidPasswordMinimalLength" xml:space="preserve">
+        <value>Пароль має бути коротшим за {0} символів</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_RequiredPassword" xml:space="preserve">
+        <value>Пароль є обов'зковим</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_RequiredPasswordConfirm" xml:space="preserve">
+        <value>Підтвердження паролю є обов'зковим</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidDisplayNameMaximalLength" xml:space="preserve">
+        <value>Ім'я для відображення має бути більшим за {0} символів</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidDisplayNameMinimalLength" xml:space="preserve">
+        <value>Ім'я для відображення має бути коротшим за {0} символів</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidEmailFormat" xml:space="preserve">
+        <value>Невірний формат пошти</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidPhoneNumberFormat" xml:space="preserve">
+        <value>Невірний формат номера телефону</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidUsernameMaximalLength" xml:space="preserve">
+        <value>Ім'я користувача має бути більшим за {0} символів</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidUsernameMinimalLength" xml:space="preserve">
+        <value>Ім'я користувача має бути коротшим за {0} символів</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Ім'я для відображення є обов'зковим</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_RequiredUsername" xml:space="preserve">
+        <value>Ім'я користувача є обов'зковим</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_RequiredEmail" xml:space="preserve">
+        <value>Пошта є обов'зковою</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_RequiredPhoneNumber" xml:space="preserve">
+        <value>Номер телефону є обов'язковим</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordButton" xml:space="preserve">
+        <value>Змінити пароль</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordErrorAlert" xml:space="preserve">
+        <value>Помилка зміни паролю</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_EqualPasswordConfirm" xml:space="preserve">
+        <value>Паролі не співпадають</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordSuccessAlert" xml:space="preserve">
+        <value>Пароль успішно змінено</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ConfirmPasswordHelperText" xml:space="preserve">
+        <value>Повторіть пароль</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ConfirmPasswordLabel" xml:space="preserve">
+        <value>Підтвердження паролю</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_PasswordHelperText" xml:space="preserve">
+        <value>Введіть новий пароль</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_PasswordLabel" xml:space="preserve">
+        <value>Новий пароль</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_Title" xml:space="preserve">
+        <value>Змінити пароль</value>
+    </data>
+    <data name="ProfilePage_ChangeUserPhotoTab_Title" xml:space="preserve">
+        <value>Фото користувача</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Змінити ім'я для відображення</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_DisplayNameLabel" xml:space="preserve">
+        <value>Ім'я для відображення</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_EmailHelperText" xml:space="preserve">
+        <value>Змінити пошту</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_EmailLabel" xml:space="preserve">
+        <value>Пошта</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_PhoneNumberHelperText" xml:space="preserve">
+        <value>Змінити номер телефону</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_PhoneNumberLabel" xml:space="preserve">
+        <value>Номер телефону</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileSaveButton" xml:space="preserve">
+        <value>Зберегти профіль</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileSaveErrorAlert" xml:space="preserve">
+        <value>Помилка збереження профілю</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileSaveSuccessAlert" xml:space="preserve">
+        <value>Профіль збереженно успішно</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_Title" xml:space="preserve">
+        <value>Профіль</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_UsernameHelperText" xml:space="preserve">
+        <value>Змінити ім'я користувача</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_UsernameLabel" xml:space="preserve">
+        <value>Ім'я користувача</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_CurrentUserPhotoTitle" xml:space="preserve">
+        <value>Поточне фото користувача</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_LoadUserPhotoButton" xml:space="preserve">
+        <value>Обрати нове фото</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_NewUserPhotoTitle" xml:space="preserve">
+        <value>Нове зображення користувача</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UpdateUserPhotoButton" xml:space="preserve">
+        <value>Оновити поточне фото</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoUpdateErrorAlert" xml:space="preserve">
+        <value>Помилка оновлення поточного фото</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoUpdateSuccessAlert" xml:space="preserve">
+        <value>Поточне фото успішно оновлено</value>
+    </data>
+    <data name="IndexPage_Body" xml:space="preserve">
+        <value>Ласкаво просимо до нашого інноваційний додаток для букінгу бухт та послуг зберігання яхт! Ми пропонуємо власникам кораблів та яхт унікальну можливість орендувати бухти для безпечного зберігання своїх суден. Більше того, ми надаємо можливість додавання власних пристаней та додаткових послуг, щоб власники суден могли повністю настроїти свій досвід.
+
+З нашим додатком власники яхт мають можливість переглядати поточні умови зберігання своїх яхт. Ми пропонуємо зручний інтерфейс, який забезпечує доступ до інформації про погодні умови, стан яхти та інші важливі дані. Таким чином, ви можете бути впевнені в безпеці та хорошому стані свого судна у будь-який час.
+
+Наш сервіс також надає механізм рейтингу та відгуків, який допомагає власникам яхт вибирати найбільш підходящі бухти та послуги. Ми віримо, що зворотний зв'язок від наших користувачів є важливою складовою успішного досвіду використання програми. Ми прагнемо постійного поліпшення та надання найкращого досвіду.
+
+Ми пишаємося тим, що використовуємо передові технології, щоб запропонувати вам найкращий досвід використання нашого додатка. Ми прагнемо простоти та зручності в навігації, а також забезпечуємо надійність та безпеку вашої інформації. Ваша довіра та задоволення є нашими головними пріоритетами.
+
+Приєднуйтесь до нашого сервісу прямо зараз і відкрийте для себе новий рівень зручності та безпеки у букінгу бухт та зберіганні яхт. Ми завжди готові допомогти вам втілити ваші морські пригоди у реальність!</value>
+    </data>
+    <data name="IndexPage_Title" xml:space="preserve">
+        <value>Система управління човнами та бухтами</value>
+    </data>
+    <data name="IndexPage_Body5" xml:space="preserve">
+        <value>Приєднуйтесь до нашого сервісу прямо зараз і відкрийте для себе новий рівень зручності та безпеки у букінгу бухт та зберіганні яхт. Ми завжди готові допомогти вам втілити ваші морські пригоди у реальність!</value>
+    </data>
+    <data name="IndexPage_Body4" xml:space="preserve">
+        <value>Ми пишаємося тим, що використовуємо передові технології, щоб запропонувати вам найкращий досвід використання нашого додатка. Ми прагнемо простоти та зручності в навігації, а також забезпечуємо надійність та безпеку вашої інформації. Ваша довіра та задоволення є нашими головними пріоритетами.</value>
+    </data>
+    <data name="IndexPage_Body3" xml:space="preserve">
+        <value>Наш сервіс також надає механізм рейтингу та відгуків, який допомагає власникам яхт вибирати найбільш підходящі бухти та послуги. Ми віримо, що зворотний зв'язок від наших користувачів є важливою складовою успішного досвіду використання програми. Ми прагнемо постійного поліпшення та надання найкращого досвіду.</value>
+    </data>
+    <data name="IndexPage_Body2" xml:space="preserve">
+        <value>З нашим додатком власники яхт мають можливість переглядати поточні умови зберігання своїх яхт. Ми пропонуємо зручний інтерфейс, який забезпечує доступ до інформації про погодні умови, стан яхти та інші важливі дані. Таким чином, ви можете бути впевнені в безпеці та хорошому стані свого судна у будь-який час.</value>
+    </data>
+    <data name="IndexPage_Body1" xml:space="preserve">
+        <value>Ласкаво просимо до нашого інноваційний додаток для букінгу бухт та послуг зберігання яхт! Ми пропонуємо власникам кораблів та яхт унікальну можливість орендувати бухти для безпечного зберігання своїх суден. Більше того, ми надаємо можливість додавання власних пристаней та додаткових послуг, щоб власники суден могли повністю настроїти свій досвід.</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_NewUserPhotoSizeError" xml:space="preserve">
+        <value>Розмір файлу більший за {0} байт</value>
+    </data>
+    <data name="SubscriptionPage_MaxHarborAmountText" xml:space="preserve">
+        <value>Максимальна кількість причалів</value>
+    </data>
+    <data name="SubscriptionPage_TaxOnBookingText" xml:space="preserve">
+        <value>Податок на аренду</value>
+    </data>
+    <data name="SubscriptionPage_TaxOnServicesText" xml:space="preserve">
+        <value>Податок на додаткові сервіси</value>
+    </data>
+    <data name="SubscriptionPage_Title" xml:space="preserve">
+        <value>Список підписок</value>
+    </data>
+    <data name="SubscriptionPage_UpdateSubscriptionButton" xml:space="preserve">
+        <value>Змінити підписку</value>
+    </data>
+    <data name="SubscriptionPage_ChangeSubscriptionCostText" xml:space="preserve">
+        <value>Коштовність зміни підписки</value>
+    </data>
+    <data name="SubscriptionPage_ChangeSubscriptionDialog_CancelButton" xml:space="preserve">
+        <value>Відмовити</value>
+    </data>
+    <data name="SubscriptionPage_ChangeSubscriptionDialog_SubmitButton" xml:space="preserve">
+        <value>Підтвердити</value>
+    </data>
+    <data name="SubscriptionPage_ChangeSubscriptionDialog_Title" xml:space="preserve">
+        <value>Підтвердження про зміну підписки</value>
+    </data>
+    <data name="NavBarComponent_PaymentHistory" xml:space="preserve">
+        <value>Історія грошових витрат</value>
+    </data>
+    <data name="PaymentHistoryPage_SubscriptionChecksTab_BankTransactionIdText" xml:space="preserve">
+        <value>ID банківської транзакції</value>
+    </data>
+    <data name="PaymentHistoryPage_SubscriptionChecksTab_EmptyListText" xml:space="preserve">
+        <value>Чеків про зміну підписки досі немає</value>
+    </data>
+    <data name="PaymentHistoryPage_SubscriptionChecksTab_Title" xml:space="preserve">
+        <value>Чеки про зміну підписки</value>
+    </data>
+    <data name="PaymentHistoryPage_SubscriptionChecksTab_TotalCostText" xml:space="preserve">
+        <value>Сума</value>
+    </data>
+    <data name="PaymentHistoryPage_BookingChecksTab_BankTransactionIdText" xml:space="preserve">
+        <value>ID банківської транзакції</value>
+    </data>
+    <data name="PaymentHistoryPage_BookingChecksTab_TotalCostText" xml:space="preserve">
+        <value>Сума</value>
+    </data>
+    <data name="PaymentHistoryPage_BookingChecksTab_EmptyListText" xml:space="preserve">
+        <value>Чеків про аренду досі немає</value>
+    </data>
+    <data name="PaymentHistoryPage_BookingChecksTab_Title" xml:space="preserve">
+        <value>Чеки про аренду</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionPriceText" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="HomePage_AdminPart_ManageShipTypesButton" xml:space="preserve">
+        <value>Управління типами човнів</value>
+    </data>
+    <data name="HomePage_AdminPart_ManageSubscriptionsButton" xml:space="preserve">
+        <value>Управління підписками</value>
+    </data>
+    <data name="HomePage_AdminPart_Title" xml:space="preserve">
+        <value>Адмін</value>
+    </data>
+    <data name="HomePage_UserPart_ShipTypeText" xml:space="preserve">
+        <value>Тип судна</value>
+    </data>
+    <data name="HomePage_UserPart_ShipTypeDescriptionText" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="HomePage_UserPart_ShipPart_Title" xml:space="preserve">
+        <value>Кораблі</value>
+    </data>
+    <data name="HomePage_UserPart_ShipNameText" xml:space="preserve">
+        <value>Назва човна</value>
+    </data>
+    <data name="HomePage_UserPart_GetStatisticsButton" xml:space="preserve">
+        <value>Статистика збереження</value>
+    </data>
+    <data name="HomePage_UserPart_GetBookingsButton" xml:space="preserve">
+        <value>Історія бронювання</value>
+    </data>
+    <data name="HomePage_UserPart_EditShipButton" xml:space="preserve">
+        <value>Змінити</value>
+    </data>
+    <data name="HomePage_UserPart_DeleteShipButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithmLabel" xml:space="preserve">
+        <value>Алгоритм интерполяції</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithm_PeriodicText" xml:space="preserve">
+        <value>Періодичний</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithm_NaturalSplineText" xml:space="preserve">
+        <value>Природний сплайн</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithm_EndSlopeText" xml:space="preserve">
+        <value>Кінцевий нахил</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithm_StraightText" xml:space="preserve">
+        <value>Прямий</value>
+    </data>
+    <data name="LineChart_SwitchLabel" xml:space="preserve">
+        <value>Змінити режим діаграми</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня задня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична задня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна задня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна задня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Задня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_EmptyData" xml:space="preserve">
+        <value>Немає даних</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня передня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична передня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна передня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна передня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Передня дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня висота голови над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична висота голови над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна висота голови над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна висота голови над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Висота голови над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня висота хвоста над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична висота хвоста над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна висота хвоста над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна висота хвоста над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Висота хвоста над водою</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня ліва дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична ліва дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна ліва дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна ліва дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Ліва дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня права дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична права дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна права дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна права дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Права дистанція</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середній кут нахилу</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одиничний кут нахилу</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальний кут нахилу</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальний кут нахилу</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Кут нахилу</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середній кут повороту</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одиничний кут повороту</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальний кут повороту</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальний кут повороту</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Кут повороту</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середній кут крену</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одиничний кут крену</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальний кут крену</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальний кут крену</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Кут крену</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_Title" xml:space="preserve">
+        <value>Виміри відносного положення</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalConditionComponent_EmptyData" xml:space="preserve">
+        <value>Немає даних</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalConditionEmptyData" xml:space="preserve">
+        <value>Немає даних</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_Title" xml:space="preserve">
+        <value>Умови довколишньої середи</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середній атмосферний тиск</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одиничний атмосферний тиск</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальний атмосферний тиск</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальний атмосферний тиск</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Атмосферний тиск</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня температура</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична температура</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна температура</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна температура</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Температура</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_ShipRelativeWindDirectionChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одиничний напрям вітру</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_ShipRelativeWindDirectionChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Напрям вітру</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня сила хвиль</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична сила хвиль</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна сила хвиль</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна сила хвиль</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Сила хвиль</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Сила вітру</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна сила вітру</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна сила вітру</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична сила вітру</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня сила вітру</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalConditionComponent_EmptyData" xml:space="preserve">
+        <value>Немає даних</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_Title" xml:space="preserve">
+        <value>Умови довколишньої середи зберігання</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня забрудненість повітря</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична забрудненість повітря</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна забрудненість повітря</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна забрудненість повітря</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Забрудненість повітря</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середній рівень радіації</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одиничний рівень радіації</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальний рівень радіації</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальний рівень радіації</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Рівень радіації</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня температура корабля</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична температура корабля</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна температура корабля</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна температура корабля</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Температура корабля</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Середня зубрудненість води</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Одинична зубрудненість води</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Максимальна зубрудненість води</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Мінімальна зубрудненість води</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Зубрудненість води</value>
+    </data>
+    <data name="ErrorComponent_DialogSubmitButton" xml:space="preserve">
+        <value>Зрозуміло</value>
+    </data>
+    <data name="ErrorComponent_DialogMessage" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_InvalidDescriptionMaximalLength" xml:space="preserve">
+        <value>Опис має бути більшим за {0} символів</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_InvalidDescriptionMinimalLength" xml:space="preserve">
+        <value>Опис користувача має бути коротшим за {0} символів</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_InvalidTypeNameMinimalLength" xml:space="preserve">
+        <value>Назва типу має бути коротшим за {0} символів</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_InvalidTypeNameMaximalLength" xml:space="preserve">
+        <value>Назва типу має бути більшим за {0} символів</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_RequiredTypeName" xml:space="preserve">
+        <value>Назва типу є обов'язковою</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeCreateButton" xml:space="preserve">
+        <value>Створити</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeDescriptionHelperText" xml:space="preserve">
+        <value>Введить опис типу</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeDescriptionLabel" xml:space="preserve">
+        <value>Опис типу</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeErrorAlert" xml:space="preserve">
+        <value>Помилка створення типу корабля</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeNameHelperText" xml:space="preserve">
+        <value>Введить назву типу</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeNameLabel" xml:space="preserve">
+        <value>Назва типу</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeSuccessAlert" xml:space="preserve">
+        <value>Тип корабля створено успішно</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_Title" xml:space="preserve">
+        <value>Створення типу корабля</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeDescriptionHelperText" xml:space="preserve">
+        <value>Відредагувати опис типу</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeDescriptionLabel" xml:space="preserve">
+        <value>Опис типу</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeEditButton" xml:space="preserve">
+        <value>Редагувати</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeErrorAlert" xml:space="preserve">
+        <value>Помилка редагування типу корабля</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeNameHelperText" xml:space="preserve">
+        <value>Відредагувати тип корабля</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeNameLabel" xml:space="preserve">
+        <value>Назва типу</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeSuccessAlert" xml:space="preserve">
+        <value>Тип корабля успішно змінено</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_Title" xml:space="preserve">
+        <value>Редагування типу корабля</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_DeleteButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_EditButton" xml:space="preserve">
+        <value>Відредагувати</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_Title" xml:space="preserve">
+        <value>Типи кораблів</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_TypeName" xml:space="preserve">
+        <value>Назва типу</value>
+    </data>
+    <data name="ShipTypesManagePage_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="ShipTypesManagePage_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidDescriptionMaximalLength" xml:space="preserve">
+        <value>Опис має бути більшим за {0} символів</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidDescriptionMinimalLength" xml:space="preserve">
+        <value>Опис має бути меншим за {0} символів</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidDisplayNameMaximalLength" xml:space="preserve">
+        <value>Назва має бути більшою за {0} символів</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidDisplayNameMinimalLength" xml:space="preserve">
+        <value>Назва має бути меньшою за {0} символів</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMinimalMaxHarborAmount" xml:space="preserve">
+        <value>Максимальна кількість бухт має бути бульше за 0</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMinimalPrice" xml:space="preserve">
+        <value>Ціна має бути бульше за 0</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMinimalTaxOnBooking" xml:space="preserve">
+        <value>Податок на бронювання має бути бульше за 0</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMinimaTaxOnServices" xml:space="preserve">
+        <value>Податок на додаткові сервіси має бути бульше за 0</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredDescription" xml:space="preserve">
+        <value>Опис є обов'язковим</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Назва є обов'язковою</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredMaxHarborAmount" xml:space="preserve">
+        <value>Максимальна кількість бухт є обов'язковою</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredPrice" xml:space="preserve">
+        <value>Ціна є обов'язковою</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredTaxOnBooking" xml:space="preserve">
+        <value>Податок на бронювання є обов'язковим</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredTaxOnServices" xml:space="preserve">
+        <value>Податок на додаткові сервіси є обов'язковим</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_DescriptionHelperText" xml:space="preserve">
+        <value>Введіть опис</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_DescriptionLabel" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Введіть назву підписки</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_DisplayNameLabel" xml:space="preserve">
+        <value>Назва підписки</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_MaxHarborAmountHelperText" xml:space="preserve">
+        <value>Установіть максимальну кількість бухт</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_MaxHarborAmountLabel" xml:space="preserve">
+        <value>Максимальна кількість бухт</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_PriceHelperText" xml:space="preserve">
+        <value>Установіть ціну</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_PriceLabel" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_SubscriptionCreateButton" xml:space="preserve">
+        <value>Створити</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_SubscriptionErrorAlert" xml:space="preserve">
+        <value>Помилка створення підписки</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_SubscriptionSuccessAlert" xml:space="preserve">
+        <value>Підписка створенна успішно</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_TaxOnBookingHelperText" xml:space="preserve">
+        <value>Установіть податок на буккинг</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_TaxOnBookingLabel" xml:space="preserve">
+        <value>Податок на буккинг</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_TaxOnServicesHelperText" xml:space="preserve">
+        <value>Встановіть податок на додаткові послуги</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_TaxOnServicesLabel" xml:space="preserve">
+        <value>Податок на додаткові послуги</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_Title" xml:space="preserve">
+        <value>Створити підписку</value>
+    </data>
+    <data name="SubscriptionsManagePage_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_DescriptionHelperText" xml:space="preserve">
+        <value>Відредагувати підписку</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_DescriptionLabel" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Відредагувати назву підписки</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_DisplayNameLabel" xml:space="preserve">
+        <value>Назва підписки</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_MaxHarborAmountHelperText" xml:space="preserve">
+        <value>Відредагувати максимальну кількість бухт</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_MaxHarborAmountLabel" xml:space="preserve">
+        <value>Максимальна кількість бухт</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_PriceHelperText" xml:space="preserve">
+        <value>Відредагувати ціну</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_PriceLabel" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_SubscriptionCreateButton" xml:space="preserve">
+        <value>Відредагувати</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_SubscriptionErrorAlert" xml:space="preserve">
+        <value>Помилка редагування підписки</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_SubscriptionSuccessAlert" xml:space="preserve">
+        <value>Підписка успішно відредагована</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_TaxOnBookingHelperText" xml:space="preserve">
+        <value>Відредагувати податок на бронювання</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_TaxOnBookingLabel" xml:space="preserve">
+        <value>Податок на бронювання</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_TaxOnServicesHelperText" xml:space="preserve">
+        <value>Відредагувати податок на додаткові послуги</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_TaxOnServicesLabel" xml:space="preserve">
+        <value>Податок на додаткові послуги</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_Title" xml:space="preserve">
+        <value>Відредагувати підписку</value>
+    </data>
+    <data name="SubscriptionsManagePage_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_DeleteButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_EditButton" xml:space="preserve">
+        <value>Відредагувати</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_MaxHarborAmount" xml:space="preserve">
+        <value>Максимальна кількість бухт</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_Price" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_SubscriberAmount" xml:space="preserve">
+        <value>Кількість підписників</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_TaxOnBooking" xml:space="preserve">
+        <value>Податок на бронювання</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_TaxOnServices" xml:space="preserve">
+        <value>Податок на додаткові послуги</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_Title" xml:space="preserve">
+        <value>Усі підписки</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMaximalTaxOnBooking" xml:space="preserve">
+        <value>Податок на бронювання не повинен перевищувати  {0}%</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMaximalTaxOnServices" xml:space="preserve">
+        <value>Податок на додаткові послуги не повинен перевищувати {0}%</value>
+    </data>
+    <data name="BookingHistoryPage_Title_BookingsForBerth" xml:space="preserve">
+        <value>Бронювання для причалу</value>
+    </data>
+    <data name="BookingHistoryPage_Title_BookingsForHarbor" xml:space="preserve">
+        <value>Бронювання для бухти</value>
+    </data>
+    <data name="BookingHistoryPage_Title_BookingsForShip" xml:space="preserve">
+        <value>Бронювання для корабля</value>
+    </data>
+    <data name="BookingHistoryPage_Title_OwnBookings" xml:space="preserve">
+        <value>Власні бронювання</value>
+    </data>
+    <data name="BookingHistoryPage_Title_Undefined" xml:space="preserve">
+        <value>Нерозпізнаний список бронювання</value>
+    </data>
+    <data name="BookingHistoryPage_DeleteButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="BookingHistoryPage_EditButton" xml:space="preserve">
+        <value>Відредагувати</value>
+    </data>
+    <data name="BookingHistoryPage_EmptyBookingsData" xml:space="preserve">
+        <value>Наразі немає даних</value>
+    </data>
+    <data name="BookingHistoryPage_EndDate" xml:space="preserve">
+        <value>Кінцева дата</value>
+    </data>
+    <data name="BookingHistoryPage_PayButton_NotPayed" xml:space="preserve">
+        <value>Cплатити</value>
+    </data>
+    <data name="BookingHistoryPage_PayButton_Payed" xml:space="preserve">
+        <value>Cплачено</value>
+    </data>
+    <data name="BookingHistoryPage_ShipName" xml:space="preserve">
+        <value>Назва човна</value>
+    </data>
+    <data name="BookingHistoryPage_StartDate" xml:space="preserve">
+        <value>Початкова дата</value>
+    </data>
+    <data name="BookingHistoryPage_Services" xml:space="preserve">
+        <value>Додаткові послуги</value>
+    </data>
+    <data name="BookingHistoryPage_Services_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BookingHistoryPage_Services_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BookingHistoryPage_Services_Price" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_BICText" xml:space="preserve">
+        <value>BIC</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_IBANText" xml:space="preserve">
+        <value>IBAN</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_BerthNameText" xml:space="preserve">
+        <value>Назва причалу</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_CancelButton" xml:space="preserve">
+        <value>Відмова</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_EndDateText" xml:space="preserve">
+        <value>Дата кінця</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_HarborNameText" xml:space="preserve">
+        <value>Назва бухти</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Services" xml:space="preserve">
+        <value>Додаткові сервіси</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Services_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Services_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Services_Price" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_StartDateText" xml:space="preserve">
+        <value>Дата початку</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_SubmitButton" xml:space="preserve">
+        <value>Підтвердити</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_TotalCostText" xml:space="preserve">
+        <value>Фінальна вартість бронювання</value>
+    </data>
+    <data name="BookingHistoryPage_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Title" xml:space="preserve">
+        <value>Сплата</value>
+    </data>
+    <data name="BookingHistoryPage_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="HomePage_UserPart_ShipPart_CreateShipButton" xml:space="preserve">
+        <value>Створити новий корабель</value>
+    </data>
+    <data name="NavBarComponent_navigateToBookingHistory" xml:space="preserve">
+        <value>Бронювання</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_DeleteButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_EditButton" xml:space="preserve">
+        <value>Змінити</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_GetBookingsButton" xml:space="preserve">
+        <value>Історія бронювання</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_Title" xml:space="preserve">
+        <value>Бухти</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_ReviewAmountText" xml:space="preserve">
+        <value>Кількість оглядів</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_SupportEmailText" xml:space="preserve">
+        <value>Пошта підтримки</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_SupportPhoneNumberText" xml:space="preserve">
+        <value>Телефоний номер підтримки</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_CreateButton_Enable" xml:space="preserve">
+        <value>Створитити нову бухту</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_CreateButton_Disabled" xml:space="preserve">
+        <value>Створення заблокованно через обмеження пілписки: ліміти - {0} == поточною кількістю - {1}</value>
+    </data>
+    <data name="HomePage_HarborPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="HomePage_ShipPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="HomePage_ShipPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Помил</value>
+    </data>
+    <data name="HomePage_HarborPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="ShipFormPage_ShipTypeValidator_InvalidDisplayNameMaximalLength" xml:space="preserve">
+        <value>Ім'я для відображення має бути більшим за {0} символів</value>
+    </data>
+    <data name="ShipFormPage_ShipTypeValidator_InvalidDisplayNameMinimalLength" xml:space="preserve">
+        <value>Ім'я для відображення має бути коротшим за {0} символів</value>
+    </data>
+    <data name="ShipFormPage_ShipTypeValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Ім'я є обов'язковим</value>
+    </data>
+    <data name="ShipFormPage_ShipTypeValidator_RequiredShipType" xml:space="preserve">
+        <value>Тип корабля є обов'язковим</value>
+    </data>
+    <data name="ShipFormPage_CreateButton" xml:space="preserve">
+        <value>Створити</value>
+    </data>
+    <data name="ShipFormPage_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="ShipFormPage_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="ShipFormPage_ErrorAlert" xml:space="preserve">
+        <value>Помилка створення корабля</value>
+    </data>
+    <data name="ShipFormPage_ShipType_Label" xml:space="preserve">
+        <value>Тип корабля</value>
+    </data>
+    <data name="ShipFormPage_ShipType_Text" xml:space="preserve">
+        <value>Обери тип корабля</value>
+    </data>
+    <data name="ShipFormPage_SuccessAlert" xml:space="preserve">
+        <value>Корабль успішно створенно</value>
+    </data>
+    <data name="ShipFormPage_Title" xml:space="preserve">
+        <value>Створення корабля</value>
+    </data>
+    <data name="ShipFormPage_ToShipPageButton" xml:space="preserve">
+        <value>Перейти до отсаннього створенного кораблю</value>
+    </data>
+    <data name="ShipFormPage_TypeName" xml:space="preserve">
+        <value>Назва типу</value>
+    </data>
+    <data name="ShipPage_ChangeShipPhotoTab_Title" xml:space="preserve">
+        <value>Фото корабля</value>
+    </data>
+    <data name="ShipPage_EditTab_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="ShipPage_EditTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Відредагуйте назву корабля</value>
+    </data>
+    <data name="ShipPage_EditTab_DisplayNameLabel" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipSaveButton" xml:space="preserve">
+        <value>Змінити</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipSaveErrorAlert" xml:space="preserve">
+        <value>Помилка редагування</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipSaveSuccessAlert" xml:space="preserve">
+        <value>Редагування успішне</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipType_Label" xml:space="preserve">
+        <value>Тип корабля</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipType_Text" xml:space="preserve">
+        <value>Змініть тип корабля</value>
+    </data>
+    <data name="ShipPage_EditTab_Title" xml:space="preserve">
+        <value>Редагування корабля</value>
+    </data>
+    <data name="ShipPage_EditTab_TypeName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_CurrentShipPhotoTitle" xml:space="preserve">
+        <value>Поточне фото</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_DeleteShipPhotoButton" xml:space="preserve">
+        <value>Видалити фото</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_LoadShipPhotoButton" xml:space="preserve">
+        <value>Завантажити фото</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_NewShipPhotoSizeError" xml:space="preserve">
+        <value>Розмір фото перевищує {0} байт</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_NewShipPhotoTitle" xml:space="preserve">
+        <value>Нове фото</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_ShipPhotoDeleteErrorAlert" xml:space="preserve">
+        <value>Помилка видалення фото</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_ShipPhotoDeleteSuccessAlert" xml:space="preserve">
+        <value>Фото видалене успішно</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_ShipPhotoUpdateErrorAlert" xml:space="preserve">
+        <value>Помилка оновлення фото</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_ShipPhotoUpdateSuccessAlert" xml:space="preserve">
+        <value>Фото оновлено успішно</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_UpdateShipPhotoButton" xml:space="preserve">
+        <value>Оновити фото</value>
+    </data>
+    <data name="ShipPage_DeleteShipButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="ShipPage_GetBookingsButton" xml:space="preserve">
+        <value>Історія бронювання</value>
+    </data>
+    <data name="ShipPage_UserPart_GetStatisticsButton" xml:space="preserve">
+        <value>Отримати статистику</value>
+    </data>
+    <data name="ShipPage_UserPart_ShipPart_CreateShipButton" xml:space="preserve">
+        <value>Створити новий корабель</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalConditionEmptyData" xml:space="preserve">
+        <value>Немає даних</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoDeleteButton" xml:space="preserve">
+        <value>Видалити фото</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoDeleteErrorAlert" xml:space="preserve">
+        <value>Помилка видалення фото</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoDeleteSuccessAlert" xml:space="preserve">
+        <value>Фото успішно видалено</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMaximalDescriptionLength" xml:space="preserve">
+        <value>Опис має бути коротшим за {0} символів</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMaximalDisplayNameLength" xml:space="preserve">
+        <value>Назва має бути коротшою за {0} символів</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMinimalDescriptionLength" xml:space="preserve">
+        <value>Опис має бути довшим за {0} символів</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMinimalDisplayNameLength" xml:space="preserve">
+        <value>Назва має бути довшою за {0} символів</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMinimalPrice" xml:space="preserve">
+        <value>Ціна має бути більшою за {0}$</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_RequiredDescription" xml:space="preserve">
+        <value>Опис є обов'язковим</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Назва є обов'язковою</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_RequiredPrice" xml:space="preserve">
+        <value>Ціна є обов'язковою</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMaximalPrice" xml:space="preserve">
+        <value>Ціна має бути меншою за {0}$</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMaximalDescriptionLength" xml:space="preserve">
+        <value>Опис має бути коротшим за {0} символів</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMaximalDisplayNameLength" xml:space="preserve">
+        <value>Назва має бути коротшою за {0} символів</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMaximalPrice" xml:space="preserve">
+        <value>Ціна має бути меншою за {0}$</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMinimalDescriptionLength" xml:space="preserve">
+        <value>Опис має бути довшим за {0} символів</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMinimalDisplayNameLength" xml:space="preserve">
+        <value>Назва має бути довшою за {0} символів</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMinimalPrice" xml:space="preserve">
+        <value>Ціна має бути більшою за {0}$</value>
+    </data>
+    <data name="HarborPage_BerthValidator_RequiredDescription" xml:space="preserve">
+        <value>Опис є обов'язковим</value>
+    </data>
+    <data name="HarborPage_BerthValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Назва є обов'язковою</value>
+    </data>
+    <data name="HarborPage_BerthValidator_RequiredPrice" xml:space="preserve">
+        <value>Ціна є обов'язковою</value>
+    </data>
+    <data name="HarborPage_BerthValidator_RequiredShipTypes" xml:space="preserve">
+        <value>Повинен бути додан хочаб один тип підходящих кораблів</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidFormatBIC" xml:space="preserve">
+        <value>Невірний формат BIC</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidFormatIBAN" xml:space="preserve">
+        <value>Невірний формат IBAN</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidFormatSupportEmail" xml:space="preserve">
+        <value>Невірний формат пошти</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidFormatSupportPhoneNumber" xml:space="preserve">
+        <value>Невірний формат номера телефону</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMinimalDescriptionLength" xml:space="preserve">
+        <value>Опис має бути довшим за {0} символів</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMinimalDisplayNameLength" xml:space="preserve">
+        <value>Назва має бути довшою за {0} символів</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMaximalDisplayNameLength" xml:space="preserve">
+        <value>Назва має бути коротшою за {0} символів</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMaximalDescriptionLength" xml:space="preserve">
+        <value>Опис має бути коротшим за {0} символів</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredBIC" xml:space="preserve">
+        <value>BIC є обов'язковим</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredDescription" xml:space="preserve">
+        <value>Опис є обов'язковим</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Назва є обов'язковою</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredGeolocationLatitude" xml:space="preserve">
+        <value>Широта є обов'язковою</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredGeolocationLongitude" xml:space="preserve">
+        <value>Довгота є обов'язковою</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredIBAN" xml:space="preserve">
+        <value>IBAN є обов'язковим</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredSupportEmail" xml:space="preserve">
+        <value>Пошта підтримки є обов'язковою</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredSupportPhoneNumber" xml:space="preserve">
+        <value>Телефон підтримки є обов'язковим</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMaximalGeolocationLatitude" xml:space="preserve">
+        <value>Широта має бути більшою за {0} градусів</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMaximalGeolocationLongitude" xml:space="preserve">
+        <value>Довгота має бути більшою за {0} градусів</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMinimalGeolocationLongitude" xml:space="preserve">
+        <value>Довгота має бути меншою за {0} градусів</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMinimalGeolocationLatitude" xml:space="preserve">
+        <value>Широта має бути меншою за {0} градусів</value>
+    </data>
+    <data name="HarborFormPage_ErrorAlert" xml:space="preserve">
+        <value>Помилка створення бухти</value>
+    </data>
+    <data name="HarborFormPage_HelperText_BIC" xml:space="preserve">
+        <value>Введіть BIC</value>
+    </data>
+    <data name="HarborFormPage_HelperText_Description" xml:space="preserve">
+        <value>Введіть опис</value>
+    </data>
+    <data name="HarborFormPage_HelperText_DisplayName" xml:space="preserve">
+        <value>Введіть назву</value>
+    </data>
+    <data name="HarborFormPage_HelperText_GeolocationLatitude" xml:space="preserve">
+        <value>Введіть довготу</value>
+    </data>
+    <data name="HarborFormPage_HelperText_GeolocationLongitude" xml:space="preserve">
+        <value>Введіть широту</value>
+    </data>
+    <data name="HarborFormPage_HelperText_IBAN" xml:space="preserve">
+        <value>Введіть IBAN</value>
+    </data>
+    <data name="HarborFormPage_HelperText_SupportEmail" xml:space="preserve">
+        <value>Введіть пошту підтримки</value>
+    </data>
+    <data name="HarborFormPage_HelperText_SupportPhoneNumber" xml:space="preserve">
+        <value>Введіть телефон підтримки</value>
+    </data>
+    <data name="HarborFormPage_Label_BIC" xml:space="preserve">
+        <value>BIC</value>
+    </data>
+    <data name="HarborFormPage_CreateButton" xml:space="preserve">
+        <value>Створити</value>
+    </data>
+    <data name="HarborFormPage_Label_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="HarborFormPage_Label_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="HarborFormPage_Label_GeolocationLatitude" xml:space="preserve">
+        <value>Довгота</value>
+    </data>
+    <data name="HarborFormPage_Label_GeolocationLongitude" xml:space="preserve">
+        <value>Широта</value>
+    </data>
+    <data name="HarborFormPage_Label_IBAN" xml:space="preserve">
+        <value>IBAN</value>
+    </data>
+    <data name="HarborFormPage_SuccessAlert" xml:space="preserve">
+        <value>Бухта створена успішно</value>
+    </data>
+    <data name="HarborFormPage_Label_SupportEmail" xml:space="preserve">
+        <value>Пошта підтримки</value>
+    </data>
+    <data name="HarborFormPage_Label_SupportPhoneNumber" xml:space="preserve">
+        <value>Телефон підтримки</value>
+    </data>
+    <data name="HarborFormPage_Title" xml:space="preserve">
+        <value>Створення бухти</value>
+    </data>
+    <data name="HarborFormPage_ToHarborPageButton" xml:space="preserve">
+        <value>Відкрити отсанню створену бухту</value>
+    </data>
+    <data name="HarborPage_HarborControls_CreateNewButton" xml:space="preserve">
+        <value>Створити нову бухту</value>
+    </data>
+    <data name="HarborPage_HarborControls_DeleteButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="HarborPage_HarborControls_GetBookingHistoryButton" xml:space="preserve">
+        <value>Отримати історію бронювання</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsPart_Title" xml:space="preserve">
+        <value>Документи</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DeleteHarborDocumentErrorAlert" xml:space="preserve">
+        <value>Помилка видалення документа</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DeleteHarborDocumentSuccessAlert" xml:space="preserve">
+        <value>Документ видалено успішно</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentName" xml:space="preserve">
+        <value>Назва документу</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentNumber" xml:space="preserve">
+        <value>Номер документу</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentUploadButton" xml:space="preserve">
+        <value>Завантаження</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentUploadErrorAlert" xml:space="preserve">
+        <value>Помилка завантаження документу</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentUploadSuccessAlert" xml:space="preserve">
+        <value>Документ завантажено успішно</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_EmptyData" xml:space="preserve">
+        <value>Жодного документа наразі немає</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_SendDocumentButton" xml:space="preserve">
+        <value>Зберегти документ</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_Title" xml:space="preserve">
+        <value>Документи</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_UploadTitle" xml:space="preserve">
+        <value>Додати документ</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_BICHelperText" xml:space="preserve">
+        <value>Відредагувати BIC</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_BICLabel" xml:space="preserve">
+        <value>BIC</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_DescriptionHelperText" xml:space="preserve">
+        <value>Відредагувати опис</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_DescriptionLabel" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_DisplayNameHelperText" xml:space="preserve">
+        <value>Відредагувати назву</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_DisplayNameLabel" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_GeolocationLatitudeHelperText" xml:space="preserve">
+        <value>Відредагувати широту</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_GeolocationLatitudeLabel" xml:space="preserve">
+        <value>Широта</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_GeolocationLongitudeHelperText" xml:space="preserve">
+        <value>Відредагувати довготу</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_GeolocationLongitudeLabel" xml:space="preserve">
+        <value>Довгота</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_HarborSaveButton" xml:space="preserve">
+        <value>Зберегти</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_HarborSaveErrorAlert" xml:space="preserve">
+        <value>Помилка збереження бухти</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_HarborSaveSuccessAlert" xml:space="preserve">
+        <value>Бухта збережена успішно</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_IBANHelperText" xml:space="preserve">
+        <value>Відредагувати IBAN</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_IBANLabel" xml:space="preserve">
+        <value>IBAN</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_SupportEmailHelperText" xml:space="preserve">
+        <value>Відредагувати пошту підтримки</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_SupportEmailLabel" xml:space="preserve">
+        <value>Пошта підтримки</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_SupportPhoneNumberHelperText" xml:space="preserve">
+        <value>Відредагувати телефоний номер підтримки</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_SupportPhoneNumberLabel" xml:space="preserve">
+        <value>Телефоний номер підтримки</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_Title" xml:space="preserve">
+        <value>Редагування бухти</value>
+    </data>
+    <data name="HarborPage_HarborEditTab_Title" xml:space="preserve">
+        <value>Редагування бухти</value>
+    </data>
+    <data name="HarborPage_HarborPhotosPart_Title" xml:space="preserve">
+        <value>Фото</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_DeletePhotoErrorAlert" xml:space="preserve">
+        <value>Помилка видалення фото</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_DeletePhotoSuccessAlert" xml:space="preserve">
+        <value>Фото видалене успішно</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_EmptyData" xml:space="preserve">
+        <value>Жодного фото наразі немає</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_NewHarborPhoto" xml:space="preserve">
+        <value>Додати фото бухти</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_SendPhotoButton" xml:space="preserve">
+        <value>Зберети фото</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_Title" xml:space="preserve">
+        <value>Фото</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_UploadPhotoButton" xml:space="preserve">
+        <value>Завантажити фото</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_UploadPhotoErrorAlert" xml:space="preserve">
+        <value>Помилка завантаження фото</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_UploadPhotoSuccessAlert" xml:space="preserve">
+        <value>Фото завантажене успішно</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_UploadTab" xml:space="preserve">
+        <value>Додати фото бухти</value>
+    </data>
+    <data name="HarborPage_ServicesPart_Title" xml:space="preserve">
+        <value>Сервіси</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_PriceLabel" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_PriceHelperText" xml:space="preserve">
+        <value>Визначте ціну</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceCreateButton" xml:space="preserve">
+        <value>Створити</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceDescriptionHelperText" xml:space="preserve">
+        <value>Наведіть опис</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceDescriptionLabel" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceDisplayNameHelperText" xml:space="preserve">
+        <value>Введіть назву</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceDisplayNameLabel" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceErrorAlert" xml:space="preserve">
+        <value>Помилка створення сервісу</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceSuccessAlert" xml:space="preserve">
+        <value>Сервіс успішно створенно</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_Title" xml:space="preserve">
+        <value>Створити сервіс</value>
+    </data>
+    <data name="ServicesManagePage_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_PriceHelperText" xml:space="preserve">
+        <value>Відредагувати ціну</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_PriceLabel" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceDescriptionHelperText" xml:space="preserve">
+        <value>Відредагувати опис</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceDescriptionLabel" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceDisplayNameHelperText" xml:space="preserve">
+        <value>Відредагувати назву</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceDisplayNameLabel" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceEditButton" xml:space="preserve">
+        <value>Відредагувати</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceErrorAlert" xml:space="preserve">
+        <value>Помикла редагування сервісу</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceSuccessAlert" xml:space="preserve">
+        <value>Сервіс відредаговано успішно</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_Title" xml:space="preserve">
+        <value>Відредагувати сервіс</value>
+    </data>
+    <data name="ServicesManagePage_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_DeleteButton" xml:space="preserve">
+        <value>Видалення</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_EditButton" xml:space="preserve">
+        <value>Змінити</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_Price" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_Title" xml:space="preserve">
+        <value>Сервіси</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_EmptyData" xml:space="preserve">
+        <value>Немає даних</value>
+    </data>
+    <data name="HarborPage_BerthPart_ActivateBerthButton" xml:space="preserve">
+        <value>Активувати</value>
+    </data>
+    <data name="HarborPage_BerthPart_BerthDescriptionText" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="HarborPage_BerthPart_BerthIsActive" xml:space="preserve">
+        <value>Активна</value>
+    </data>
+    <data name="HarborPage_BerthPart_BerthPriceText" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="HarborPage_BerthPart_Berth_ReviewAmountText" xml:space="preserve">
+        <value>Кількість відгуків</value>
+    </data>
+    <data name="HarborPage_BerthPart_Berth_SuitableTypesText" xml:space="preserve">
+        <value>Підходящі типи</value>
+    </data>
+    <data name="HarborPage_BerthPart_Berth_TypeDescriptionText" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="HarborPage_BerthPart_Berth_TypeNameText" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="HarborPage_BerthPart_CreateBerthButton" xml:space="preserve">
+        <value>Створити новий причал</value>
+    </data>
+    <data name="HarborPage_BerthPart_DeleteBerthButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="HarborPage_BerthPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалення</value>
+    </data>
+    <data name="HarborPage_BerthPart_DisableBerthButton" xml:space="preserve">
+        <value>Деактивувати</value>
+    </data>
+    <data name="HarborPage_BerthPart_EditBerthButton" xml:space="preserve">
+        <value>Змінити</value>
+    </data>
+    <data name="HarborPage_BerthPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="HarborPage_BerthPart_GetBookingsButton" xml:space="preserve">
+        <value>Отримати історію бронювання</value>
+    </data>
+    <data name="HarborPage_BerthPart_Title" xml:space="preserve">
+        <value>Причали</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_Actions" xml:space="preserve">
+        <value>Дії</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_CreateButton" xml:space="preserve">
+        <value>Додати відгук</value>
+    </data>
+    <data name="HomePage_ReviewsPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="HomePage_ReviewsPart_EditDialog_Title" xml:space="preserve">
+        <value>Відредагувати</value>
+    </data>
+    <data name="HomePage_ReviewsPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="HomePage_ReviewsPart_CreateDialog_Title" xml:space="preserve">
+        <value>Створити</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_RequiredReviewPluses" xml:space="preserve">
+        <value>Плюси є обов'язковими</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_RequiredReviewMinuses" xml:space="preserve">
+        <value>Мінуси є обов'язковими</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_EmptyData" xml:space="preserve">
+        <value>Жодного відгуку ще немає</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_IsPayed" xml:space="preserve">
+        <value>Оплачено</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_NotPayed" xml:space="preserve">
+        <value>Не оплачено</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_Payed" xml:space="preserve">
+        <value>Статус платежу</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_Review" xml:space="preserve">
+        <value>Відгук</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewBody" xml:space="preserve">
+        <value>Вміст відгуку</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewDate" xml:space="preserve">
+        <value>Дата відгуку</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_BerthDescription" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_BerthHelperText" xml:space="preserve">
+        <value>Виберіть причал</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_BerthLabel" xml:space="preserve">
+        <value>Вибор причалу</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_BerthName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_CancelButton" xml:space="preserve">
+        <value>Скасувати</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewBodyHelperText" xml:space="preserve">
+        <value>Напишіть відгук</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewBodyLabel" xml:space="preserve">
+        <value>Відгук</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewMark" xml:space="preserve">
+        <value>Оцінка</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewMinusesHelperText" xml:space="preserve">
+        <value>Вкажіть мінуси</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewMinusesLabel" xml:space="preserve">
+        <value>Мінуси</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewPlusesHelperText" xml:space="preserve">
+        <value>Вкажіть плюси</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewPlusesLabel" xml:space="preserve">
+        <value>Плюси</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_SubmitButton" xml:space="preserve">
+        <value>Підтвердження</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewMark" xml:space="preserve">
+        <value>Оцінка</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewMinuses" xml:space="preserve">
+        <value>Мінуси</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewPluses" xml:space="preserve">
+        <value>Плюси</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_RequiredBerth" xml:space="preserve">
+        <value>Причал є обов'язковим</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_RequiredReviewBody" xml:space="preserve">
+        <value>Відгук є обов'язковим</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMaximalReviewBodyLength" xml:space="preserve">
+        <value>Відгук має бути коротшим за {0} символів</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMaximalReviewMark" xml:space="preserve">
+        <value>Оцінка має бути меншою за {0}</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMaximalReviewMinusesLength" xml:space="preserve">
+        <value>Мінуси мають бути коротшими за {0} символів</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMaximalReviewPlusesLength" xml:space="preserve">
+        <value>Плюси мають бути коротшими за {0} символів</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMinimalReviewBodyLength" xml:space="preserve">
+        <value>Відгук має бути довшим за {0} символів</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMinimalReviewMark" xml:space="preserve">
+        <value>Оцінка має бути більшою за {0}</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMinimalReviewMinusesLength" xml:space="preserve">
+        <value>Мінуси мають бути довшими за {0} символів</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMinimalReviewPlusesLength" xml:space="preserve">
+        <value>Плюси мають бути довшими за {0} символів</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewAmountText" xml:space="preserve">
+        <value>Кількість відгуків</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_Title" xml:space="preserve">
+        <value>Відгуки</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_EditErrorAlert" xml:space="preserve">
+        <value>Помилка редагування відгуку</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_CreateErrorAlert" xml:space="preserve">
+        <value>Помилка створення відгуку</value>
+    </data>
+    <data name="HarborPage_HarborPart_ReviewAmountText" xml:space="preserve">
+        <value>Кількість відгуків</value>
+    </data>
+    <data name="BerthFormPage_CreateButton" xml:space="preserve">
+        <value>Створити</value>
+    </data>
+    <data name="BerthFormPage_DescriptionHelperText" xml:space="preserve">
+        <value>Введіть опис</value>
+    </data>
+    <data name="BerthFormPage_DescriptionLabel" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BerthFormPage_DisplayNameHelperText" xml:space="preserve">
+        <value>Введіть назву причалу</value>
+    </data>
+    <data name="BerthFormPage_DisplayNameLabel" xml:space="preserve">
+        <value>Назва причалу</value>
+    </data>
+    <data name="BerthFormPage_ErrorAlert" xml:space="preserve">
+        <value>Помилка створення причалу</value>
+    </data>
+    <data name="BerthFormPage_PriceHelperText" xml:space="preserve">
+        <value>Введіть ціну</value>
+    </data>
+    <data name="BerthFormPage_PriceLabel" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="BerthFormPage_ShipTypeDescription" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BerthFormPage_ShipTypeName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BerthFormPage_ShipType_Label" xml:space="preserve">
+        <value>Вибір типів кораблів</value>
+    </data>
+    <data name="BerthFormPage_ShipType_Text" xml:space="preserve">
+        <value>Оберіть підходящі типи кораблів</value>
+    </data>
+    <data name="BerthFormPage_SuccessAlert" xml:space="preserve">
+        <value>Причал успішно створено</value>
+    </data>
+    <data name="BerthFormPage_Title" xml:space="preserve">
+        <value>Створення причалу</value>
+    </data>
+    <data name="BerthFormPage_ToBerthPageButton" xml:space="preserve">
+        <value>Відкрити останній створений причал</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="HarborPage_HarborDocumentTab_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="HarborPage_HarborPhotoTab_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="BerthPage_BerthPhotoTab_NewBerthPhotoSizeError" xml:space="preserve">
+        <value>Розмір файлу більший за {0} байт</value>
+    </data>
+    <data name="BerthPage_BerthControls_CreateNewButton" xml:space="preserve">
+        <value>Створити нову пристань</value>
+    </data>
+    <data name="BerthPage_BerthControls_DeleteButton" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="BerthPage_BerthControls_GetBookingHistoryButton" xml:space="preserve">
+        <value>Отримати історію бронювання</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_BerthSaveButton" xml:space="preserve">
+        <value>Зберегти</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_BerthSaveErrorAlert" xml:space="preserve">
+        <value>Помилка збереження пристані</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_BerthSaveSuccessAlert" xml:space="preserve">
+        <value>Пристань збережена успішно</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_DescriptionHelperText" xml:space="preserve">
+        <value>Відредагуйте опис</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_DescriptionLabel" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_DisplayNameHelperText" xml:space="preserve">
+        <value>Відредагуйте назву</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_DisplayNameLabel" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_PriceHelperText" xml:space="preserve">
+        <value>Відредагуйте ціну</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_PriceLabel" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_ShipTypeDescription" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_ShipTypeName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_ShipType_Label" xml:space="preserve">
+        <value>Вибір підходящих типів кораблів</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_ShipType_Text" xml:space="preserve">
+        <value>Виберіть підходящі типи кораблів</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_Title" xml:space="preserve">
+        <value>Редагування пристані</value>
+    </data>
+    <data name="BerthPage_BerthPhotosPart_Title" xml:space="preserve">
+        <value>Фото</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_DeletePhotoErrorAlert" xml:space="preserve">
+        <value>Помилка видалення фото</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_DeletePhotoSuccessAlert" xml:space="preserve">
+        <value>Фото видалено успішно</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_EmptyData" xml:space="preserve">
+        <value>Жодного фото наразі немає</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_NewBerthPhoto" xml:space="preserve">
+        <value>Нове фото пристані</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_SendPhotoButton" xml:space="preserve">
+        <value>Зберегти фото</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_Title" xml:space="preserve">
+        <value>Фото</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_UploadPhotoButton" xml:space="preserve">
+        <value>Завантажити</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_UploadPhotoErrorAlert" xml:space="preserve">
+        <value>Помилка завантаження фото</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_UploadPhotoSuccessAlert" xml:space="preserve">
+        <value>Фото завантажено успішно</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_UploadTab" xml:space="preserve">
+        <value>Додати нове фото</value>
+    </data>
+    <data name="BerthPage_BerthPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="BerthPage_BerthPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="BookingHistoryPage_CreateButton" xml:space="preserve">
+        <value>Створити нове бронювання</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredStartDate" xml:space="preserve">
+        <value>Початкова дата є обов'язковою</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredHarbor" xml:space="preserve">
+        <value>Бухта є обов'язковою</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredShip" xml:space="preserve">
+        <value>Човен є обов'язковим</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredEndDate" xml:space="preserve">
+        <value>Кінцева дата є обов'язковою</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredBerth" xml:space="preserve">
+        <value>Причал є обов'язковим</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_InvalidStartDateByEndDate" xml:space="preserve">
+        <value>Початкова дата має бути меншою за кінцеву</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_InvalidEndDateByStartDate" xml:space="preserve">
+        <value>Початкова дата має бути меншою за кінцеву</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_InvalidEndDateByDateNow" xml:space="preserve">
+        <value>Кінцева дата має бути у майбутньому</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_InvalidStartDateByDateNow" xml:space="preserve">
+        <value>Початкова дата має бути у майбутньому</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_BackButton" xml:space="preserve">
+        <value>Повернутись</value>
+    </data>
+    <data name="BookingFormPage_DateTab_BackButton" xml:space="preserve">
+        <value>Повернутись</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_BackButton" xml:space="preserve">
+        <value>Повернутись</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_Title" xml:space="preserve">
+        <value>Вибір човна</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Berth_Label" xml:space="preserve">
+        <value>Вибір пристані</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Berth_Text" xml:space="preserve">
+        <value>Оберіть пристань</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_NextButton" xml:space="preserve">
+        <value>Далі</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Price" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Title" xml:space="preserve">
+        <value>Вибір пристані</value>
+    </data>
+    <data name="BookingFormPage_DateTab_NextButton" xml:space="preserve">
+        <value>Далі</value>
+    </data>
+    <data name="BookingFormPage_DateTab_Title" xml:space="preserve">
+        <value>Вибір дат</value>
+    </data>
+    <data name="BookingFormPage_ErrorAlert" xml:space="preserve">
+        <value>Помилка збереження бронювання</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_NextButton" xml:space="preserve">
+        <value>Далі</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_Title" xml:space="preserve">
+        <value>Вибір бухти</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_BackButton" xml:space="preserve">
+        <value>Повернутись</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_DisplayName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Price" xml:space="preserve">
+        <value>Ціна</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Services_Label" xml:space="preserve">
+        <value>Вибір сервісів</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Services_Text" xml:space="preserve">
+        <value>Оберіть сервіси</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Title" xml:space="preserve">
+        <value>Вибір сервісів</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_Label" xml:space="preserve">
+        <value>Вибір човна</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_NextButton" xml:space="preserve">
+        <value>Далі</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_ShipDescription" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_ShipTypeName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_Text" xml:space="preserve">
+        <value>Оберіть корабель</value>
+    </data>
+    <data name="BookingFormPage_CreateButton" xml:space="preserve">
+        <value>Зберегти</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_Label" xml:space="preserve">
+        <value>Вибір бухт</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_Text" xml:space="preserve">
+        <value>Виберіть бухту</value>
+    </data>
+    <data name="BookingFormPage_DateTab_StartDate" xml:space="preserve">
+        <value>Дата початку</value>
+    </data>
+    <data name="BookingFormPage_DateTab_SelectStartDate" xml:space="preserve">
+        <value>Оберіть дату початку</value>
+    </data>
+    <data name="BookingFormPage_DateTab_SelectEndDate" xml:space="preserve">
+        <value>Оберіть дату кінця</value>
+    </data>
+    <data name="BookingFormPage_DateTab_EndDate" xml:space="preserve">
+        <value>Дата кінця</value>
+    </data>
+    <data name="BookingFormPage_ErrorDialog_Title" xml:space="preserve">
+        <value>Помилка</value>
+    </data>
+    <data name="BookingFormPage_EditButton" xml:space="preserve">
+        <value>Зберегти</value>
+    </data>
+    <data name="BookingHistoryPage_BerthName" xml:space="preserve">
+        <value>Назва причалу</value>
+    </data>
+    <data name="BookingHistoryPage_HarborName" xml:space="preserve">
+        <value>Назва бухти</value>
+    </data>
+    <data name="MapPage_CurrentPosition_ButtonLabel" xml:space="preserve">
+        <value>Поточна позиція</value>
+    </data>
+    <data name="MapPage_CurrentPosition_InformWindow" xml:space="preserve">
+        <value>Ви знаходитесь тут</value>
+    </data>
+    <data name="MapPage_ShipType_Label" xml:space="preserve">
+        <value>Вибір типів кораблів</value>
+    </data>
+    <data name="MapPage_ShipType_Text" xml:space="preserve">
+        <value>Оберіть тип кораблю</value>
+    </data>
+    <data name="MapPage_TypeName" xml:space="preserve">
+        <value>Назва</value>
+    </data>
+    <data name="MapPage_Description" xml:space="preserve">
+        <value>Опис</value>
+    </data>
+</root>

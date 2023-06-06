@@ -1,0 +1,516 @@
+﻿@page "/ShipPage/{Id}"
+
+@using Domain.Dtos
+@using IoC.Constants
+@using Microsoft.AspNetCore.Components
+@using UI.FormEntities
+@using System.Net.Http.Headers
+@using System.Globalization
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using UI.FormEntities.Ship
+@using UI.Services
+@using UI.Validators.Ship
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject NavigationManager NavManager
+@inject ShipValidator ShipValidator
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject IJSRuntime JSRuntime
+@inject IDialogService DialogService
+
+<NavBar/>
+<MudPaper Class="d-flex justify-start flex-wrap gap-2 mx-3 my-2" Elevation="0">
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info"
+               OnClick="createShip">
+        @Localization["ShipPage_UserPart_ShipPart_CreateShipButton"]
+    </MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+               OnClick="() => getStatistics()">
+        @Localization["ShipPage_UserPart_GetStatisticsButton"]
+    </MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+               OnClick="() => getBookingsForShip()">
+        @Localization["ShipPage_GetBookingsButton"]
+    </MudButton>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+               OnClick="() => deleteShip()">
+        @Localization["ShipPage_DeleteShipButton"]
+    </MudButton>
+
+</MudPaper>
+<MudTabs Elevation="2" Rounded="true" PanelClass="pa-6" Centered="true">
+    <MudTabPanel Text="@Localization["ShipPage_EditTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudForm @ref="@editForm" Model="@_shipForm" Validation="@(ShipValidator.ValidateValue)" ValidationDelay="0">
+                        <MudCardContent>
+                            <MudTextField Label="@Localization["ShipPage_EditTab_DisplayNameLabel"]"
+                                          HelperText="@Localization["ShipPage_EditTab_DisplayNameHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_shipForm.DisplayName" For="@(() => _shipForm.DisplayName)"/>
+                            <MudSelect T="Guid" @bind-Value="_shipForm.ShipTypeId" For="() => _shipForm.ShipTypeId"
+                                       Label="@Localization["ShipPage_EditTab_ShipType_Label"]"
+                                       Text="@Localization["ShipPage_EditTab_ShipType_Text"]">
+                                @foreach (var type in _shipTypes)
+                                {
+                                    <MudSelectItem T="Guid" Value="@type.Id">
+                                        <div class="d-flex flex-column gap-1 ma-0 pa-0">
+                                            <MudText Typo="Typo.subtitle1">
+                                                @Localization["ShipPage_EditTab_TypeName"]:
+                                                @type.TypeName
+                                            </MudText>
+                                            <MudText Typo="Typo.subtitle2">
+                                                @Localization["ShipPage_EditTab_Description"]:
+                                                @type.Description
+                                            </MudText>
+                                        </div>
+                                    </MudSelectItem>
+                                }
+                            </MudSelect>
+                            
+                        </MudCardContent>
+                    </MudForm>
+                    <MudCardActions>
+                        @if (_shipErrorAlertVisible)
+                        {
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.EditShipError))">
+                                @Localization["ShipPage_EditTab_ShipSaveErrorAlert"]: @_shipFormError
+                            </MudAlert>
+                        }
+                        @if (_shipSuccessVisible)
+                        {
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.EditShipSuccess))">
+                                @Localization["ShipPage_EditTab_ShipSaveSuccessAlert"]
+                            </MudAlert>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                   @onclick="shipSave">
+                            @Localization["ShipPage_EditTab_ShipSaveButton"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    <MudTabPanel Text="@Localization["ShipPage_ChangeShipPhotoTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudCardContent>
+                        <MudPaper Class="d-flex flex-row justify-center gap-4" Elevation="0">
+                            <MudPaper Class="d-flex flex-column gap-2" Elevation="0">
+                                <MudText Typo="@Typo.subtitle2">@Localization["ShipPage_ShipPhotoTab_CurrentShipPhotoTitle"]</MudText>
+                                <MudImage Src="@_currentShipPhoto.Url" Height="200" Width="200" ObjectFit="ObjectFit.Fill"/>
+                            </MudPaper>
+                            @if (_file != null)
+                            {
+                                <MudPaper Class="d-flex flex-column gap-2" Elevation="0">
+                                    <MudText Typo="@Typo.subtitle2">@Localization["ShipPage_ShipPhotoTab_NewShipPhotoTitle"]</MudText>
+                                    <MudImage
+                                        Height="200" Width="200" ObjectFit="ObjectFit.Fill"
+                                        Src="@(_fileContent != null ? $"data:{_file.ContentType};base64,{Convert.ToBase64String(_fileContent)}" : null)"/>
+                                </MudPaper>
+                            }
+                        </MudPaper>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+                            <MudPaper Class="d-flex flex-row flex-grow-1 gap-2" Elevation="0">
+                                @if (_shipPhotoUploadErrorAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.ChangeShipPhotoError))">
+                                        @Localization["ShipPage_ShipPhotoTab_ShipPhotoUpdateErrorAlert"]: @_changeShipUploadPhotoError
+                                    </MudAlert>
+                                }
+                                @if (_shipPhotoUploadSuccessAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.ChangeShipPhotoSuccess))">
+                                        @Localization["ShipPage_ShipPhotoTab_ShipPhotoUpdateSuccessAlert"]
+                                    </MudAlert>
+                                }
+                                @if (_shipPhotoDeleteErrorAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteShipPhotoError))">
+                                        @Localization["ShipPage_ShipPhotoTab_ShipPhotoDeleteErrorAlert"]: @_changeShipDeletePhotoError
+                                    </MudAlert>
+                                }
+                                @if (_shipPhotoDeleteSuccessAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteShipPhotoSuccess))">
+                                        @Localization["ShipPage_ShipPhotoTab_ShipPhotoDeleteSuccessAlert"]
+                                    </MudAlert>
+                                }
+                            </MudPaper>
+                            <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
+                                <MudPaper Class="d-flex flex-row justify-start flex-grow-1 gap-2" Elevation="0">
+                                <MudFileUpload T="IBrowserFile" FilesChanged="HandleFileSelection" Accept=".jpg, .jpeg, .png">
+                                    <ButtonTemplate>
+                                        <MudFab HtmlTag="label"
+                                                Variant="@Variant.Filled"
+                                                Color="Color.Primary"
+                                                Icon="@Icons.Material.Filled.Image"
+                                                Label="@Localization["ShipPage_ShipPhotoTab_LoadShipPhotoButton"]"
+                                                for="@context"/>
+                                    </ButtonTemplate>
+                                </MudFileUpload>
+                                @if (!DefaultFileLinks.DefaultImage.Equals(_currentShipPhoto.Url))
+                                {
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                                               Class="ml-auto" @onclick="shipPhotoDelete">
+                                        @Localization["ShipPage_ShipPhotoTab_DeleteShipPhotoButton"]
+                                    </MudButton>
+                                }
+                                </MudPaper>
+
+                                @if (_file != null)
+                                {
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                                               Class="ml-auto" @onclick="shipPhotoSave">
+                                        @Localization["ShipPage_ShipPhotoTab_UpdateShipPhotoButton"]
+                                    </MudButton>
+                                }
+                            </MudPaper>
+                        </MudPaper>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+</MudTabs>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    
+    private MudForm editForm;
+
+    private List<ShipTypeDto> _shipTypes = new List<ShipTypeDto>();
+    private ShipForm _shipForm = new ShipForm();
+    private string _shipFormError = "";
+    private bool _shipErrorAlertVisible = false;
+    private bool _shipSuccessVisible = false;
+
+    private IBrowserFile _file = null;
+    private byte[] _fileContent = default;
+    private FileDto _currentShipPhoto = new FileDto();
+    private readonly int _maxPhotoSize = 10 * 1024 * 1024;
+    private string _changeShipUploadPhotoError = "";
+    private string _changeShipDeletePhotoError = "";
+    private bool _shipPhotoUploadErrorAlertVisible = false;
+    private bool _shipPhotoUploadSuccessAlertVisible = false;
+    private bool _shipPhotoDeleteSuccessAlertVisible = false;
+    private bool _shipPhotoDeleteErrorAlertVisible = false;
+
+    private string _currentUserEmail = "";
+    
+    private void getStatistics() => NavManager.NavigateTo(string.Format(
+        "{0}/{1}",
+        PageNavigateConstants.StatisticsPage,
+        Id));
+
+    private void getBookingsForShip() => NavManager.NavigateTo(
+        string.Format("{0}/{1}/{2}", 
+            PageNavigateConstants.BookingHistoryPage,
+            (int)BookingHistoryPageType.BookingsForShip,
+            Id));
+    
+    private void createShip() => NavManager.NavigateTo(PageNavigateConstants.ShipFormPage);
+    
+    private async Task deleteShip()
+    {
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+        
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+            Localization["HomePage_ShipPart_DeleteDialog_Title"],
+            parameters, options)).Result;
+
+        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        {
+            var response = await Client.DeleteAsync(string.Format(
+                "{0}?id={1}",
+                ApiRoutes.Ship.Controller,
+                Id));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["HomePage_ShipPart_ErrorDialog_Title"],
+                    parameters, options)).Result;
+                
+                return;
+            }
+
+            NavManager.NavigateTo(PageNavigateConstants.HomePage);
+        }
+    }
+    
+    private async Task shipSave()
+    {
+        editForm.Validate();
+        
+        if (!editForm.IsValid)
+        {
+            return;
+        }
+        
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var shipDto = new ShipDataDto()
+        {
+            DisplayName = _shipForm.DisplayName,
+            ShipTypeId = _shipForm.ShipTypeId,
+            Id = Guid.Parse(Id)
+        };
+
+        var response = await Client.PutAsJsonAsync(ApiRoutes.Ship.Controller, shipDto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            _shipSuccessVisible = true;
+            _shipErrorAlertVisible = false;
+        }
+        else
+        {
+            _shipFormError = await response.Content.ReadAsStringAsync();
+            _shipSuccessVisible = false;
+            _shipErrorAlertVisible = true;
+        }
+        
+        StateHasChanged();
+    }
+
+    private async Task shipPhotoSave()
+    {
+        if (_file == null)
+        {
+            _shipPhotoUploadErrorAlertVisible = true;
+            _shipPhotoUploadSuccessAlertVisible = false;
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+
+        var fileDto = new ShipPhotoDataDto()
+        {
+            FileNameWithExtension = _file.Name,
+            FileStream = _fileContent,
+            ShipId = Guid.Parse(Id)
+        };
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            if (string.IsNullOrEmpty(_currentShipPhoto.Url))
+            {
+                response = await Client.PostAsJsonAsync(ApiRoutes.Ship.Photo, fileDto);
+            }
+            else
+            {
+                response = await Client.PutAsJsonAsync(ApiRoutes.Ship.Photo, fileDto);
+            }
+        }
+        catch (Exception e)
+        {
+            _changeShipUploadPhotoError = e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _shipPhotoUploadSuccessAlertVisible = true;
+            _shipPhotoUploadErrorAlertVisible = false;
+            _file = null;
+            _fileContent = default;
+            _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+        }
+        else
+        {
+            _changeShipUploadPhotoError = await response.Content.ReadAsStringAsync();
+            _shipPhotoUploadSuccessAlertVisible = false;
+            _shipPhotoUploadErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+    
+    private async Task shipPhotoDelete()
+    {
+        if (DefaultFileLinks.DefaultImage.Equals(_currentShipPhoto.Url))
+        {
+            return;
+        }
+        
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            response = await Client.DeleteAsync(ApiRoutes.Ship.Photo + "?id=" + Id);
+        }
+        catch (Exception e)
+        {
+            _changeShipDeletePhotoError = e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _shipPhotoDeleteSuccessAlertVisible = true;
+            _shipPhotoDeleteErrorAlertVisible = false;
+            _file = null;
+            _fileContent = default;
+            _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+        }
+        else
+        {
+            _changeShipDeletePhotoError = await response.Content.ReadAsStringAsync();
+            _shipPhotoDeleteSuccessAlertVisible = false;
+            _shipPhotoDeleteErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task HandleFileSelection(IBrowserFile file)
+    {
+        _file = file;
+
+        if (_file != null)
+        {
+            var maxFileSizeInBytes = _maxPhotoSize;
+            if (_file.Size > maxFileSizeInBytes)
+            {
+                _file = null;
+                await JSRuntime.InvokeVoidAsync("alert", 
+                    string.Format(
+                        Localization["ShipPage_ShipPhotoTab_NewShipPhotoSizeError"],
+                        _maxPhotoSize));
+                return;
+            }
+
+            try
+            {
+                _fileContent = new byte[_file.Size];
+                await using (var stream = _file.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                {
+                    await stream.ReadAsync(_fileContent, 0, (int)_file.Size);
+                }
+            }
+            catch (Exception e)
+            {
+                _shipPhotoUploadSuccessAlertVisible = false;
+                _shipPhotoUploadErrorAlertVisible = true;
+                _changeShipUploadPhotoError = e.Message;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task closeAlert(AlertDestination alertDirection)
+    {
+        switch (alertDirection)
+        {
+            case AlertDestination.EditShipError:
+                _shipFormError = "";
+                _shipErrorAlertVisible = false;
+                break;
+            case AlertDestination.EditShipSuccess:
+                _shipSuccessVisible = false;
+                break;
+            case AlertDestination.ChangeShipPhotoError:
+                _shipPhotoUploadErrorAlertVisible = false;
+                break;
+            case AlertDestination.ChangeShipPhotoSuccess:
+                _shipPhotoUploadSuccessAlertVisible = false;
+                break;
+            case AlertDestination.DeleteShipPhotoError:
+                _shipPhotoDeleteErrorAlertVisible = false;
+                break;
+            case AlertDestination.DeleteShipPhotoSuccess:
+                _shipPhotoDeleteSuccessAlertVisible = false;
+                break;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        if (string.IsNullOrEmpty(token))
+        {
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+        if (userDto == null)
+        {
+            await LocalStorageService.RemoveAsync("token");
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+
+        response = await Client.GetAsync(ApiRoutes.Ship.ById + "?id=" + Id);
+
+        var shipData = await response.Content.ReadFromJsonAsync<ShipDataDto>();
+        
+        _shipForm = new ShipForm
+        {
+            DisplayName = shipData.DisplayName,
+            ShipTypeId = shipData.ShipTypeId
+        };
+
+        response = await Client.GetAsync(ApiRoutes.Ship.Photo + "?id=" + Id);
+
+        _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+        
+        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+
+        StateHasChanged();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+}

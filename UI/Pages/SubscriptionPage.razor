@@ -1,0 +1,171 @@
+﻿@page "/SubscriptionPage"
+@using Domain.Dtos
+@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Net.Http.Json
+@using IoC.Constants
+@using Microsoft.Extensions.Localization
+@using UI.Services
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject NavigationManager NavManager
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject IDialogService DialogService
+
+<NavBar/>
+
+<MudContainer Class="m-2 p-2">
+    <MudGrid JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Height="100%">
+        <MudItem Style="width: 100%">
+            <MudText Typo="Typo.h4" Align="Align.Start" Style="width: 100%">@Localization["SubscriptionPage_Title"]</MudText>
+            <MudPaper Class="d-flex flex-row flex-wrap flex-grow-1 gap-4 ma-2 pa-2" Elevation="0">
+                @foreach (var subscription in _subscriptions.Subscriptions)
+                {
+                    <MudPaper Class="d-flex flex-column flex-grow-1 gap-2 pa-2" Elevation="1"
+                              Style=@(_subscriptions.Subscriptions.LastIndexOf(subscription) == _subscriptions.CurrentSubscriptionIndex ? "background-color: yellowgreen;" : "")>
+                        <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0"
+                                  Style=@(_subscriptions.Subscriptions.LastIndexOf(subscription) == _subscriptions.CurrentSubscriptionIndex ? "background-color: yellowgreen;" : "")>
+                            <MudText Typo="@Typo.h6">@subscription.DisplayName</MudText>
+                            <MudText Typo="@Typo.subtitle2">@subscription.Description</MudText>
+                            <MudText Typo="@Typo.subtitle2">
+                                @Localization["SubscriptionPage_MaxHarborAmountText"]:
+                                @subscription.MaxHarborAmount
+                            </MudText>
+                            <MudText Typo="@Typo.subtitle2">
+                                @Localization["SubscriptionPage_TaxOnBookingText"]:
+                                @subscription.TaxOnBooking%
+                            </MudText>
+                            <MudText Typo="@Typo.subtitle2">
+                                @Localization["SubscriptionPage_TaxOnServicesText"]:
+                                @subscription.TaxOnServices%
+                            </MudText>
+                        </MudPaper>
+                        <MudPaper Class="d-flex justify-between align-center flex-grow-1 gap-2" Elevation="0"
+                                  Style=@(_subscriptions.Subscriptions.LastIndexOf(subscription) == _subscriptions.CurrentSubscriptionIndex ? "background-color: yellowgreen;" : "")>
+                            <MudText Typo="@Typo.h6">
+                                @Localization["SubscriptionPage_SubscriptionPriceText"]:
+                                @subscription.Price$
+                            </MudText>
+                            @if (_userDto != null)
+                            {
+                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                                           Class="ml-auto"
+                                           Disabled="@(_subscriptions.Subscriptions.LastIndexOf(subscription) <= _subscriptions.CurrentSubscriptionIndex)"
+                                           @onclick="() => changeSubscription(subscription)">
+                                    @Localization["SubscriptionPage_UpdateSubscriptionButton"]
+                                </MudButton>
+                            }
+                        </MudPaper>
+                    </MudPaper>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private UserDto _userDto = null;
+    private AllSubscriptionsDto _subscriptions { get; set; }
+        = new AllSubscriptionsDto { Subscriptions = new List<SubscriptionDto>() };
+
+    private async Task changeSubscription(SubscriptionDto subscription)
+    {
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.PostAsJsonAsync(
+            ApiRoutes.Subscription.ChangeSubscription + "?id=" + subscription.Id,
+            "");
+
+        var changeSubscription = await response.Content.ReadFromJsonAsync<SubscriptionChangeDto>();
+
+        if (changeSubscription != null)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("SubscriptionChangeDto", changeSubscription);
+
+            var confirmationResult = await (await DialogService.ShowAsync<ChangeSubscriptionDialog>(
+                Localization["SubscriptionPage_ChangeSubscriptionDialog_Title"],
+                parameters, options)).Result;
+
+            if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+            {
+                response = await Client.PostAsJsonAsync(ApiRoutes.SubscriptionCheck.Controller,
+                    new SubscriptionCheckDto
+                    {
+                        BankTransactionId = Guid.NewGuid().ToString(),
+                        Date = DateTime.Now,
+                        Description = string.Format("You pay {0}$ to change subscription on {1}",
+                            changeSubscription.ChangeCost,
+                            subscription.DisplayName),
+                        SubscriptionId = subscription.Id,
+                        TotalCost = changeSubscription.ChangeCost
+                    });
+
+                response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+                var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+                if (userDto == null)
+                {
+                    await LocalStorageService.RemoveAsync("token");
+                    NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                }
+
+                response = await Client.GetAsync(ApiRoutes.Subscription.AllSubscriptions + "?username=" + userDto.Username);
+
+                _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+
+                StateHasChanged();
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        HttpResponseMessage response;
+        
+        if (!string.IsNullOrEmpty(token))
+        {
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            _userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (_userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+        
+            response = await Client.GetAsync(ApiRoutes.Subscription.AllSubscriptions + "?username=" + _userDto.Username);
+        }
+        else
+        {
+            _userDto = null;
+            response = await Client.GetAsync(ApiRoutes.Subscription.AllSubscriptions);
+        }
+        
+        _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+}

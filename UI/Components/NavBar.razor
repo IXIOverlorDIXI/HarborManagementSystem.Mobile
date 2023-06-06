@@ -1,0 +1,93 @@
+﻿@using IoC.Constants
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using UI.FormEntities
+@using UI.Services
+@inject IStorageService LocalStorageService
+@inject NavigationManager NavManager
+@inject UserAuthorizationHelpService UserAuthorizationHelpService
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+
+<MudPaper Class="d-flex justify-content-between align-items-center mb-2 mt-2 mr-4 ml-4" Elevation="0">
+    <MudPaper Class="d-flex justify-content-start align-items-center flex-grow-1 gap-4" Elevation="0">
+        <MudButton Variant="Variant.Text" @onclick="navigateToMainPage">@Localization["NavBarComponent_MainPage"]</MudButton>
+        <MudButton Variant="Variant.Text" @onclick="navigateToSubscriptionPage">@Localization["NavBarComponent_SubscriptionPage"]</MudButton>
+    </MudPaper>
+
+    <MudPaper Class="d-flex flex-row-reverse align-items-center flex-grow-1 gap-4" Elevation="0">
+        @if (UserAuthorizationHelpService.IsUserAuthenticated ?? false)
+        {
+            <MudButton Variant="Variant.Outlined" @onclick="logout">@Localization["NavBarComponent_Logout"]</MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToProfilePage">@Localization["NavBarComponent_Profile"]</MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToPaymentHistoryPage">@Localization["NavBarComponent_PaymentHistory"]</MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToBookingHistoryPage">@Localization["NavBarComponent_navigateToBookingHistory"]</MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToHomePage">@Localization["NavBarComponent_Home"]</MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToAuthorizationPage">@Localization["NavBarComponent_Authorization"]</MudButton>
+        }
+        <MudButton Variant="Variant.Outlined" @onclick="navigateToMapPage">@Localization["NavBarComponent_Map"]</MudButton>
+        <Localization/>
+    </MudPaper>
+</MudPaper>
+
+@code {
+
+    private async Task logout()
+    {
+        UserAuthorizationHelpService.Logout();
+        LocalStorageService.ClearStorage();
+        NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+    }
+    
+    private void navigateToBookingHistoryPage() =>
+        NavManager.NavigateTo(
+            string.Format("{0}/{1}",
+                PageNavigateConstants.BookingHistoryPage,
+                (int)BookingHistoryPageType.OwnBookings));
+
+    private void navigateToMainPage() => NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+
+    private void navigateToSubscriptionPage() => NavManager.NavigateTo(PageNavigateConstants.SubscriptionPage);
+
+    private void navigateToProfilePage() => NavManager.NavigateTo(PageNavigateConstants.ProfilePage);
+
+    private void navigateToMapPage() => NavManager.NavigateTo(PageNavigateConstants.MapPage);
+
+    private void navigateToHomePage() => NavManager.NavigateTo(PageNavigateConstants.HomePage);
+    
+    private void navigateToPaymentHistoryPage() => NavManager.NavigateTo(PageNavigateConstants.PaymentHistoryPage);
+
+    private void navigateToAuthorizationPage() => NavManager.NavigateTo(PageNavigateConstants.AuthorizationPage);
+
+    protected override async Task OnInitializedAsync()
+    {
+        var culture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        LocalizationService.CultureChanged += UpdateLocalization;
+
+        if (UserAuthorizationHelpService.IsUserAuthenticated == null)
+        {
+            await UserAuthorizationHelpService.IsCredentialsRight();
+            StateHasChanged();
+        }
+        UserAuthorizationHelpService.AuthenticationStateChanged += UpdateNavbar;
+    }
+
+    private void UpdateNavbar()
+    {
+        StateHasChanged();
+    }
+
+    private void UpdateLocalization()
+    {
+        var culture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        StateHasChanged();
+    }
+
+}

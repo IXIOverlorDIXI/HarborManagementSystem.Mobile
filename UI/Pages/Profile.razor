@@ -1,0 +1,526 @@
+﻿@page "/Profile"
+
+@using Domain.Dtos
+@using IoC.Constants
+@using Microsoft.AspNetCore.Components
+@using UI.FormEntities
+@using System.Net.Http.Headers
+@using UI.FormEntities.Account
+@using System.Globalization
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using UI.Services
+@using UI.Validators.Account
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject NavigationManager NavManager
+@inject ChangePasswordFormValidation ChangePasswordFormValidation
+@inject ProfileFormValidation ProfileFormValidation
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject IDialogService DialogService
+
+<NavBar/>
+
+<MudTabs Elevation="2" Rounded="true" PanelClass="pa-6" Centered="true">
+    <MudTabPanel Text="@Localization["ProfilePage_ProfileTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudForm @ref="@profileForm" Model="@_profileForm" Validation="@(ProfileFormValidation.ValidateValue)" ValidationDelay="0">
+                        <MudCardContent>
+                            @* <MudTextField Label="@Localization["ProfilePage_ProfileTab_UsernameLabel"]" *@
+                            @*               HelperText="@Localization["ProfilePage_ProfileTab_UsernameHelperText"]" *@
+                            @*               Class="mt-3" *@
+                            @*               @bind-Value="_profileForm.Username" For="@(() => _profileForm.Username)"/> *@
+                            <MudTextField Label="@Localization["ProfilePage_ProfileTab_DisplayNameLabel"]"
+                                          HelperText="@Localization["ProfilePage_ProfileTab_DisplayNameHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_profileForm.DisplayName" For="@(() => _profileForm.DisplayName)"/>
+                            <MudTextField Label="@Localization["ProfilePage_ProfileTab_EmailLabel"]"
+                                          HelperText="@Localization["ProfilePage_ProfileTab_EmailHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_profileForm.Email" For="@(() => _profileForm.Email)"/>
+                            <MudTextField Label="@Localization["ProfilePage_ProfileTab_PhoneNumberLabel"]"
+                                          HelperText="@Localization["ProfilePage_ProfileTab_PhoneNumberHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_profileForm.PhoneNumber" For="@(() => _profileForm.PhoneNumber)"/>
+                        </MudCardContent>
+                    </MudForm>
+                    <MudCardActions>
+                        @if (_profileErrorAlertVisible)
+                        {
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.ProfileError))">
+                                @Localization["ProfilePage_ProfileTab_ProfileSaveErrorAlert"]: @_profileFormError
+                            </MudAlert>
+                        }
+                        @if (_profileSuccessVisible)
+                        {
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.ProfileSuccess))">
+                                @Localization["ProfilePage_ProfileTab_ProfileSaveSuccessAlert"]
+                            </MudAlert>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                   @onclick="profileSave">
+                            @Localization["ProfilePage_ProfileTab_ProfileSaveButton"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    <MudTabPanel Text="@Localization["ProfilePage_ChangeUserPhotoTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudCardContent>
+                        <MudPaper Class="d-flex flex-row justify-center gap-4" Elevation="0">
+                            <MudPaper Class="d-flex flex-column gap-2" Elevation="0">
+                                <MudText Typo="@Typo.subtitle2">@Localization["ProfilePage_UserPhotoTab_CurrentUserPhotoTitle"]</MudText>
+                                <MudImage Src="@_currentUserPhoto.Url" Height="200" Width="200" ObjectFit="ObjectFit.Fill"/>
+                            </MudPaper>
+                            @if (_file != null)
+                            {
+                                <MudPaper Class="d-flex flex-column gap-2" Elevation="0">
+                                    <MudText Typo="@Typo.subtitle2">@Localization["ProfilePage_UserPhotoTab_NewUserPhotoTitle"]</MudText>
+                                    <MudImage
+                                        Height="200" Width="200" ObjectFit="ObjectFit.Fill"
+                                        Src="@(_fileContent != null ? $"data:{_file.ContentType};base64,{Convert.ToBase64String(_fileContent)}" : null)"/>
+                                </MudPaper>
+                            }
+                        </MudPaper>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+                            <MudPaper Class="d-flex flex-row flex-grow-1 gap-2" Elevation="0">
+                                @if (_userPhotoUploadErrorAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.ChangeUserPhotoError))">
+                                        @Localization["ProfilePage_UserPhotoTab_UserPhotoUpdateErrorAlert"]: @_changeUserPhotoUploadError
+                                    </MudAlert>
+                                }
+                                @if (_userPhotoUploadSuccessAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.ChangeUserPhotoSuccess))">
+                                        @Localization["ProfilePage_UserPhotoTab_UserPhotoUpdateSuccessAlert"]
+                                    </MudAlert>
+                                }
+                                @if (_userPhotoDeleteErrorAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteUserPhotoError))">
+                                        @Localization["ProfilePage_UserPhotoTab_UserPhotoDeleteErrorAlert"]: @_userPhotoDeleteError
+                                    </MudAlert>
+                                }
+                                @if (_userPhotoDeleteSuccessAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteUserPhotoSuccess))">
+                                        @Localization["ProfilePage_UserPhotoTab_UserPhotoDeleteSuccessAlert"]
+                                    </MudAlert>
+                                }
+                                
+                                
+
+                            </MudPaper>
+                            <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
+                                <MudPaper Class="d-flex flex-row justify-start flex-grow-1 gap-2" Elevation="0">
+                                    <MudFileUpload T="IBrowserFile" FilesChanged="HandleFileSelection" Accept=".jpg, .jpeg, .png">
+                                        <ButtonTemplate>
+                                            <MudFab HtmlTag="label"
+                                                    Variant="@Variant.Filled"
+                                                    Color="Color.Primary"
+                                                    Icon="@Icons.Material.Filled.Image"
+                                                    Label="@Localization["ProfilePage_UserPhotoTab_LoadUserPhotoButton"]"
+                                                    for="@context"/>
+                                        </ButtonTemplate>
+                                    </MudFileUpload>
+                                    @if (!DefaultFileLinks.DefaultUserPhoto.Equals(_currentUserPhoto.Url))
+                                    {
+                                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                                                   Class="ml-auto" @onclick="userPhotoDelete">
+                                            @Localization["ProfilePage_UserPhotoTab_UserPhotoDeleteButton"]
+                                        </MudButton>
+                                    }
+                                </MudPaper>
+                                @if (_file != null)
+                                {
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                                               Class="ml-auto" @onclick="userPhotoSave">
+                                        @Localization["ProfilePage_UserPhotoTab_UpdateUserPhotoButton"]
+                                    </MudButton>
+                                }
+                            </MudPaper>
+                        </MudPaper>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    <MudTabPanel Text="@Localization["ProfilePage_ChangePasswordTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudForm ref="@changePasswordForm" Model="@_changePasswordForm" Validation="@(ChangePasswordFormValidation.ValidateValue)" ValidationDelay="0">
+                        <MudCardContent>
+                            <MudTextField Label="@Localization["ProfilePage_ChangePasswordTab_PasswordLabel"]"
+                                          HelperText="@Localization["ProfilePage_ChangePasswordTab_PasswordHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_changePasswordForm.Password" For="@(() => _changePasswordForm.Password)"
+                                          InputType="InputType.Password"/>
+                            <MudTextField Label="@Localization["ProfilePage_ChangePasswordTab_ConfirmPasswordLabel"]"
+                                          HelperText="@Localization["ProfilePage_ChangePasswordTab_ConfirmPasswordHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_changePasswordForm.PasswordConfirm" For="@(() => _changePasswordForm.PasswordConfirm)"
+                                          InputType="InputType.Password"/>
+                        </MudCardContent>
+                    </MudForm>
+                    <MudCardActions>
+                        @if (_changePasswordErrorAlertVisible)
+                        {
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                      ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.ChangePasswordError))">
+                                @Localization["ProfilePage_ChangePasswordTab_ChangePasswordErrorAlert"]: @_changePasswordFormError
+                            </MudAlert>
+                        }
+                        @if (_changePasswordSuccessAlertVisible)
+                        {
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                      ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.ChangePasswordSuccess))">
+                                @Localization["ProfilePage_ChangePasswordTab_ChangePasswordSuccessAlert"]
+                            </MudAlert>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                   @onclick="changePassword">
+                            @Localization["ProfilePage_ChangePasswordTab_ChangePasswordButton"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+    private MudForm profileForm;
+    private MudForm changePasswordForm;
+
+    private ProfileForm _profileForm = new ProfileForm();
+    private string _profileFormError = "";
+    private bool _profileErrorAlertVisible = false;
+    private bool _profileSuccessVisible = false;
+
+    private IBrowserFile _file = null;
+    private byte[] _fileContent = default;
+    private FileDto _currentUserPhoto = new FileDto();
+    private readonly int _maxPhotoSize = 10 * 1024 * 1024;
+    private string _changeUserPhotoUploadError = "";
+    private bool _userPhotoUploadErrorAlertVisible = false;
+    private bool _userPhotoUploadSuccessAlertVisible = false;
+    private string _userPhotoDeleteError = "";
+    private bool _userPhotoDeleteSuccessAlertVisible = false;
+    private bool _userPhotoDeleteErrorAlertVisible = false;
+
+    private readonly ChangePasswordForm _changePasswordForm = new ChangePasswordForm();
+    private string _changePasswordFormError = "";
+    private bool _changePasswordErrorAlertVisible = false;
+    private bool _changePasswordSuccessAlertVisible = false;
+
+    private string _currentUserEmail = "";
+
+    private async Task profileSave()
+    {
+        profileForm.Validate();
+
+        if (!profileForm.IsValid)
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var profileDto = new ProfileDto()
+        {
+            Username = _profileForm.Username,
+            DisplayName = _profileForm.DisplayName,
+            Email = _profileForm.Email,
+            PhoneNumber = _profileForm.PhoneNumber
+        };
+
+        var response = await Client.PutAsJsonAsync(ApiRoutes.Profile.Controller, profileDto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            _currentUserEmail = profileDto.Email;
+            _profileSuccessVisible = true;
+            _profileErrorAlertVisible = false;
+        }
+        else
+        {
+            _profileFormError = await response.Content.ReadAsStringAsync();
+            _profileSuccessVisible = false;
+            _profileErrorAlertVisible = true;
+        }
+    }
+
+    private async Task userPhotoSave()
+    {
+        if (_file == null)
+        {
+            _userPhotoUploadErrorAlertVisible = true;
+            _userPhotoUploadSuccessAlertVisible = false;
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+
+        var fileDto = new ProfilePhotoDataDto()
+        {
+            FileNameWithExtension = _file.Name,
+            FileStream = _fileContent
+        };
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            if (string.IsNullOrEmpty(_currentUserPhoto.Url))
+            {
+                response = await Client.PostAsJsonAsync(ApiRoutes.Profile.Photo, fileDto);
+            }
+            else
+            {
+                response = await Client.PutAsJsonAsync(ApiRoutes.Profile.Photo, fileDto);
+            }
+        }
+        catch (Exception e)
+        {
+            _changeUserPhotoUploadError += e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _userPhotoUploadSuccessAlertVisible = true;
+            _userPhotoUploadErrorAlertVisible = false;
+            _file = null;
+            _fileContent = default;
+            _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+        }
+        else
+        {
+            _userPhotoUploadSuccessAlertVisible = false;
+            _userPhotoUploadErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task HandleFileSelection(IBrowserFile file)
+    {
+        _file = file;
+
+        if (_file != null)
+        {
+            var maxFileSizeInBytes = _maxPhotoSize;
+            if (_file.Size > maxFileSizeInBytes)
+            {
+                _file = null;
+                
+                var parameters = new DialogParameters();
+                parameters.Add("Error", string.Format(
+                    Localization["ProfilePage_UserPhotoTab_NewUserPhotoSizeError"],
+                    _maxPhotoSize));
+                var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["ProfilePage_UserPhotoTab_ErrorDialog_Title"],
+                    parameters, options)).Result;
+                
+                return;
+            }
+
+            try
+            {
+                _fileContent = new byte[_file.Size];
+                await using (var stream = _file.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                {
+                    await stream.ReadAsync(_fileContent, 0, (int)_file.Size);
+                }
+            }
+            catch (Exception e)
+            {
+                _userPhotoUploadSuccessAlertVisible = false;
+                _userPhotoUploadErrorAlertVisible = true;
+                _changeUserPhotoUploadError += e.Message;
+            }
+
+            StateHasChanged();
+        }
+    }
+    
+    private async Task userPhotoDelete()
+    {
+        if (DefaultFileLinks.DefaultUserPhoto.Equals(_currentUserPhoto.Url))
+        {
+            return;
+        }
+        
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            response = await Client.DeleteAsync(ApiRoutes.Profile.Photo);
+        }
+        catch (Exception e)
+        {
+            _userPhotoDeleteError = e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _userPhotoDeleteSuccessAlertVisible = true;
+            _userPhotoDeleteErrorAlertVisible = false;
+            _file = null;
+            _fileContent = default;
+            _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+        }
+        else
+        {
+            _userPhotoDeleteError = await response.Content.ReadAsStringAsync();
+            _userPhotoDeleteSuccessAlertVisible = false;
+            _userPhotoDeleteErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task changePassword()
+    {
+        changePasswordForm.Validate();
+
+        if (!changePasswordForm.IsValid)
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var loginDto = new LoginDto()
+        {
+            Email = _currentUserEmail,
+            Password = _changePasswordForm.PasswordConfirm
+        };
+
+        var response = await Client.PutAsJsonAsync(ApiRoutes.Account.ChangePassword, loginDto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            _changePasswordSuccessAlertVisible = true;
+            _changePasswordErrorAlertVisible = false;
+        }
+        else
+        {
+            _changePasswordFormError = await response.Content.ReadAsStringAsync();
+            _changePasswordSuccessAlertVisible = false;
+            _changePasswordErrorAlertVisible = true;
+        }
+    }
+
+    private async Task closeAlert(AlertDestination alertDirection)
+    {
+        switch (alertDirection)
+        {
+            case AlertDestination.ProfileError:
+                _profileFormError = "";
+                _profileErrorAlertVisible = false;
+                break;
+            case AlertDestination.ProfileSuccess:
+                _profileSuccessVisible = false;
+                break;
+            case AlertDestination.ChangeUserPhotoError:
+                _userPhotoUploadErrorAlertVisible = false;
+                break;
+            case AlertDestination.ChangeUserPhotoSuccess:
+                _userPhotoUploadSuccessAlertVisible = false;
+                break;
+            case AlertDestination.ChangePasswordError:
+                _changePasswordFormError = "";
+                _changePasswordErrorAlertVisible = false;
+                break;
+            case AlertDestination.ChangePasswordSuccess:
+                _changePasswordSuccessAlertVisible = false;
+                break;
+            case AlertDestination.DeleteUserPhotoError:
+                _userPhotoDeleteError = "";
+                _userPhotoDeleteErrorAlertVisible = false;
+                break;
+            case AlertDestination.DeleteUserPhotoSuccess:
+                _userPhotoDeleteSuccessAlertVisible = false;
+                break;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        if (string.IsNullOrEmpty(token))
+        {
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+        if (userDto == null)
+        {
+            await LocalStorageService.RemoveAsync("token");
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+
+        response = await Client.GetAsync(ApiRoutes.Profile.Controller + "?username=" + userDto.Username);
+
+        _profileForm = await response.Content.ReadFromJsonAsync<ProfileForm>();
+
+        response = await Client.GetAsync(ApiRoutes.Profile.Photo + "?username=" + userDto.Username);
+
+        _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+
+        _currentUserEmail = _profileForm.Email;
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+
+}

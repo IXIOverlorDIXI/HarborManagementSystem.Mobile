@@ -1,0 +1,57 @@
+﻿@page "/"
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using UI.Services
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+
+<NavBar/>
+
+<MudContainer Class="m-2 p-2">
+    <MudGrid JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Height="100%">
+        <MudItem Style="width: 100%">
+            <MudText Typo="Typo.h3" Align="Align.Center" Style="width: 100%">@Localization["IndexPage_Title"]</MudText>
+        </MudItem>
+        <MudItem>
+            <MudText Typo="Typo.body1" Align="Align.Justify" Style="text-indent: 20px;" 
+                     Class="mx-auto">@Localization["IndexPage_Body1"]</MudText>
+            <MudText Typo="Typo.body1" Align="Align.Justify" Style="text-indent: 20px;" 
+                     Class="mx-auto">@Localization["IndexPage_Body2"]</MudText>
+            <MudText Typo="Typo.body1" Align="Align.Justify" Style="text-indent: 20px;" 
+                     Class="mx-auto">@Localization["IndexPage_Body3"]</MudText>
+            <MudText Typo="Typo.body1" Align="Align.Justify" Style="text-indent: 20px;" 
+                     Class="mx-auto">@Localization["IndexPage_Body4"]</MudText>
+            <MudText Typo="Typo.body1" Align="Align.Justify" Style="text-indent: 20px;" 
+                     Class="mx-auto">@Localization["IndexPage_Body5"]</MudText>
+        </MudItem>
+        <MudItem Style="width: 100%" Class="d-flex justify-center gap-4">
+            <MudImage 
+                Src="https://harbormagementsysstorage.blob.core.windows.net/harbor-management-system/HarborManagementSystem_Images_1.jpg" 
+                Height="300" Width="300" ObjectFit="ObjectFit.Fill"/>
+            <MudImage 
+                Src="https://harbormagementsysstorage.blob.core.windows.net/harbor-management-system/HarborManagementSystem_Images_2.jpg" 
+                Height="300" Width="300" ObjectFit="ObjectFit.Fill"/>
+            <MudImage 
+                Src="https://harbormagementsysstorage.blob.core.windows.net/harbor-management-system/HarborManagementSystem_Images_3.jpg" 
+                Height="300" Width="300" ObjectFit="ObjectFit.Fill"/>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+    }
+    
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+}

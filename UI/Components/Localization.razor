@@ -1,0 +1,130 @@
+﻿@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Reflection
+@using System.Text.Json;
+@using Domain.Dtos
+@using IoC.Constants
+@using Microsoft.Extensions.Localization
+@using Newtonsoft.Json.Linq
+@using UI.Services
+@inject LocalizationService LocalizationService
+@inject IStorageService LocalStorageService
+@inject NavigationManager NavManager
+@inject UserAuthorizationHelpService UserAuthorizationHelpService
+@inject HttpClient Client
+@inject IStringLocalizer<Localizations.Localization> Localizations
+
+<MudPaper Width="200px" Elevation="0" Class="m-0 p-0">
+    <MudContainer Class="m-0 p-0">
+        <MudSelect T="string" Label="@Localizations["LocalizationsComponent_MudSelect_Label"]" 
+                   Variant="Variant.Outlined" ValueChanged="ChangeLanguage" 
+                   Class="small-mud-select m-0 p-0" FullWidth="true">
+            <MudSelectItem Value="@("en")">
+                English
+            </MudSelectItem>
+            <MudSelectItem Value="@("uk")">
+                Українська
+            </MudSelectItem>
+        </MudSelect>
+    </MudContainer>
+</MudPaper>
+
+
+@code {
+    private async Task ChangeLanguage(string changedLocalization)
+    {
+        if (changedLocalization.Equals(LocalizationService.GetCulture()))
+        {
+            return;
+        }
+        
+        try
+        {
+            await LocalStorageService.SetAsync("LocalizationCulture", changedLocalization);
+        
+            CultureInfo culture = new CultureInfo(changedLocalization);
+            LocalizationService.SetCulture(culture);
+
+            if (UserAuthorizationHelpService.IsUserAuthenticated == null)
+            {
+                await UserAuthorizationHelpService.IsCredentialsRight();
+            }
+
+            if(UserAuthorizationHelpService.IsUserAuthenticated ?? false)
+            {
+                await UserAuthorizationHelpService.SetLanguageSettings(changedLocalization);
+            }
+        }
+        catch (Exception e)
+        {
+            await LocalStorageService.SetAsync("Error", e.Message);
+        }
+        
+        StateHasChanged();
+    }
+    
+    
+    protected override async Task OnInitializedAsync()
+    {
+        string localization = "";
+        CultureInfo culture = null;
+        
+        if (UserAuthorizationHelpService.IsUserAuthenticated == null)
+        {
+            await UserAuthorizationHelpService.IsCredentialsRight();
+        }
+
+        if(UserAuthorizationHelpService.IsUserAuthenticated ?? false)
+        {
+            try
+            {
+                var settings = await UserAuthorizationHelpService.GetSettings();
+                string language = "";
+                
+                var settingsJson = JObject.Parse(settings);
+
+                if (!settingsJson.Properties().Any(x => x.Name.Equals("language")))
+                {
+                    throw new Exception("language does not save");
+                }
+                
+                language = settingsJson["language"].ToString();
+
+                if (!string.IsNullOrEmpty(language))
+                {
+                    culture = new CultureInfo(language);
+                }
+            }
+            catch (Exception e)
+            {
+                await LocalStorageService.SetAsync("Error", e.Message);
+            }
+        }
+        
+        if (culture == null)
+        {
+            try
+            {
+                localization = await LocalStorageService.GetAsync<string>("LocalizationCulture");
+                culture = new CultureInfo(localization);
+            }
+            catch(Exception e)
+            {
+                localization = "en";
+                await LocalStorageService.SetAsync("Error", e.Message);
+                culture = new CultureInfo(localization);
+            }
+        }
+
+        LocalizationService.SetCulture(culture);
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        LocalizationService.CultureChanged += UpdateComponent;
+    }
+
+    private void UpdateComponent()
+    {
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+    }
+}

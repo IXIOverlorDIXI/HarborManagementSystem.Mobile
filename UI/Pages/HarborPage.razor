@@ -1,0 +1,866 @@
+﻿@page "/HarborPage/{Id}"
+
+@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Net.Http.Json
+@using Domain.Dtos
+@using IoC.Constants
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using UI.FormEntities
+@using UI.FormEntities.Harbor
+@using UI.Services
+@using UI.Validators.Harbor
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject NavigationManager NavManager
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject IDialogService DialogService
+@inject HarborValidator HarborValidator
+@inject ServiceValidator ServiceValidator
+@inject IJSRuntime JSRuntime
+
+<NavBar/>
+@if (isOwner)
+{
+    <MudPaper Class="d-flex justify-start flex-wrap gap-2 mx-3 my-2" Elevation="0">
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info"
+                   OnClick="createHarbor">
+            @Localization["HarborPage_HarborControls_CreateNewButton"]
+        </MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                   OnClick="getBookingsForHarbor">
+            @Localization["HarborPage_HarborControls_GetBookingHistoryButton"]
+        </MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                   OnClick="deleteHarbor">
+            @Localization["HarborPage_HarborControls_DeleteButton"]
+        </MudButton>
+    </MudPaper>
+}
+<MudContainer Style="width: 100%">
+<MudGrid JustifyContent="JustifyContent.Start" Class="d-flex d-column" AlignItems="AlignItems.Center" Height="100%" Style="width: 100%">
+@if (isOwner)
+{
+    <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+        <MudExpansionPanel Text="@Localization["HarborPage_HarborEditPart_Title"]" Style="width: 100%">
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6" Style="width: 100%">
+                <MudCard>
+                    <MudForm @ref="harborEditForm" Model="@_harborForm" Validation="@(HarborValidator.ValidateValue)" ValidationDelay="0">
+                        <MudCardContent>
+                            <MudTextField Label="@Localization["HarborPage_HarborEditPart_DisplayNameLabel"]"
+                                          HelperText="@Localization["HarborPage_HarborEditPart_DisplayNameHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_harborForm.DisplayName" For="@(() => _harborForm.DisplayName)"/>
+                            <MudTextField Label="@Localization["HarborPage_HarborEditPart_DescriptionLabel"]"
+                                          HelperText="@Localization["HarborPage_HarborEditPart_DescriptionHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_harborForm.Description" For="@(() => _harborForm.Description)"/>
+                            <MudNumericField T="double" Label="@Localization["HarborPage_HarborEditPart_GeolocationLongitudeLabel"]"
+                                             HelperText="@Localization["HarborPage_HarborEditPart_GeolocationLongitudeHelperText"]"
+                                             Class="mt-3" Step=".5"
+                                             @bind-Value="_harborForm.GeolocationLongitude" For="@(() => _harborForm.GeolocationLongitude)"/>
+                            <MudNumericField T="double" Label="@Localization["HarborPage_HarborEditPart_GeolocationLatitudeLabel"]"
+                                             HelperText="@Localization["HarborPage_HarborEditPart_GeolocationLatitudeHelperText"]"
+                                             Class="mt-3" Step=".5"
+                                             @bind-Value="_harborForm.GeolocationLatitude" For="@(() => _harborForm.GeolocationLatitude)"/>
+                            <MudTextField Label="@Localization["HarborPage_HarborEditPart_BICLabel"]"
+                                          HelperText="@Localization["HarborPage_HarborEditPart_BICHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_harborForm.BIC" For="@(() => _harborForm.BIC)"/>
+                            <MudTextField Label="@Localization["HarborPage_HarborEditPart_IBANLabel"]"
+                                          HelperText="@Localization["HarborPage_HarborEditPart_IBANHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_harborForm.IBAN" For="@(() => _harborForm.IBAN)"/>
+                            <MudTextField Label="@Localization["HarborPage_HarborEditPart_SupportEmailLabel"]"
+                                          HelperText="@Localization["HarborPage_HarborEditPart_SupportEmailHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_harborForm.SupportEmail" For="@(() => _harborForm.SupportEmail)"/>
+                            <MudTextField Label="@Localization["HarborPage_HarborEditPart_SupportPhoneNumberLabel"]"
+                                          HelperText="@Localization["HarborPage_HarborEditPart_SupportPhoneNumberHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_harborForm.SupportPhoneNumber" For="@(() => _harborForm.SupportPhoneNumber)"/>
+
+                        </MudCardContent>
+                    </MudForm>
+                    <MudCardActions>
+                        @if (_harborErrorAlertVisible)
+                        {
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.EditHarborError))">
+                                @Localization["HarborPage_HarborEditPart_HarborSaveErrorAlert"]: @_harborFormError
+                            </MudAlert>
+                        }
+                        @if (_harborSuccessVisible)
+                        {
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.EditHarborSuccess))">
+                                @Localization["HarborPage_HarborEditPart_HarborSaveSuccessAlert"]
+                            </MudAlert>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                   @onclick="harborSave">
+                            @Localization["HarborPage_HarborEditPart_HarborSaveButton"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+}
+
+<MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+    <MudExpansionPanel Text="@Localization["HarborPage_HarborPhotosPart_Title"]" Style="width: 100%">
+        <MudItem Class="mx-1 pa-1" Style="width: 100%">
+            <MudTabs Elevation="2" Rounded="true" PanelClass="pa-0" Centered="true" Style="width: 100%">
+                <MudTabPanel Text="@Localization["HarborPage_HarborPhotosTab_Title"]">
+                    <MudCard Style="width: 100%">
+                        @if (_currentHarborPhotos.Any())
+                        {
+                            <MudPaper Class="d-flex justify-center flex-wrap gap-2" Elevation="0">
+                                @foreach (var photo in _currentHarborPhotos)
+                                {
+                                    <MudPaper Class="d-flex flex-column align-content-start gap-0" Elevation="0">
+                                        <MudImage
+                                            Src="@photo.Url"
+                                            Height="200" Width="200" ObjectFit="ObjectFit.Fill"/>
+                                        @if (isOwner)
+                                        {
+                                            <MudIconButton Style="width: 200px" Color="Color.Error"
+                                                           OnClick="() => harborPhotoDelete(photo)"
+                                                           Icon="@Icons.Material.Filled.Delete"/>
+                                        }
+
+                                    </MudPaper>
+                                }
+                            </MudPaper>
+                            if (_harborPhotoDeleteErrorAlertVisible)
+                            {
+                                <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                          ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteHarborPhotoError))">
+                                    @Localization["HarborPage_HarborPhotosTab_DeletePhotoErrorAlert"]: @_harborDeletePhotoError
+                                </MudAlert>
+                            }
+                            if (_harborPhotoDeleteSuccessAlertVisible)
+                            {
+                                <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                          ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteHarborPhotoSuccess))">
+                                    @Localization["HarborPage_HarborPhotosTab_DeletePhotoSuccessAlert"]
+                                </MudAlert>
+                            }
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.h5" Align="Align.Start" Class="ma-2">
+                                @Localization["HarborPage_HarborPhotosTab_EmptyData"]
+                            </MudText>
+                        }
+                    </MudCard>
+                </MudTabPanel>
+                @if (isOwner)
+                {
+                    <MudTabPanel Text="@Localization["HarborPage_HarborPhotosTab_UploadTab"]">
+                        <MudCard Style="width: 100%">
+                            <MudCardContent Style="width: 100%">
+                                <MudPaper Class="d-flex flex-row justify-center align-content-center gap-4" Elevation="0">
+                                    @if (_photo != null)
+                                    {
+                                        <MudPaper Class="d-flex flex-column justify-center align-content-center gap-2" Elevation="0">
+                                            <MudText Typo="@Typo.subtitle2">@Localization["HarborPage_HarborPhotosTab_NewHarborPhoto"]</MudText>
+                                            <MudImage ObjectPosition="ObjectPosition.Center" Class="d-flex align-center"
+                                                      Height="200" Width="200" ObjectFit="ObjectFit.Fill"
+                                                      Src="@(_photoContent != null ? $"data:{_photo.ContentType};base64,{Convert.ToBase64String(_photoContent)}" : null)"/>
+                                        </MudPaper>
+                                    }
+                                </MudPaper>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+                                    <MudPaper Class="d-flex flex-row flex-grow-1 gap-2" Elevation="0">
+                                        @if (_harborPhotoUploadErrorAlertVisible)
+                                        {
+                                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                                      ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.UploadHarborPhotoError))">
+                                                @Localization["HarborPage_HarborPhotosTab_UploadPhotoErrorAlert"]: @_harborUploadPhotoError
+                                            </MudAlert>
+                                        }
+                                        @if (_harborPhotoUploadSuccessAlertVisible)
+                                        {
+                                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                                      ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.UploadHarborPhotoSuccess))">
+                                                @Localization["HarborPage_HarborPhotosTab_UploadPhotoSuccessAlert"]
+                                            </MudAlert>
+                                        }
+                                    </MudPaper>
+                                    <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
+                                        <MudFileUpload T="IBrowserFile" FilesChanged="HandlePhotoSelection" Accept=".jpg, .jpeg, .png">
+                                            <ButtonTemplate>
+                                                <MudFab HtmlTag="label"
+                                                        Variant="@Variant.Filled"
+                                                        Color="Color.Primary"
+                                                        Icon="@Icons.Material.Filled.Image"
+                                                        Label="@Localization["HarborPage_HarborPhotosTab_UploadPhotoButton"]"
+                                                        for="@context"/>
+                                            </ButtonTemplate>
+                                        </MudFileUpload>
+
+                                        @if (_photo != null)
+                                        {
+                                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                                                       Class="ml-auto" @onclick="harborPhotoSave">
+                                                @Localization["HarborPage_HarborPhotosTab_SendPhotoButton"]
+                                            </MudButton>
+                                        }
+                                    </MudPaper>
+                                </MudPaper>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudTabPanel>
+                }
+            </MudTabs>
+        </MudItem>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+<MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+    <MudExpansionPanel Text="@Localization["HarborPage_HarborDocumentsPart_Title"]" Style="width: 100%">
+        <MudItem Class="mx-1 pa-1" Style="width: 100%">
+            <MudTabs Elevation="2" Rounded="true" PanelClass="pa-6" Centered="true" Style="width: 100%">
+                <MudTabPanel Text="@Localization["HarborPage_HarborDocumentsTab_Title"]">
+                    <MudCard Style="width: 100%">
+                        @if (_currentHarborDocuments.Any())
+                        {
+                            <MudPaper Class="d-flex flex-column gap-2" Elevation="0">
+                                @foreach (var document in _currentHarborDocuments)
+                                {
+                                    <MudPaper Class="d-flex flex-row justify-center align-center gap-1" Elevation="0">
+                                        <MudText Typo="@Typo.subtitle1" Style="background-color: darkgrey; cursor: pointer"
+                                                 @onclick="() => NavManager.NavigateTo(document.Url)">
+                                            @Localization["HarborPage_HarborDocumentsTab_DocumentNumber"]:
+                                            @document.DocumentId
+                                        </MudText>
+                                        @if (isOwner)
+                                        {
+                                            <MudIconButton Style="height: 100%" Color="Color.Error"
+                                                           OnClick="() => harborDocumentDelete(document)"
+                                                           Icon="@Icons.Material.Filled.Delete"/>
+                                        }
+                                    </MudPaper>
+                                }
+                            </MudPaper>
+                            if (_harborDocumentDeleteErrorAlertVisible)
+                            {
+                                <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                          ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteHarborDocumentError))">
+                                    @Localization["HarborPage_HarborDocumentsTab_DeleteHarborDocumentErrorAlert"]: @_harborDeleteDocumentError
+                                </MudAlert>
+                            }
+                            if (_harborDocumentDeleteSuccessAlertVisible)
+                            {
+                                <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                          ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteHarborDocumentSuccess))">
+                                    @Localization["HarborPage_HarborDocumentsTab_DeleteHarborDocumentSuccessAlert"]
+                                </MudAlert>
+                            }
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.h5" Align="Align.Start">
+                                @Localization["HarborPage_HarborDocumentsTab_EmptyData"]
+                            </MudText>
+                        }
+                    </MudCard>
+                </MudTabPanel>
+                @if (isOwner)
+                {
+                    <MudTabPanel Text="@Localization["HarborPage_HarborDocumentsTab_UploadTitle"]">
+                        <MudCard Style="width: 100%">
+                            <MudCardContent Style="width: 100%">
+                                <MudPaper Class="d-flex flex-row justify-center align-content-center gap-4" Elevation="0">
+                                    @if (_document != null)
+                                    {
+                                        <MudPaper Class="d-flex flex-column justify-center align-content-center gap-2" Elevation="0">
+                                            <MudText Typo="@Typo.subtitle2">@Localization["HarborPage_HarborDocumentsTab_DocumentName"]</MudText>
+                                            <MudText Typo="@Typo.subtitle1" Style="background-color: darkgrey">@_document.Name</MudText>
+                                        </MudPaper>
+                                    }
+                                </MudPaper>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+                                    <MudPaper Class="d-flex flex-row flex-grow-1 gap-2" Elevation="0">
+                                        @if (_harborDocumentUploadErrorAlertVisible)
+                                        {
+                                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                                      ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.UploadHarborDocumentError))">
+                                                @Localization["HarborPage_HarborDocumentsTab_DocumentUploadErrorAlert"]: @_harborUploadDocumentError
+                                            </MudAlert>
+                                        }
+                                        @if (_harborDocumentUploadSuccessAlertVisible)
+                                        {
+                                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                                      ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.UploadHarborDocumentSuccess))">
+                                                @Localization["HarborPage_HarborDocumentsTab_DocumentUploadSuccessAlert"]
+                                            </MudAlert>
+                                        }
+                                    </MudPaper>
+                                    <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
+                                        <MudFileUpload T="IBrowserFile" FilesChanged="HandleDocumentSelection" Accept=".pdf">
+                                            <ButtonTemplate>
+                                                <MudFab HtmlTag="label"
+                                                        Variant="@Variant.Filled"
+                                                        Color="Color.Primary"
+                                                        Icon="@Icons.Material.Filled.FileUpload"
+                                                        Label="@Localization["HarborPage_HarborDocumentsTab_DocumentUploadButton"]"
+                                                        for="@context"/>
+                                            </ButtonTemplate>
+                                        </MudFileUpload>
+
+                                        @if (_document != null)
+                                        {
+                                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                                                       Class="ml-auto" @onclick="harborDocumentSave">
+                                                @Localization["HarborPage_HarborDocumentsTab_SendDocumentButton"]
+                                            </MudButton>
+                                        }
+                                    </MudPaper>
+                                </MudPaper>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudTabPanel>
+                }
+            </MudTabs>
+        </MudItem>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+<MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+    <MudExpansionPanel Text="@Localization["HarborPage_ServicesPart_Title"]" Style="width: 100%">
+        <MudItem Class="mx-1 pa-1" Style="width: 100%">
+            <ServicesManageComponent Id="@Id" IsOwner="isOwner"/>
+        </MudItem>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+<MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+    <MudExpansionPanel Text="@Localization["HarborPage_BerthPart_Title"]" Style="width: 100%">
+        <MudItem Class="mx-1 pa-1" Style="width: 100%">
+            <BerthsComponent Id="@Id" IsOwner="isOwner"/>
+        </MudItem>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+<MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+    <MudExpansionPanel Text="@Localization["HarborPage_ReviewsPart_Title"]" Style="width: 100%">
+        <MudItem Class="mx-1 pa-1" Style="width: 100%">
+            <ReviewsComponent Id="@Id" _Scope="@ReviewsScope.Harbor" IsObjectOwner="isOwner"/>
+        </MudItem>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+</MudGrid>
+</MudContainer>
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private bool isAdmin = false;
+
+    private MudForm harborEditForm;
+
+
+    private bool isOwner = false;
+    private HarborForm _harborForm = new HarborForm();
+    private string _harborFormError = "";
+    private bool _harborErrorAlertVisible = false;
+    private bool _harborSuccessVisible = false;
+
+    private IBrowserFile _document = null;
+    private byte[] _documentContent = default;
+    private List<HarborDocumentDto> _currentHarborDocuments = new List<HarborDocumentDto>();
+
+    private IBrowserFile _photo = null;
+    private byte[] _photoContent = default;
+    private List<HarborPhotoDto> _currentHarborPhotos = new List<HarborPhotoDto>();
+
+    private readonly int _maxPhotoSize = 10 * 1024 * 1024;
+    private string _harborUploadPhotoError = "";
+    private string _harborDeletePhotoError = "";
+    private bool _harborPhotoUploadErrorAlertVisible = false;
+    private bool _harborPhotoUploadSuccessAlertVisible = false;
+    private bool _harborPhotoDeleteSuccessAlertVisible = false;
+    private bool _harborPhotoDeleteErrorAlertVisible = false;
+
+    private readonly int _maxDocumentSize = 100 * 1024 * 1024;
+    private string _harborUploadDocumentError = "";
+    private string _harborDeleteDocumentError = "";
+    private bool _harborDocumentUploadErrorAlertVisible = false;
+    private bool _harborDocumentUploadSuccessAlertVisible = false;
+    private bool _harborDocumentDeleteSuccessAlertVisible = false;
+    private bool _harborDocumentDeleteErrorAlertVisible = false;
+
+    private void getBookingsForHarbor() => NavManager.NavigateTo(
+        string.Format("{0}/{1}/{2}",
+            PageNavigateConstants.BookingHistoryPage,
+            (int)BookingHistoryPageType.BookingsForHarbor,
+            Id));
+
+    private void createHarbor() => NavManager.NavigateTo(PageNavigateConstants.HarborFormPage);
+
+    private async Task deleteHarbor()
+    {
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+            Localization["HomePage_HarborPart_DeleteDialog_Title"],
+            parameters, options)).Result;
+
+        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        {
+            var response = await Client.DeleteAsync(string.Format(
+                "{0}?id={1}",
+                ApiRoutes.Harbor.Controller,
+                Id));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["HomePage_HarborPart_ErrorDialog_Title"],
+                    parameters, options)).Result;
+
+                return;
+            }
+
+            NavManager.NavigateTo(PageNavigateConstants.HomePage);
+        }
+    }
+
+    private async Task harborSave()
+    {
+        harborEditForm.Validate();
+
+        if (!harborEditForm.IsValid)
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var harborDto = new HarborDataDto()
+        {
+            DisplayName = _harborForm.DisplayName,
+            Description = _harborForm.Description,
+            GeolocationLatitude = _harborForm.GeolocationLatitude,
+            GeolocationLongitude = _harborForm.GeolocationLongitude,
+            BIC = _harborForm.BIC,
+            IBAN = _harborForm.IBAN,
+            SupportPhoneNumber = _harborForm.SupportPhoneNumber,
+            SupportEmail = _harborForm.SupportEmail,
+            Id = Guid.Parse(Id)
+        };
+
+        var response = await Client.PutAsJsonAsync(ApiRoutes.Harbor.Controller, harborDto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            _harborSuccessVisible = true;
+            _harborErrorAlertVisible = false;
+        }
+        else
+        {
+            _harborFormError = await response.Content.ReadAsStringAsync();
+            _harborSuccessVisible = false;
+            _harborErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task harborPhotoSave()
+    {
+        if (_photo == null)
+        {
+            _harborPhotoUploadErrorAlertVisible = true;
+            _harborPhotoUploadSuccessAlertVisible = false;
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+
+        var fileDto = new HarborPhotoDataDto()
+        {
+            FileNameWithExtension = _photo.Name,
+            FileStream = _photoContent,
+            HarborId = Guid.Parse(Id)
+        };
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            response = await Client.PostAsJsonAsync(ApiRoutes.Harbor.Photos, fileDto);
+        }
+        catch (Exception e)
+        {
+            _harborUploadPhotoError = e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _harborPhotoUploadSuccessAlertVisible = true;
+            _harborPhotoUploadErrorAlertVisible = false;
+            _document = null;
+            _documentContent = default;
+
+            response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
+            _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+        }
+        else
+        {
+            _harborUploadPhotoError = await response.Content.ReadAsStringAsync();
+            _harborPhotoUploadSuccessAlertVisible = false;
+            _harborPhotoUploadErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task harborPhotoDelete(HarborPhotoDto harborPhoto)
+    {
+        if (DefaultFileLinks.DefaultImage.Equals(harborPhoto.Url))
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            response = await Client.DeleteAsync(ApiRoutes.Harbor.Photos + "?id=" + harborPhoto.PhotoId);
+        }
+        catch (Exception e)
+        {
+            _harborDeletePhotoError = e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _harborPhotoDeleteSuccessAlertVisible = true;
+            _harborPhotoDeleteErrorAlertVisible = false;
+            _document = null;
+            _documentContent = default;
+            response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
+            _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+        }
+        else
+        {
+            _harborDeletePhotoError = await response.Content.ReadAsStringAsync();
+            _harborPhotoDeleteSuccessAlertVisible = false;
+            _harborPhotoDeleteErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task HandlePhotoSelection(IBrowserFile file)
+    {
+        _photo = file;
+
+        if (_photo != null)
+        {
+            var maxFileSizeInBytes = _maxPhotoSize;
+            if (_photo.Size > maxFileSizeInBytes)
+            {
+                _photo = null;
+                
+                var parameters = new DialogParameters();
+                parameters.Add("Error", string.Format(
+                    Localization["HarborPage_HarborPhotoTab_NewHarborPhotoSizeError"],
+                    _maxPhotoSize));
+                var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["HarborPage_HarborPhotoTab_ErrorDialog_Title"],
+                    parameters, options)).Result;
+                
+                return;
+            }
+
+            try
+            {
+                _photoContent = new byte[_photo.Size];
+                await using (var stream = _photo.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                {
+                    await stream.ReadAsync(_photoContent, 0, (int)_photo.Size);
+                }
+            }
+            catch (Exception e)
+            {
+                _harborPhotoUploadSuccessAlertVisible = false;
+                _harborPhotoUploadErrorAlertVisible = true;
+                _harborUploadPhotoError = e.Message;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task harborDocumentSave()
+    {
+        if (_document == null)
+        {
+            _harborDocumentUploadErrorAlertVisible = true;
+            _harborDocumentUploadSuccessAlertVisible = false;
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+
+        var fileDto = new HarborDocumentDataDto()
+        {
+            FileNameWithExtension = _document.Name,
+            FileStream = _documentContent,
+            HarborId = Guid.Parse(Id)
+        };
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            response = await Client.PostAsJsonAsync(ApiRoutes.Harbor.Documents, fileDto);
+        }
+        catch (Exception e)
+        {
+            _harborUploadDocumentError = e.Message;
+        }
+
+        if (response.IsSuccessStatusCode)
+        {
+            _harborDocumentUploadSuccessAlertVisible = true;
+            _harborDocumentUploadErrorAlertVisible = false;
+            _document = null;
+            _documentContent = default;
+
+            response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
+            _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+        }
+        else
+        {
+            _harborUploadDocumentError = await response.Content.ReadAsStringAsync();
+            _harborDocumentUploadSuccessAlertVisible = false;
+            _harborDocumentUploadErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task harborDocumentDelete(HarborDocumentDto harborDocument)
+    {
+        if (DefaultFileLinks.DefaultImage.Equals(harborDocument.Url))
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            response = await Client.DeleteAsync(ApiRoutes.Harbor.Documents + "?id=" + harborDocument.DocumentId);
+        }
+        catch (Exception e)
+        {
+            _harborDeleteDocumentError = e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _harborDocumentDeleteSuccessAlertVisible = true;
+            _harborDocumentDeleteErrorAlertVisible = false;
+            _document = null;
+            _documentContent = default;
+
+            response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
+            _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+        }
+        else
+        {
+            _harborDeleteDocumentError = await response.Content.ReadAsStringAsync();
+            _harborDocumentDeleteSuccessAlertVisible = false;
+            _harborDocumentDeleteErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task HandleDocumentSelection(IBrowserFile file)
+    {
+        _document = file;
+
+        if (_document != null)
+        {
+            if (_document.Size > _maxPhotoSize)
+            {
+                _document = null;
+                
+                var parameters = new DialogParameters();
+                parameters.Add("Error", string.Format(
+                    Localization["HarborPage_HarborPhotoTab_NewHarborPhotoSizeError"],
+                    _maxDocumentSize));
+                var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["HarborPage_HarborDocumentTab_ErrorDialog_Title"],
+                    parameters, options)).Result;
+                
+                return;
+            }
+
+            try
+            {
+                _documentContent = new byte[_document.Size];
+                await using (var stream = _document.OpenReadStream(maxAllowedSize: _maxDocumentSize))
+                {
+                    await stream.ReadAsync(_documentContent, 0, (int)_document.Size);
+                }
+            }
+            catch (Exception e)
+            {
+                _harborDocumentUploadSuccessAlertVisible = false;
+                _harborDocumentUploadErrorAlertVisible = true;
+                _harborUploadDocumentError = e.Message;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task closeAlert(AlertDestination alertDirection)
+    {
+        switch (alertDirection)
+        {
+            case AlertDestination.EditHarborError:
+                _harborFormError = "";
+                _harborErrorAlertVisible = false;
+                break;
+            case AlertDestination.EditHarborSuccess:
+                _harborSuccessVisible = false;
+                break;
+            case AlertDestination.UploadHarborPhotoError:
+                _harborUploadPhotoError = "";
+                _harborPhotoUploadErrorAlertVisible = false;
+                break;
+            case AlertDestination.UploadHarborPhotoSuccess:
+                _harborPhotoUploadSuccessAlertVisible = false;
+                break;
+            case AlertDestination.DeleteHarborPhotoError:
+                _harborDeletePhotoError = "";
+                _harborPhotoDeleteErrorAlertVisible = false;
+                break;
+            case AlertDestination.DeleteHarborPhotoSuccess:
+                _harborPhotoDeleteSuccessAlertVisible = false;
+                break;
+            case AlertDestination.UploadHarborDocumentError:
+                _harborUploadDocumentError = "";
+                _harborDocumentUploadErrorAlertVisible = false;
+                break;
+            case AlertDestination.UploadHarborDocumentSuccess:
+                _harborDocumentUploadSuccessAlertVisible = false;
+                break;
+            case AlertDestination.DeleteHarborDocumentError:
+                _harborDeleteDocumentError = "";
+                _harborDocumentDeleteErrorAlertVisible = false;
+                break;
+            case AlertDestination.DeleteHarborDocumentSuccess:
+                _harborDocumentDeleteSuccessAlertVisible = false;
+                break;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        HttpResponseMessage response;
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            response = await Client.GetAsync(ApiRoutes.Harbor.ById + "?id=" + Id);
+
+            var harborData = await response.Content.ReadFromJsonAsync<HarborPreviewDataDto>();
+
+            _harborForm = new HarborForm()
+            {
+                DisplayName = harborData.DisplayName,
+                Description = harborData.Description,
+                GeolocationLatitude = harborData.GeolocationLatitude,
+                GeolocationLongitude = harborData.GeolocationLongitude,
+                BIC = harborData.BIC,
+                IBAN = harborData.IBAN,
+                SupportPhoneNumber = harborData.SupportPhoneNumber,
+                SupportEmail = harborData.SupportEmail,
+            };
+
+            isOwner = harborData.IsOwner;
+        }
+
+
+        response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
+
+        _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+
+        response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
+
+        _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+
+        StateHasChanged();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+
+}

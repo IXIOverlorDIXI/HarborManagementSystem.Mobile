@@ -1,0 +1,119 @@
+﻿@page "/StatisticsPage/{Id}"
+@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Net.Http.Json
+@using IoC.Constants
+@using Domain.Dtos
+@using Microsoft.Extensions.Localization
+@using UI.Services
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject NavigationManager NavManager
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+
+<NavBar/>
+<MudContainer>
+    <MudGrid JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Height="100%"
+             Class="d-flex flex-column">
+        <MudExpansionPanels Elevation="1" Class="mt-6">
+            @if (_relativePositionMeteringData.Any())
+            {
+                <RelativePositionMeteringChartsComponent
+                    RelativePositionMeteringData="@_relativePositionMeteringData"/>
+            }
+            else
+            {
+                <MudExpansionPanel Text="@Localization["StatisticsPage_RelativePositionComponent_Title"]" >
+                    <MudText Typo="Typo.h5" Align="Align.Start">
+                        @Localization["StatisticsPage_RelativePositionComponent_EmptyData"]
+                    </MudText>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+        <MudExpansionPanels Elevation="1" Class="mt-6">
+            @if (_environmentalConditionData.Any())
+            {
+                <EnvironmentalConditionChartsComponent
+                    EnvironmentalConditionData="@_environmentalConditionData"/>
+            }
+            else
+            {
+                <MudExpansionPanel Text="@Localization["StatisticsPage_EnvironmentalCondition_Title"]" >
+                    <MudText Typo="Typo.h5" Align="Align.Start">
+                        @Localization["StatisticsPage_EnvironmentalConditionComponent_EmptyData"]
+                    </MudText>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+        <MudExpansionPanels Elevation="1" Class="mt-6">
+            @if (_storageEnvironmentalConditionData.Any())
+            {
+                <StorageEnvironmentalConditionChartsComponent
+                    StorageEnvironmentalConditionData="@_storageEnvironmentalConditionData"/>
+            }
+            else
+            {
+                <MudExpansionPanel Text="@Localization["StatisticsPage_StorageEnvironmentalCondition_Title"]" >
+                    <MudText Typo="Typo.h5" Align="Align.Start">
+                        @Localization["StatisticsPage_StorageEnvironmentalConditionComponent_EmptyData"]
+                    </MudText>
+                </MudExpansionPanel>
+                
+            }
+        </MudExpansionPanels>
+        
+    </MudGrid>
+</MudContainer>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private List<RelativePositionMeteringDto> _relativePositionMeteringData { get; set; } 
+        = new List<RelativePositionMeteringDto>();
+    private List<StorageEnvironmentalConditionDto> _storageEnvironmentalConditionData { get; set; } 
+        = new List<StorageEnvironmentalConditionDto>();
+    private List<EnvironmentalConditionDto> _environmentalConditionData { get; set; } 
+        = new List<EnvironmentalConditionDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        if (string.IsNullOrEmpty(token))
+        {
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.RelativePositionMetering.Controller, Id));
+
+        _relativePositionMeteringData = await response.Content.ReadFromJsonAsync<List<RelativePositionMeteringDto>>();
+
+        response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.EnvironmentalCondition.Controller, Id));
+
+        _environmentalConditionData = await response.Content.ReadFromJsonAsync<List<EnvironmentalConditionDto>>();
+        
+        response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.StorageEnvironmentalCondition.Controller, Id));
+
+        _storageEnvironmentalConditionData = await response.Content.ReadFromJsonAsync<List<StorageEnvironmentalConditionDto>>();
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+}

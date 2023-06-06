@@ -1,0 +1,202 @@
+﻿@page "/Map"
+@using Domain.Dtos
+@using System.Text
+@using System.Globalization
+@using System.Net.Http.Json
+@using IoC.Constants
+@using Microsoft.Extensions.Localization
+@using UI.Services
+
+@inject IJSRuntime JSRuntime
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject NavigationManager NavManager
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject IDialogService DialogService
+
+<MudPaper Height="100%" Width="100%" Class="h-100 ma-0 pa-0 d-flex flex-column">
+    <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="h-100 ma-0 pa-0">
+        <NavBar/>
+        <MudPaper Class="d-flex flex-row gap-1 mx-1 pa-0" Style="width: 100%; height: 630px;"Elevation="0">
+            <MudPaper Class="d-flex flex-column align-content-start gap-1 ma-0 pa-0" Elevation="0" MinWidth="200">
+                <MudPaper Style="max-height: 280px" Elevation="0">
+                    <MudSelect T="ShipTypeDto" SelectedValuesChanged="() => ShipTypeFilterChange()"
+                                               @bind-Value="@selectedValue" Clearable="true"
+                                               Label="@Localization["MapPage_ShipType_Label"]"
+                                               Text="@Localization["MapPage_ShipType_Text"]">
+                                        @foreach (var type in _shipTypes)
+                                        {
+                                            <MudSelectItem T="ShipTypeDto" Value="@type">
+                                                <div class="d-flex flex-column gap-1 ma-0 pa-0">
+                                                    <MudText Typo="Typo.subtitle1">
+                                                        @Localization["MapPage_TypeName"]:
+                                                        @type.TypeName
+                                                    </MudText>
+                                                    <MudText Typo="Typo.subtitle2">
+                                                        @Localization["MapPage_Description"]:
+                                                        @type.Description
+                                                    </MudText>
+                                                </div>
+                                            </MudSelectItem>
+                                        }
+                                    </MudSelect>
+                </MudPaper>
+                <MudPaper Class="d-flex flex-column gap-1 my-1 mx-0 pa-0" Elevation="0" Width="200"
+                          Style="cursor: pointer; overflow-y: auto;">
+                    @foreach (var filteredHarbor in _filteredHarbors)
+                    {
+                        <MudPaper Class="d-flex flex-row justify-space-between flex-grow-1 gap-0"
+                                  Elevation="0" @onclick="() => HarborClick(filteredHarbor)">
+                            <MudPaper Class="d-flex flex-column gap-1" Elevation="0">
+                                <MudText Typo="@Typo.h6">
+                                    @filteredHarbor.DisplayName
+                                </MudText>
+                                <MudText Typo="@Typo.subtitle1">
+                                    @filteredHarbor.Description
+                                </MudText>
+                                <MudText Typo="@Typo.subtitle2">
+                                    @filteredHarbor.SupportEmail
+                                </MudText>
+                                <MudText Typo="@Typo.subtitle2">
+                                    @filteredHarbor.SupportPhoneNumber
+                                </MudText>
+                            </MudPaper>
+                            <MudPaper Class="d-flex flex-column align-center gap0" Elevation="0">
+                                <MudRating ReadOnly="true" SelectedValue="@((int)(filteredHarbor.AverageRate))"/>
+                                <MudText Typo="@Typo.subtitle2">
+                                    @filteredHarbor.ReviewsAmount
+                                </MudText>
+                            </MudPaper>
+                        </MudPaper>
+                    }
+                </MudPaper>
+            </MudPaper>
+            <div id="map" @ref="mapDiv" class="ma-0 pa-0"/>
+        </MudPaper>
+
+    </MudContainer>
+</MudPaper>
+
+@code {
+    private ElementReference mapDiv;
+    private double latitude;
+    private double longitude;
+    
+    private int zoom = 7;
+    private ShipTypeDto selectedValue = new ShipTypeDto();
+    
+    private List<HarborPreviewDataDto> _harbors = new List<HarborPreviewDataDto>();
+    private List<ShipTypeDto> _shipTypes = new List<ShipTypeDto>();
+
+    private List<HarborPreviewDataDto> _filteredHarbors = new List<HarborPreviewDataDto>();
+
+    private async Task HarborClick(HarborPreviewDataDto harbor)
+    {
+        await JSRuntime.InvokeVoidAsyncIgnoreErrors(
+            "zoom",
+            7, 
+            harbor.GeolocationLatitude,
+            harbor.GeolocationLongitude);
+        
+        StateHasChanged();
+    }
+
+    private async void ShipTypeFilterChange()
+    {
+        if (_shipTypes.Any(x => x.Id.Equals(selectedValue.Id)))
+        {
+            var response = await Client.PostAsJsonAsync(ApiRoutes.Harbor.SuitableHarbors, selectedValue);
+            
+            _filteredHarbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+        }
+        else
+        {
+            _filteredHarbors = _harbors;
+        }
+
+        _filteredHarbors = _filteredHarbors
+            .OrderByDescending(x => x.AverageRate)
+            .ThenByDescending(x => x.ReviewsAmount)
+            .ToList();
+        
+        StateHasChanged();
+    }
+
+    private async Task AddMarkerOnMap(HarborPreviewDataDto harbor)
+    {
+        var markerText = new StringBuilder("");
+
+        markerText.Append(string.Format("<div id=\"content\" onclick=\"window.redirectToPage('{0}/{1}')\" style=\"cursor: pointer\">",
+            PageNavigateConstants.HarborPage, harbor.Id));
+        markerText.Append("<div id=\"siteNotice\">");
+        markerText.Append(String.Format("</div>"));
+        markerText.Append(String.Concat("<h1 id=\"firstHeading\" class=\"firstHeading\">", harbor.DisplayName, "</h1>"));
+        markerText.Append(String.Concat("<p>", harbor.Description, "</p>"));
+        markerText.Append("<div id=\"siteNotice\">");
+        markerText.Append("</div>");
+        markerText.Append("</div>");
+        
+        await JSRuntime.InvokeVoidAsyncIgnoreErrors("addMarker", 
+            markerText.ToString(), 
+            harbor.DisplayName, 
+            harbor.GeolocationLatitude, 
+            harbor.GeolocationLongitude);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        var response = await Client.GetAsync(ApiRoutes.Harbor.Controller);
+
+        _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+
+        _filteredHarbors = _harbors;
+        
+        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+
+        await JSRuntime.InvokeVoidAsyncIgnoreErrors(
+            "initMap", 
+            mapDiv, 
+            zoom, 
+            Localization["MapPage_CurrentPosition_ButtonLabel"].Value,
+            Localization["MapPage_CurrentPosition_InformWindow"].Value);
+        
+        foreach (var harbor in _harbors)
+        {
+            await AddMarkerOnMap(harbor);
+        }
+        
+        _filteredHarbors = _filteredHarbors
+            .OrderByDescending(x => x.AverageRate)
+            .ThenByDescending(x => x.ReviewsAmount)
+            .ToList();
+        
+        StateHasChanged();
+    }
+
+    private async void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+        
+        await JSRuntime.InvokeVoidAsyncIgnoreErrors(
+            "initMap", 
+            mapDiv, 
+            zoom, 
+            Localization["MapPage_CurrentPosition_ButtonLabel"].Value,
+            Localization["MapPage_CurrentPosition_InformWindow"].Value);
+        
+        foreach (var harbor in _harbors)
+        {
+            await AddMarkerOnMap(harbor);
+        }
+        
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,292 @@
+﻿@using Domain.Dtos
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using UI.Services
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject NavigationManager NavManager
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+
+<MudExpansionPanel Text="@Localization["StatisticsPage_EnvironmentalCondition_Title"]" >
+    <MudItem Style="width: 100%">
+        <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%">
+            @Localization["StatisticsPage_EnvironmentalCondition_Title"]
+        </MudText>
+        @if (EnvironmentalConditionData.Any())
+        {
+            <MudPaper Class="d-flex flex-wrap flex-grow-1 gap-2 ma-2 pa-2" Elevation="0">
+                            <LineChartDiagram
+                                ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataAverageLocalizationKey"
+                                ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataByOneLocalizationKey"
+                                ChartDataMaxLocalizationKey="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataMaxLocalizationKey"
+                                ChartDataMinLocalizationKey="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataMinLocalizationKey"
+                                ChartTitleLocalizationKey="StatisticsPage_EnvironmentalCondition_TemperatureChart_TitleLocalizationKey"
+                                XAxisLabels="@_environmentalConditionDates"
+                                DataMax="@_temperatureMaximalData"
+                                DataMin="@_temperatureMinimalData"
+                                DataAverage="@_temperatureData"
+                                DataByOne="@(EnvironmentalConditionData
+                                               .OrderBy(x => x.MeteringDate)
+                                               .TakeLast(20)
+                                               .Select(x => 
+                                                   new Tuple<string, double>(x.MeteringDate.ToString(), x.Temperature))
+                                               .ToList())"/>
+                            <LineChartDiagram
+                                ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataAverageLocalizationKey"
+                                ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataByOneLocalizationKey"
+                                ChartDataMaxLocalizationKey="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataMaxLocalizationKey"
+                                ChartDataMinLocalizationKey="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataMinLocalizationKey"
+                                ChartTitleLocalizationKey="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_TitleLocalizationKey"
+                                XAxisLabels="@_environmentalConditionDates"
+                                DataMax="@_atmospherePressureMaximalData"
+                                DataMin="@_atmospherePressureMinimalData"
+                                DataAverage="@_atmospherePressureData"
+                                DataByOne="@(EnvironmentalConditionData
+                                               .OrderBy(x => x.MeteringDate)
+                                               .TakeLast(20)
+                                               .Select(x => 
+                                                   new Tuple<string, double>(x.MeteringDate.ToString(), x.AtmospherePressure))
+                                               .ToList())"/>
+                            <LineChartDiagram
+                                ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataAverageLocalizationKey"
+                                ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataByOneLocalizationKey"
+                                ChartDataMaxLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataMaxLocalizationKey"
+                                ChartDataMinLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataMinLocalizationKey"
+                                ChartTitleLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_TitleLocalizationKey"
+                                XAxisLabels="@_environmentalConditionDates"
+                                DataMax="@_waveForceMaximalData"
+                                DataMin="@_waveForceMinimalData"
+                                DataAverage="@_waveForceData"
+                                DataByOne="@(EnvironmentalConditionData
+                                               .OrderBy(x => x.MeteringDate)
+                                               .TakeLast(20)
+                                               .Select(x => 
+                                                   new Tuple<string, double>(x.MeteringDate.ToString(), x.WaveForce))
+                                               .ToList())"/>
+                            <LineChartDiagram
+                                ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataAverageLocalizationKey"
+                                ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataByOneLocalizationKey"
+                                ChartDataMaxLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataMaxLocalizationKey"
+                                ChartDataMinLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataMinLocalizationKey"
+                                ChartTitleLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_TitleLocalizationKey"
+                                XAxisLabels="@_environmentalConditionDates"
+                                DataMax="@_waveForceMaximalData"
+                                DataMin="@_waveForceMinimalData"
+                                DataAverage="@_waveForceData"
+                                DataByOne="@(EnvironmentalConditionData
+                                               .OrderBy(x => x.MeteringDate)
+                                               .TakeLast(20)
+                                               .Select(x => 
+                                                   new Tuple<string, double>(x.MeteringDate.ToString(), x.WaveForce))
+                                               .ToList())"/>
+                            <LineChartDiagram
+                                ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataAverageLocalizationKey"
+                                ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataByOneLocalizationKey"
+                                ChartDataMaxLocalizationKey="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataMaxLocalizationKey"
+                                ChartDataMinLocalizationKey="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataMinLocalizationKey"
+                                ChartTitleLocalizationKey="StatisticsPage_EnvironmentalCondition_WindSpeedChart_TitleLocalizationKey"
+                                XAxisLabels="@_environmentalConditionDates"
+                                DataMax="@_windSpeedMaximalData"
+                                DataMin="@_windSpeedMinimalData"
+                                DataAverage="@_windSpeedData"
+                                DataByOne="@(EnvironmentalConditionData
+                                               .OrderBy(x => x.MeteringDate)
+                                               .TakeLast(20)
+                                               .Select(x => 
+                                                   new Tuple<string, double>(x.MeteringDate.ToString(), x.WindSpeed))
+                                               .ToList())"/>
+                            <LineChartDiagram
+                                ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_ShipRelativeWindDirectionChart_DataByOneLocalizationKey"
+                                ChartTitleLocalizationKey="StatisticsPage_EnvironmentalCondition_ShipRelativeWindDirectionChart_TitleLocalizationKey"
+                                GenericModeOff="true"
+                                DataByOne="@(EnvironmentalConditionData
+                                               .OrderBy(x => x.MeteringDate)
+                                               .TakeLast(20)
+                                               .Select(x => 
+                                                   new Tuple<string, double>(x.MeteringDate.ToString(), (int)x.ShipRelativeWindDirection))
+                                               .ToList())"/>
+                            
+                        </MudPaper>
+        }
+        else
+        {
+            <MudText Typo="Typo.h5" Align="Align.Start">
+                @Localization["StatisticsPage_EnvironmentalConditionEmptyData"]
+            </MudText>
+        }
+    </MudItem>
+</MudExpansionPanel>
+
+
+@code {
+    [Parameter]
+    public List<EnvironmentalConditionDto> EnvironmentalConditionData { get; set; }
+
+    private string[] _environmentalConditionDates = { "NaN", "NaN", "NaN", "NaN" }; 
+    
+    private double[] _temperatureData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _atmospherePressureData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _windSpeedData = new double[] { 0, 0, 0, 0 } ;
+    private double[] _waveSpeedData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _waveForceData = new double[] { 0, 0, 0, 0 } ;
+
+    private double[] _temperatureMinimalData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _atmospherePressureMinimalData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _windSpeedMinimalData = new double[] { 0, 0, 0, 0 } ;
+    private double[] _waveSpeedMinimalData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _waveForceMinimalData = new double[] { 0, 0, 0, 0 } ;
+    
+    private double[] _temperatureMaximalData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _atmospherePressureMaximalData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _windSpeedMaximalData = new double[] { 0, 0, 0, 0 } ;
+    private double[] _waveSpeedMaximalData = new double[] { 0, 0, 0, 0 } ; 
+    private double[] _waveForceMaximalData = new double[] { 0, 0, 0, 0 } ;
+
+
+    private async Task buildEnvironmentalCondition()
+    {
+        var relativePositionMeteringDtos = EnvironmentalConditionData
+            .Where(x => 
+                x.MeteringDate >= new DateTime(
+                DateTime.Today.Year - 1,
+                DateTime.Today.Month,
+                DateTime.Today.Day) && x.MeteringDate <= DateTime.Now)
+            .ToList();
+
+        if (relativePositionMeteringDtos.Any())
+        {
+            var orderedList = relativePositionMeteringDtos.OrderBy(x => x.MeteringDate).ToList();
+            
+            var firstEdge = relativePositionMeteringDtos.MinBy(x => x.MeteringDate).MeteringDate;
+            var secondEdge = DateTime.Now;
+            
+            int monthAmount = (secondEdge.Year - firstEdge.Year) * 12
+                              + (secondEdge.Month - firstEdge.Month);
+
+            if (monthAmount < 4)
+            {
+                var m = secondEdge.Month;
+                var y = secondEdge.Year;
+                if (m <= 4)
+                {
+                    m = 12 + m - 4;
+                    y -= 1;
+                }
+                else
+                {
+                    m -= 4;
+                }
+                firstEdge = new DateTime(y, m, secondEdge.Day);
+                monthAmount = 5;
+            }
+
+            _environmentalConditionDates = new string[monthAmount];
+            
+            _temperatureData = new double[monthAmount];
+            _atmospherePressureData = new double[monthAmount];
+            _windSpeedData = new double[monthAmount];
+            _waveSpeedData = new double[monthAmount];
+            _waveForceData = new double[monthAmount];
+
+            _temperatureMinimalData = new double[monthAmount];
+            _atmospherePressureMinimalData = new double[monthAmount];
+            _windSpeedMinimalData = new double[monthAmount];
+            _waveSpeedMinimalData = new double[monthAmount];
+            _waveForceMinimalData = new double[monthAmount];
+
+            _temperatureMaximalData = new double[monthAmount];
+            _atmospherePressureMaximalData = new double[monthAmount];
+            _windSpeedMaximalData = new double[monthAmount];
+            _waveSpeedMaximalData = new double[monthAmount];
+            _waveForceMaximalData = new double[monthAmount];
+
+            for (int i = 0, month = firstEdge.Month, year = firstEdge.Year;
+                i < monthAmount; i++)
+            {
+                _environmentalConditionDates[i] = month switch
+                {
+                    1 => String.Concat("Jan\n", year),
+                    2 => String.Concat("Feb\n", year),
+                    3 => String.Concat("Mar\n", year),
+                    4 => String.Concat("Apr\n", year),
+                    5 => String.Concat("May\n", year),
+                    6 => String.Concat("Jun\n", year),
+                    7 => String.Concat("Jul\n", year),
+                    8 => String.Concat("Aug\n", year),
+                    9 => String.Concat("Sep\n", year),
+                    10 => String.Concat("Oct\n", year),
+                    11 => String.Concat("Nov\n", year),
+                    12 => String.Concat("Dec\n", year),
+                    _ => _environmentalConditionDates[i]
+                    };
+
+                var tempDtosList = orderedList
+                    .Where(x => x.MeteringDate.Month == month && x.MeteringDate.Year == year)
+                    .ToList();
+
+                if (tempDtosList.Any())
+                {
+                    _temperatureData[i] = tempDtosList.Average(x => x.Temperature);
+                    _atmospherePressureData[i] = tempDtosList.Average(x => x.AtmospherePressure);
+                    _windSpeedData[i] = tempDtosList.Average(x => x.WindSpeed);
+                    _waveSpeedData[i] = tempDtosList.Average(x => x.WaveSpeed);
+                    _waveForceData[i] = tempDtosList.Average(x => x.WaveForce);
+
+                    _temperatureMinimalData[i] = tempDtosList.Min(x => x.Temperature);
+                    _atmospherePressureMinimalData[i] = tempDtosList.Min(x => x.AtmospherePressure);
+                    _windSpeedMinimalData[i] = tempDtosList.Min(x => x.WindSpeed);
+                    _waveSpeedMinimalData[i] = tempDtosList.Min(x => x.WaveSpeed);
+                    _waveForceMinimalData[i] = tempDtosList.Min(x => x.WaveForce);
+
+                    _temperatureMaximalData[i] = tempDtosList.Max(x => x.Temperature);
+                    _atmospherePressureMaximalData[i] = tempDtosList.Max(x => x.AtmospherePressure);
+                    _windSpeedMaximalData[i] = tempDtosList.Max(x => x.WindSpeed);
+                    _waveSpeedMaximalData[i] = tempDtosList.Max(x => x.WaveSpeed);
+                    _waveForceMaximalData[i] = tempDtosList.Max(x => x.WaveForce);
+                }
+                else
+                {
+                    _temperatureData[i] = 0;
+                    _atmospherePressureData[i] = 0;
+                    _windSpeedData[i] = 0;
+                    _waveSpeedData[i] = 0;
+                    _waveForceData[i] = 0;
+
+                    _temperatureMinimalData[i] = 0;
+                    _atmospherePressureMinimalData[i] = 0;
+                    _windSpeedMinimalData[i] = 0;
+                    _waveSpeedMinimalData[i] = 0;
+                    _waveForceMinimalData[i] = 0;
+
+                    _temperatureMaximalData[i] = 0;
+                    _atmospherePressureMaximalData[i] = 0;
+                    _windSpeedMaximalData[i] = 0;
+                    _waveSpeedMaximalData[i] = 0;
+                    _waveForceMaximalData[i] = 0;
+                }
+                
+                year = month == 12 ? year + 1 : year;
+                month = month == 12 ? 1 : month + 1;
+            }
+        }
+        await InvokeAsync(() => StateHasChanged());
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        await buildEnvironmentalCondition();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+}

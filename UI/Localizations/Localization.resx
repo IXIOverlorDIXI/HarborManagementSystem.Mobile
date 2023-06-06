@@ -1,0 +1,2181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AuthorizationPage_LoginTab_LoginErrorAlert" xml:space="preserve">
+        <value>Login error</value>
+    </data>
+    <data name="LocalizationsComponent_MudSelect_Label" xml:space="preserve">
+        <value>Language</value>
+    </data>
+    <data name="NavBarComponent_Logout" xml:space="preserve">
+        <value>Logout</value>
+    </data>
+    <data name="NavBarComponent_Authorization" xml:space="preserve">
+        <value>Logine | Register</value>
+    </data>
+    <data name="NavBarComponent_Map" xml:space="preserve">
+        <value>Map</value>
+    </data>
+    <data name="NavBarComponent_Home" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="NavBarComponent_MainPage" xml:space="preserve">
+        <value>Main page</value>
+    </data>
+    <data name="NavBarComponent_Profile" xml:space="preserve">
+        <value>Profile</value>
+    </data>
+    <data name="NavBarComponent_SubscriptionPage" xml:space="preserve">
+        <value>Subscription</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginSuccessAlert" xml:space="preserve">
+        <value>Login success</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterErrorAlert" xml:space="preserve">
+        <value>Register error</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterSuccessAlert" xml:space="preserve">
+        <value>Register success</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_RequiredEmail" xml:space="preserve">
+        <value>Email is required</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_InvalidEmailFormat" xml:space="preserve">
+        <value>Invalid email format</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_RequiredPassword" xml:space="preserve">
+        <value>Password is required</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_InvalidPasswordMinimalLength" xml:space="preserve">
+        <value>Password must be bigger than {0} characters</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginValidator_InvalidPasswordMaximalLength" xml:space="preserve">
+        <value>Password must be shorter than {0} characters</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterButton" xml:space="preserve">
+        <value>Register</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_LoginButton" xml:space="preserve">
+        <value>Login</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_ConfirmPasswordLabel" xml:space="preserve">
+        <value>Confirm password</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_ConfirmPasswordHelperText" xml:space="preserve">
+        <value>Repeat the password</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_UsernameLabel" xml:space="preserve">
+        <value>Username</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_UsernameHelperText" xml:space="preserve">
+        <value>Username name will be able to change latter</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_DisplayNameLabel" xml:space="preserve">
+        <value>Display name</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Display name will be able to change latter</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_EmailLabel" xml:space="preserve">
+        <value>Email</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_EmailHelperText" xml:space="preserve">
+        <value>Email will be able to change latter</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_PasswordLabel" xml:space="preserve">
+        <value>Password</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_PasswordHelperText" xml:space="preserve">
+        <value>Chose the strong password</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_EmailLabel" xml:space="preserve">
+        <value>Email</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_EmailHelperText" xml:space="preserve">
+        <value>Enter the email</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_PasswordLabel" xml:space="preserve">
+        <value>Password</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_PasswordHelperText" xml:space="preserve">
+        <value>Enter the password</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredUsername" xml:space="preserve">
+        <value>Username is required</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidUsernameMinimalLength" xml:space="preserve">
+        <value>Username must be shorter than {0} characters</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidUsernameMaximalLength" xml:space="preserve">
+        <value>Username must be bigger than {0} characters</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Display name is required</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidDisplayNameMinimalLength" xml:space="preserve">
+        <value>Display name must be shorter than {0} characters</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidDisplayNameMaximalLength" xml:space="preserve">
+        <value>Display name must be bigger than {0} characters</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredEmail" xml:space="preserve">
+        <value>Email is required</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidEmailFormat" xml:space="preserve">
+        <value>Invalid email format</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredPassword" xml:space="preserve">
+        <value>Password is required</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidPasswordMinimalLength" xml:space="preserve">
+        <value>Password must be shorter than {0} characters</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_InvalidPasswordMaximalLength" xml:space="preserve">
+        <value>Password must be bigger than {0} characters</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_RequiredPasswordConfirm" xml:space="preserve">
+        <value>Password confirmation is required</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_RegisterValidator_EqualPasswordConfirm" xml:space="preserve">
+        <value>Passwords is not equal</value>
+    </data>
+    <data name="AuthorizationPage_LoginTab_TabTitle" xml:space="preserve">
+        <value>Login</value>
+    </data>
+    <data name="AuthorizationPage_RegisterTab_TabTitle" xml:space="preserve">
+        <value>Registration</value>
+    </data>
+    <data name="DeleteComponent_DialogMessage" xml:space="preserve">
+        <value>Are you sure?</value>
+    </data>
+    <data name="DeleteComponent_DialogCancelButton" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="DeleteComponent_DialogConfirmButton" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_RequiredPassword" xml:space="preserve">
+        <value>Password is required</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_InvalidPasswordMinimalLength" xml:space="preserve">
+        <value>Password must be shorter than {0} characters</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_InvalidPasswordMaximalLength" xml:space="preserve">
+        <value>Password must be bigger than {0} characters</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_RequiredPasswordConfirm" xml:space="preserve">
+        <value>Password confirmation is required</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_RequiredUsername" xml:space="preserve">
+        <value>Username is required</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidUsernameMinimalLength" xml:space="preserve">
+        <value>Username must be shorter than {0} characters</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidUsernameMaximalLength" xml:space="preserve">
+        <value>Username must be bigger than {0} characters</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Display name is required</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidDisplayNameMinimalLength" xml:space="preserve">
+        <value>Display name must be shorter than {0} characters</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidDisplayNameMaximalLength" xml:space="preserve">
+        <value>Display name must be bigger than {0} characters</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_RequiredEmail" xml:space="preserve">
+        <value>Email is required</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidEmailFormat" xml:space="preserve">
+        <value>Invalid email format</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_RequiredPhoneNumber" xml:space="preserve">
+        <value>Phone number is required</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileValidator_InvalidPhoneNumberFormat" xml:space="preserve">
+        <value>Invalid phone number format</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordButton" xml:space="preserve">
+        <value>Change password</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordSuccessAlert" xml:space="preserve">
+        <value>Change password success</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordErrorAlert" xml:space="preserve">
+        <value>Change password error</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ConfirmPasswordHelperText" xml:space="preserve">
+        <value>Repeat the password</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ConfirmPasswordLabel" xml:space="preserve">
+        <value>Confirm password</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_PasswordHelperText" xml:space="preserve">
+        <value>Enter new password</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_PasswordLabel" xml:space="preserve">
+        <value>New password</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_Title" xml:space="preserve">
+        <value>Change password</value>
+    </data>
+    <data name="ProfilePage_ChangeUserPhotoTab_Title" xml:space="preserve">
+        <value>User photo</value>
+    </data>
+    <data name="ProfilePage_ChangePasswordTab_ChangePasswordValidator_EqualPasswordConfirm" xml:space="preserve">
+        <value>Passwords is not equal</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileSaveButton" xml:space="preserve">
+        <value>Save profile</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileSaveSuccessAlert" xml:space="preserve">
+        <value>Profile save success</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_ProfileSaveErrorAlert" xml:space="preserve">
+        <value>Profile save error</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_PhoneNumberHelperText" xml:space="preserve">
+        <value>Edit phone number</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_PhoneNumberLabel" xml:space="preserve">
+        <value>Phone number</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_EmailHelperText" xml:space="preserve">
+        <value>Edit email</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_EmailLabel" xml:space="preserve">
+        <value>Email</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Edit display name</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_DisplayNameLabel" xml:space="preserve">
+        <value>Display name</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_UsernameHelperText" xml:space="preserve">
+        <value>Edit username</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_UsernameLabel" xml:space="preserve">
+        <value>Username</value>
+    </data>
+    <data name="ProfilePage_ProfileTab_Title" xml:space="preserve">
+        <value>Profile</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UpdateUserPhotoButton" xml:space="preserve">
+        <value>Update current photo</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoUpdateSuccessAlert" xml:space="preserve">
+        <value>Update user photo success</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoUpdateErrorAlert" xml:space="preserve">
+        <value>Update user photo error</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_NewUserPhotoTitle" xml:space="preserve">
+        <value>New user photo</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_CurrentUserPhotoTitle" xml:space="preserve">
+        <value>Current user photo</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_LoadUserPhotoButton" xml:space="preserve">
+        <value>Load new photo</value>
+    </data>
+    <data name="IndexPage_Title" xml:space="preserve">
+        <value>Harbors and ships management system</value>
+    </data>
+    <data name="IndexPage_Body" xml:space="preserve">
+        <value>Welcome to our innovative bay booking and yacht storage app! We offer ship and yacht owners a unique opportunity to rent bays for the safe storage of their vessels. What's more, we provide the ability to add your own marinas and additional services so boat owners can fully customize their experience.
+
+With our application, yacht owners have the opportunity to view the current storage conditions of their yachts at any time. We offer a user-friendly interface that provides access to information about weather conditions, the status of the yacht and other important data. Thus, you can be sure that your vessel is safe and in good condition at all times.
+
+Our service also provides a rating and review mechanism that helps yacht owners choose the most suitable bays and services. We believe that feedback from our users is an important part of a successful app experience. We are committed to continuous improvement and delivering the best experience.
+
+We pride ourselves on using the most advanced technologies to offer you the best possible experience using our app. We strive for simplicity and ease of navigation, as well as ensuring the reliability and security of your information. Your trust and satisfaction are our top priorities.
+
+Join our service now and discover a new level of convenience and security in bay booking and yacht storage. We are always ready to help you make your sea adventures a reality!</value>
+    </data>
+    <data name="IndexPage_Body1" xml:space="preserve">
+        <value>Welcome to our innovative bay booking and yacht storage app! We offer ship and yacht owners a unique opportunity to rent bays for the safe storage of their vessels. What's more, we provide the ability to add your own marinas and additional services so boat owners can fully customize their experience.</value>
+    </data>
+    <data name="IndexPage_Body2" xml:space="preserve">
+        <value>With our application, yacht owners have the opportunity to view the current storage conditions of their yachts at any time. We offer a user-friendly interface that provides access to information about weather conditions, the status of the yacht and other important data. Thus, you can be sure that your vessel is safe and in good condition at all times.</value>
+    </data>
+    <data name="IndexPage_Body3" xml:space="preserve">
+        <value>Our service also provides a rating and review mechanism that helps yacht owners choose the most suitable bays and services. We believe that feedback from our users is an important part of a successful app experience. We are committed to continuous improvement and delivering the best experience.</value>
+    </data>
+    <data name="IndexPage_Body4" xml:space="preserve">
+        <value>We pride ourselves on using the most advanced technologies to offer you the best possible experience using our app. We strive for simplicity and ease of navigation, as well as ensuring the reliability and security of your information. Your trust and satisfaction are our top priorities.
+</value>
+    </data>
+    <data name="IndexPage_Body5" xml:space="preserve">
+        <value>Join our service now and discover a new level of convenience and security in bay booking and yacht storage. We are always ready to help you make your sea adventures a reality!</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_NewUserPhotoSizeError" xml:space="preserve">
+        <value>File size bigger than {0} bytes</value>
+    </data>
+    <data name="SubscriptionPage_UpdateSubscriptionButton" xml:space="preserve">
+        <value>Change subscription</value>
+    </data>
+    <data name="SubscriptionPage_TaxOnServicesText" xml:space="preserve">
+        <value>Tax on services</value>
+    </data>
+    <data name="SubscriptionPage_TaxOnBookingText" xml:space="preserve">
+        <value>Tax on booking</value>
+    </data>
+    <data name="SubscriptionPage_MaxHarborAmountText" xml:space="preserve">
+        <value>Max harbor amount</value>
+    </data>
+    <data name="SubscriptionPage_Title" xml:space="preserve">
+        <value>Subscriptions list</value>
+    </data>
+    <data name="SubscriptionPage_ChangeSubscriptionCostText" xml:space="preserve">
+        <value>Change subscription price</value>
+    </data>
+    <data name="SubscriptionPage_ChangeSubscriptionDialog_CancelButton" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="SubscriptionPage_ChangeSubscriptionDialog_SubmitButton" xml:space="preserve">
+        <value>Submit</value>
+    </data>
+    <data name="SubscriptionPage_ChangeSubscriptionDialog_Title" xml:space="preserve">
+        <value>Confirm subscription changing</value>
+    </data>
+    <data name="NavBarComponent_PaymentHistory" xml:space="preserve">
+        <value>Payment history</value>
+    </data>
+    <data name="PaymentHistoryPage_SubscriptionChecksTab_EmptyListText" xml:space="preserve">
+        <value>Subscription checks doesn`t yet exist</value>
+    </data>
+    <data name="PaymentHistoryPage_SubscriptionChecksTab_BankTransactionIdText" xml:space="preserve">
+        <value>Bank transaction ID</value>
+    </data>
+    <data name="PaymentHistoryPage_SubscriptionChecksTab_TotalCostText" xml:space="preserve">
+        <value>Sum</value>
+    </data>
+    <data name="PaymentHistoryPage_SubscriptionChecksTab_Title" xml:space="preserve">
+        <value>Subscription checks</value>
+    </data>
+    <data name="PaymentHistoryPage_BookingChecksTab_Title" xml:space="preserve">
+        <value>Booking checks</value>
+    </data>
+    <data name="PaymentHistoryPage_BookingChecksTab_TotalCostText" xml:space="preserve">
+        <value>Sum</value>
+    </data>
+    <data name="PaymentHistoryPage_BookingChecksTab_BankTransactionIdText" xml:space="preserve">
+        <value>Bank transaction ID</value>
+    </data>
+    <data name="PaymentHistoryPage_BookingChecksTab_EmptyListText" xml:space="preserve">
+        <value>Booking checks doesn`t yet exist</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionPriceText" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="HomePage_AdminPart_Title" xml:space="preserve">
+        <value>Admin</value>
+    </data>
+    <data name="HomePage_AdminPart_ManageShipTypesButton" xml:space="preserve">
+        <value>Manage ship types</value>
+    </data>
+    <data name="HomePage_AdminPart_ManageSubscriptionsButton" xml:space="preserve">
+        <value>Manage subscriptions</value>
+    </data>
+    <data name="HomePage_UserPart_ShipPart_Title" xml:space="preserve">
+        <value>Ships</value>
+    </data>
+    <data name="HomePage_UserPart_ShipNameText" xml:space="preserve">
+        <value>Ship name</value>
+    </data>
+    <data name="HomePage_UserPart_ShipTypeText" xml:space="preserve">
+        <value>Ship type</value>
+    </data>
+    <data name="HomePage_UserPart_ShipTypeDescriptionText" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="HomePage_UserPart_DeleteShipButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HomePage_UserPart_EditShipButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="HomePage_UserPart_GetBookingsButton" xml:space="preserve">
+        <value>Bookings history</value>
+    </data>
+    <data name="HomePage_UserPart_GetStatisticsButton" xml:space="preserve">
+        <value>Storage statistics</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithmLabel" xml:space="preserve">
+        <value>Interpolation algorithm</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithm_NaturalSplineText" xml:space="preserve">
+        <value>Natural spline</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithm_EndSlopeText" xml:space="preserve">
+        <value>End slope</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithm_PeriodicText" xml:space="preserve">
+        <value>Periodic</value>
+    </data>
+    <data name="LineChart_InterpolationAlgorithm_StraightText" xml:space="preserve">
+        <value>Straight</value>
+    </data>
+    <data name="LineChart_SwitchLabel" xml:space="preserve">
+        <value>Switch chart mode</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_EmptyData" xml:space="preserve">
+        <value>Empty data</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Height tail above water</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Height tail above water min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Height tail above water max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Height tail above water single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Height tail above water average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Height head above water</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Height head above water min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Height head above water max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Height head above water single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Height head above water average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Tilt angle</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Tilt angle min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Tilt angle max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Tilt angle single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Tilt angle average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Rotation angle</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Rotation angle min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Rotation angle max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Rotation angle single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Rotation angle average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Roll angle</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Roll angle min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Roll angle max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Roll angle single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RollAngleChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Roll angle average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Left distance</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Left distance min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Left distance max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Left distance single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Left distance average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Right distance</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Right distance min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Right distance max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Right distance single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Right distance average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Front distance</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Front distance min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Front distance max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Front distance single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Front distance average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Back distance</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Back distance min</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Back distance max</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Back distance single</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Back distance average</value>
+    </data>
+    <data name="StatisticsPage_RelativePositionComponent_Title" xml:space="preserve">
+        <value>Relaitive position measuring</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalConditionComponent_EmptyData" xml:space="preserve">
+        <value>Empty data</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalConditionComponent_EmptyData" xml:space="preserve">
+        <value>Empty data</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalConditionEmptyData" xml:space="preserve">
+        <value>Empty data</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_ShipRelativeWindDirectionChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Wind direction</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_ShipRelativeWindDirectionChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Wind direction single</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Wind speed</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Wind speed min</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Wind speed max</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Wind speed single</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Wind speed average</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Wave force</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Wave force min</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Wave force max</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Wave force single</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Wave force average</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Atmosphere pressure</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Atmosphere pressure min</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Atmosphere pressure max</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Atmosphere pressure single</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Atmosphere pressure average</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Temperature</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Temperature min</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Temperature max</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Temperature single</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_TemperatureChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Temperature average</value>
+    </data>
+    <data name="StatisticsPage_EnvironmentalCondition_Title" xml:space="preserve">
+        <value>Environmental condition</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalConditionEmptyData" xml:space="preserve">
+        <value>Empty data</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Ship temperature</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Ship temperature min</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Ship temperature max</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Ship temperature single</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Ship temperature average</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Radiation level</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Radiation level min</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Radiation level max</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Radiation level single</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Radiation level average</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Water pollution</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Water pollution min</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Water pollution single</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Water pollution single</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Water pollution average</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_TitleLocalizationKey" xml:space="preserve">
+        <value>Air pollution distance</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_DataMinLocalizationKey" xml:space="preserve">
+        <value>Air pollution min</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_DataMaxLocalizationKey" xml:space="preserve">
+        <value>Air pollution max</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_DataByOneLocalizationKey" xml:space="preserve">
+        <value>Air pollution single</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_AirPollutionChart_DataAverageLocalizationKey" xml:space="preserve">
+        <value>Air pollution average</value>
+    </data>
+    <data name="StatisticsPage_StorageEnvironmentalCondition_Title" xml:space="preserve">
+        <value>Storage environmental condition</value>
+    </data>
+    <data name="ErrorComponent_DialogMessage" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="ErrorComponent_DialogSubmitButton" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_RequiredTypeName" xml:space="preserve">
+        <value>Type name is required</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_InvalidTypeNameMinimalLength" xml:space="preserve">
+        <value>Type name must be shorter than {0} characters</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_InvalidTypeNameMaximalLength" xml:space="preserve">
+        <value>Type name must be bigger than {0} characters</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_InvalidDescriptionMinimalLength" xml:space="preserve">
+        <value>Description must be shorter than {0} characters</value>
+    </data>
+    <data name="ShipTypesManagePage_ShipTypeValidator_InvalidDescriptionMaximalLength" xml:space="preserve">
+        <value>Description must be bigger than {0} characters</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_Title" xml:space="preserve">
+        <value>Ship types</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_Title" xml:space="preserve">
+        <value>Create ship type</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_Title" xml:space="preserve">
+        <value>Edit ship type</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeNameLabel" xml:space="preserve">
+        <value>Type name</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeNameHelperText" xml:space="preserve">
+        <value>Enter the type name</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeDescriptionLabel" xml:space="preserve">
+        <value>Type description</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeDescriptionHelperText" xml:space="preserve">
+        <value>Enter the type description</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeErrorAlert" xml:space="preserve">
+        <value>Ship type create error</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeSuccessAlert" xml:space="preserve">
+        <value>Ship type create success</value>
+    </data>
+    <data name="ShipTypesManagePage_CreateTab_ShipTypeCreateButton" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeNameLabel" xml:space="preserve">
+        <value>Type name</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeNameHelperText" xml:space="preserve">
+        <value>Edit the type name</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeDescriptionLabel" xml:space="preserve">
+        <value>Type description</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeDescriptionHelperText" xml:space="preserve">
+        <value>Edit the type description</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeErrorAlert" xml:space="preserve">
+        <value>Ship type edit error</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeSuccessAlert" xml:space="preserve">
+        <value>Ship type edit success</value>
+    </data>
+    <data name="ShipTypesManagePage_EditTab_ShipTypeEditButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_TypeName" xml:space="preserve">
+        <value>Type name</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_EditButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="ShipTypesManagePage_ListTab_DeleteButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="ShipTypesManagePage_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="ShipTypesManagePage_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Display name is required</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidDisplayNameMinimalLength" xml:space="preserve">
+        <value>Display name must be sherter than {0} characters</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidDisplayNameMaximalLength" xml:space="preserve">
+        <value>Display name must be bigger than {0} characters</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredDescription" xml:space="preserve">
+        <value>Description is required</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidDescriptionMinimalLength" xml:space="preserve">
+        <value>Description must be sherter than {0} characters</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidDescriptionMaximalLength" xml:space="preserve">
+        <value>Description must be bigger than {0} characters</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredPrice" xml:space="preserve">
+        <value>Price is required</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMinimalTaxOnBooking" xml:space="preserve">
+        <value>Tax on booking must be bigger than 0</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredTaxOnBooking" xml:space="preserve">
+        <value>Tax on booking is required</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredTaxOnServices" xml:space="preserve">
+        <value>Tax on services is required</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMinimaTaxOnServices" xml:space="preserve">
+        <value>Tax on services must be bigger than 0</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_RequiredMaxHarborAmount" xml:space="preserve">
+        <value>Max harbor amount is required</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMinimalMaxHarborAmount" xml:space="preserve">
+        <value>Max harbor amount must be bigger than 0</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMinimalPrice" xml:space="preserve">
+        <value>Price must be bigger than 0</value>
+    </data>
+    <data name="SubscriptionsManagePage_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="SubscriptionsManagePage_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_Title" xml:space="preserve">
+        <value>All subscriptions</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_MaxHarborAmount" xml:space="preserve">
+        <value>Maximal harbor amount</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_TaxOnBooking" xml:space="preserve">
+        <value>Tax on booking</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_TaxOnServices" xml:space="preserve">
+        <value>Tax on services</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_Price" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_SubscriberAmount" xml:space="preserve">
+        <value>Subscriber amount</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_EditButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="SubscriptionsManagePage_ListTab_DeleteButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_Title" xml:space="preserve">
+        <value>Create subscription</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_SubscriptionCreateButton" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_SubscriptionSuccessAlert" xml:space="preserve">
+        <value>Subscription create success</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_SubscriptionErrorAlert" xml:space="preserve">
+        <value>Subscription create error</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_PriceHelperText" xml:space="preserve">
+        <value>Setup price</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_PriceLabel" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_TaxOnServicesHelperText" xml:space="preserve">
+        <value>Setup tax on services</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_TaxOnServicesLabel" xml:space="preserve">
+        <value>Tax on services</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_TaxOnBookingHelperText" xml:space="preserve">
+        <value>Setup tax on booking</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_TaxOnBookingLabel" xml:space="preserve">
+        <value>Tax on booking</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_MaxHarborAmountHelperText" xml:space="preserve">
+        <value>Setup maximal harbor amount</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_MaxHarborAmountLabel" xml:space="preserve">
+        <value>Maximal harbor amount</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_DescriptionHelperText" xml:space="preserve">
+        <value>Enter description</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_DescriptionLabel" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Enter subscription name</value>
+    </data>
+    <data name="SubscriptionsManagePage_CreateTab_DisplayNameLabel" xml:space="preserve">
+        <value>Subscription name</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_SubscriptionCreateButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_SubscriptionSuccessAlert" xml:space="preserve">
+        <value>Subscription edit success</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_SubscriptionErrorAlert" xml:space="preserve">
+        <value>Subscription edit error</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_PriceHelperText" xml:space="preserve">
+        <value>Edit price</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_PriceLabel" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_TaxOnServicesHelperText" xml:space="preserve">
+        <value>Edit tax on services</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_TaxOnServicesLabel" xml:space="preserve">
+        <value>Tax on services</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_TaxOnBookingHelperText" xml:space="preserve">
+        <value>Edit tax on booking</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_TaxOnBookingLabel" xml:space="preserve">
+        <value>Tax on booking</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_MaxHarborAmountHelperText" xml:space="preserve">
+        <value>Edit maximal harbor amount</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_MaxHarborAmountLabel" xml:space="preserve">
+        <value>Maximal harbor amount</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_DescriptionHelperText" xml:space="preserve">
+        <value>Edit description</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_DescriptionLabel" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Edit display name</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_DisplayNameLabel" xml:space="preserve">
+        <value>Display name</value>
+    </data>
+    <data name="SubscriptionsManagePage_EditTab_Title" xml:space="preserve">
+        <value>Edit subscription</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMaximalTaxOnBooking" xml:space="preserve">
+        <value>Tax on booking must be smaller than {0}%</value>
+    </data>
+    <data name="SubscriptionPage_SubscriptionValidator_InvalidMaximalTaxOnServices" xml:space="preserve">
+        <value>Tax on services must be smaller than {0}%</value>
+    </data>
+    <data name="BookingHistoryPage_Title_Undefined" xml:space="preserve">
+        <value>Undefined bookings list</value>
+    </data>
+    <data name="BookingHistoryPage_Title_BookingsForShip" xml:space="preserve">
+        <value>Bookings for ship</value>
+    </data>
+    <data name="BookingHistoryPage_Title_BookingsForHarbor" xml:space="preserve">
+        <value>Bookings for harbor</value>
+    </data>
+    <data name="BookingHistoryPage_Title_BookingsForBerth" xml:space="preserve">
+        <value>Bookings for berth</value>
+    </data>
+    <data name="BookingHistoryPage_Title_OwnBookings" xml:space="preserve">
+        <value>Own bookings</value>
+    </data>
+    <data name="BookingHistoryPage_ShipName" xml:space="preserve">
+        <value>Ship name</value>
+    </data>
+    <data name="BookingHistoryPage_HarborName" xml:space="preserve">
+        <value>Harbor name</value>
+    </data>
+    <data name="BookingHistoryPage_StartDate" xml:space="preserve">
+        <value>Start date</value>
+    </data>
+    <data name="BookingHistoryPage_EndDate" xml:space="preserve">
+        <value>End date</value>
+    </data>
+    <data name="BookingHistoryPage_PayButton_NotPayed" xml:space="preserve">
+        <value>Pay</value>
+    </data>
+    <data name="BookingHistoryPage_PayButton_Payed" xml:space="preserve">
+        <value>Payed</value>
+    </data>
+    <data name="BookingHistoryPage_EditButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="BookingHistoryPage_DeleteButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="BookingHistoryPage_EmptyBookingsData" xml:space="preserve">
+        <value>Has no data for now</value>
+    </data>
+    <data name="BookingHistoryPage_Services_Price" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="BookingHistoryPage_Services_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BookingHistoryPage_Services_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BookingHistoryPage_Services" xml:space="preserve">
+        <value>Services</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_SubmitButton" xml:space="preserve">
+        <value>Submit</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_CancelButton" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Services_Price" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Services_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Services_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Services" xml:space="preserve">
+        <value>Services</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_TotalCostText" xml:space="preserve">
+        <value>Total cost</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_BICText" xml:space="preserve">
+        <value>BIC</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_IBANText" xml:space="preserve">
+        <value>IBAN</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_EndDateText" xml:space="preserve">
+        <value>End date</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_StartDateText" xml:space="preserve">
+        <value>Start date</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_BerthNameText" xml:space="preserve">
+        <value>Berth name</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_HarborNameText" xml:space="preserve">
+        <value>Harbor name</value>
+    </data>
+    <data name="BookingHistoryPage_BookingPayDialog_Title" xml:space="preserve">
+        <value>Payment</value>
+    </data>
+    <data name="BookingHistoryPage_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="BookingHistoryPage_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HomePage_UserPart_ShipPart_CreateShipButton" xml:space="preserve">
+        <value>Create new ship</value>
+    </data>
+    <data name="NavBarComponent_navigateToBookingHistory" xml:space="preserve">
+        <value>Booking</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_GetBookingsButton" xml:space="preserve">
+        <value>Bookings history</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_DeleteButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_EditButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_SupportPhoneNumberText" xml:space="preserve">
+        <value>Support phone number</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_SupportEmailText" xml:space="preserve">
+        <value>Support email</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_ReviewAmountText" xml:space="preserve">
+        <value>Review amount</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_CreateButton_Enable" xml:space="preserve">
+        <value>Create new harbor</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_CreateButton_Disabled" xml:space="preserve">
+        <value>Creating blocked by subscription limits: limit - {0} == current amount - {1}</value>
+    </data>
+    <data name="HomePage_UserPart_HarborPart_Title" xml:space="preserve">
+        <value>Harbors</value>
+    </data>
+    <data name="HomePage_HarborPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="HomePage_HarborPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HomePage_ShipPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HomePage_ShipPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="ShipFormPage_ShipTypeValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Name is required</value>
+    </data>
+    <data name="ShipFormPage_ShipTypeValidator_InvalidDisplayNameMinimalLength" xml:space="preserve">
+        <value>Name must be shorter than {0} characters</value>
+    </data>
+    <data name="ShipFormPage_ShipTypeValidator_InvalidDisplayNameMaximalLength" xml:space="preserve">
+        <value>Name must be bigger than {0} characters</value>
+    </data>
+    <data name="ShipFormPage_ShipTypeValidator_RequiredShipType" xml:space="preserve">
+        <value>Ship type is required</value>
+    </data>
+    <data name="ShipFormPage_Title" xml:space="preserve">
+        <value>Ship creation</value>
+    </data>
+    <data name="ShipFormPage_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="ShipFormPage_ShipType_Label" xml:space="preserve">
+        <value>Ship type</value>
+    </data>
+    <data name="ShipFormPage_TypeName" xml:space="preserve">
+        <value>Type name</value>
+    </data>
+    <data name="ShipFormPage_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="ShipFormPage_ErrorAlert" xml:space="preserve">
+        <value>Ship create error</value>
+    </data>
+    <data name="ShipFormPage_SuccessAlert" xml:space="preserve">
+        <value>Ship create success</value>
+    </data>
+    <data name="ShipFormPage_CreateButton" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="ShipFormPage_ToShipPageButton" xml:space="preserve">
+        <value>Move to last created ship</value>
+    </data>
+    <data name="ShipFormPage_ShipType_Text" xml:space="preserve">
+        <value>Select ship type</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_NewShipPhotoSizeError" xml:space="preserve">
+        <value>Photo size bigger than {0} bytes</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_UpdateShipPhotoButton" xml:space="preserve">
+        <value>Update photo</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_LoadShipPhotoButton" xml:space="preserve">
+        <value>Upload photo</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_ShipPhotoUpdateSuccessAlert" xml:space="preserve">
+        <value>Photo update error</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_ShipPhotoUpdateErrorAlert" xml:space="preserve">
+        <value>Photo update error</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_NewShipPhotoTitle" xml:space="preserve">
+        <value>New photo</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_CurrentShipPhotoTitle" xml:space="preserve">
+        <value>Current photo</value>
+    </data>
+    <data name="ShipPage_ChangeShipPhotoTab_Title" xml:space="preserve">
+        <value>Ship photo</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipSaveButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipSaveSuccessAlert" xml:space="preserve">
+        <value>Ship edit success</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipSaveErrorAlert" xml:space="preserve">
+        <value>Ship edit error</value>
+    </data>
+    <data name="ShipPage_EditTab_DisplayNameLabel" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="ShipPage_EditTab_DisplayNameHelperText" xml:space="preserve">
+        <value>Edit ship name</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipType_Label" xml:space="preserve">
+        <value>Ship type</value>
+    </data>
+    <data name="ShipPage_EditTab_ShipType_Text" xml:space="preserve">
+        <value>Edit ship type</value>
+    </data>
+    <data name="ShipPage_EditTab_TypeName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="ShipPage_EditTab_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="ShipPage_EditTab_Title" xml:space="preserve">
+        <value>Edit ship</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_DeleteShipPhotoButton" xml:space="preserve">
+        <value>Delete photo</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_ShipPhotoDeleteSuccessAlert" xml:space="preserve">
+        <value>Photo delete success</value>
+    </data>
+    <data name="ShipPage_ShipPhotoTab_ShipPhotoDeleteErrorAlert" xml:space="preserve">
+        <value>Photo delete error</value>
+    </data>
+    <data name="ShipPage_UserPart_ShipPart_CreateShipButton" xml:space="preserve">
+        <value>Create new ship</value>
+    </data>
+    <data name="ShipPage_UserPart_GetStatisticsButton" xml:space="preserve">
+        <value>Get statistics</value>
+    </data>
+    <data name="ShipPage_GetBookingsButton" xml:space="preserve">
+        <value>Booking history</value>
+    </data>
+    <data name="ShipPage_DeleteShipButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoDeleteButton" xml:space="preserve">
+        <value>Delete photo</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoDeleteSuccessAlert" xml:space="preserve">
+        <value>Delete photo success</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_UserPhotoDeleteErrorAlert" xml:space="preserve">
+        <value>Delete photo error</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_RequiredDescription" xml:space="preserve">
+        <value>Description is required</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMinimalDescriptionLength" xml:space="preserve">
+        <value>Description must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMaximalDescriptionLength" xml:space="preserve">
+        <value>Description must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Display name is required</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMinimalDisplayNameLength" xml:space="preserve">
+        <value>Display name must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMaximalDisplayNameLength" xml:space="preserve">
+        <value>Display name must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_RequiredPrice" xml:space="preserve">
+        <value>Price is required</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMinimalPrice" xml:space="preserve">
+        <value>Price must be bigger than {0}$</value>
+    </data>
+    <data name="HarborPage_ServiceValidator_InvalidMaximalPrice" xml:space="preserve">
+        <value>Price must be smaller than {0}$</value>
+    </data>
+    <data name="HarborPage_BerthValidator_RequiredShipTypes" xml:space="preserve">
+        <value>At least one ship type is required</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMaximalPrice" xml:space="preserve">
+        <value>Price must be smaller than {0}$</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMinimalPrice" xml:space="preserve">
+        <value>Price must be bigger than {0}$</value>
+    </data>
+    <data name="HarborPage_BerthValidator_RequiredPrice" xml:space="preserve">
+        <value>Price is required</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMaximalDisplayNameLength" xml:space="preserve">
+        <value>Display name must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMinimalDisplayNameLength" xml:space="preserve">
+        <value>Display name must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_BerthValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Display name is required</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMaximalDescriptionLength" xml:space="preserve">
+        <value>Description must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_BerthValidator_InvalidMinimalDescriptionLength" xml:space="preserve">
+        <value>Description must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_BerthValidator_RequiredDescription" xml:space="preserve">
+        <value>Description is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredDescription" xml:space="preserve">
+        <value>Description is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMinimalDescriptionLength" xml:space="preserve">
+        <value>Description must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMaximalDescriptionLength" xml:space="preserve">
+        <value>Description must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredDisplayName" xml:space="preserve">
+        <value>Display name is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMinimalDisplayNameLength" xml:space="preserve">
+        <value>Display name must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMaximalDisplayNameLength" xml:space="preserve">
+        <value>Display name must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredGeolocationLatitude" xml:space="preserve">
+        <value>Latitude is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMinimalGeolocationLatitude" xml:space="preserve">
+        <value>Latitude must be bigger than {0} degrees</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMaximalGeolocationLatitude" xml:space="preserve">
+        <value>Latitude must be smaller than {0} degrees</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredGeolocationLongitude" xml:space="preserve">
+        <value>Longtitude is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMinimalGeolocationLongitude" xml:space="preserve">
+        <value>Longitude must be bigger than {0} degrees</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidMaximalGeolocationLongitude" xml:space="preserve">
+        <value>Longitude must be smaller than {0} degrees</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredSupportEmail" xml:space="preserve">
+        <value>Support email is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidFormatSupportEmail" xml:space="preserve">
+        <value>Invalid support email format</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredSupportPhoneNumber" xml:space="preserve">
+        <value>Support phone number is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidFormatSupportPhoneNumber" xml:space="preserve">
+        <value>Invalid phone number format</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredBIC" xml:space="preserve">
+        <value>BIC is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidFormatBIC" xml:space="preserve">
+        <value>Invalid BIC format</value>
+    </data>
+    <data name="HarborPage_HarborValidator_RequiredIBAN" xml:space="preserve">
+        <value>IBAN is required</value>
+    </data>
+    <data name="HarborPage_HarborValidator_InvalidFormatIBAN" xml:space="preserve">
+        <value>Invalid IBAN format</value>
+    </data>
+    <data name="HarborFormPage_CreateButton" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="HarborFormPage_SuccessAlert" xml:space="preserve">
+        <value>Harbor create success</value>
+    </data>
+    <data name="HarborFormPage_ErrorAlert" xml:space="preserve">
+        <value>Harbor create error</value>
+    </data>
+    <data name="HarborFormPage_Label_SupportPhoneNumber" xml:space="preserve">
+        <value>Support phone number</value>
+    </data>
+    <data name="HarborFormPage_Label_SupportEmail" xml:space="preserve">
+        <value>Support email</value>
+    </data>
+    <data name="HarborFormPage_Label_IBAN" xml:space="preserve">
+        <value>IBAN</value>
+    </data>
+    <data name="HarborFormPage_Label_BIC" xml:space="preserve">
+        <value>BIC</value>
+    </data>
+    <data name="HarborFormPage_Label_GeolocationLatitude" xml:space="preserve">
+        <value>Latitude</value>
+    </data>
+    <data name="HarborFormPage_Label_GeolocationLongitude" xml:space="preserve">
+        <value>Longitude</value>
+    </data>
+    <data name="HarborFormPage_Label_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="HarborFormPage_Label_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="HarborFormPage_ToHarborPageButton" xml:space="preserve">
+        <value>Open last created harbor</value>
+    </data>
+    <data name="HarborFormPage_Title" xml:space="preserve">
+        <value>Harbor creation</value>
+    </data>
+    <data name="HarborFormPage_HelperText_DisplayName" xml:space="preserve">
+        <value>Enter name</value>
+    </data>
+    <data name="HarborFormPage_HelperText_Description" xml:space="preserve">
+        <value>Enter description</value>
+    </data>
+    <data name="HarborFormPage_HelperText_GeolocationLongitude" xml:space="preserve">
+        <value>Enter longitude</value>
+    </data>
+    <data name="HarborFormPage_HelperText_GeolocationLatitude" xml:space="preserve">
+        <value>Enter latitude</value>
+    </data>
+    <data name="HarborFormPage_HelperText_BIC" xml:space="preserve">
+        <value>Enter BIC</value>
+    </data>
+    <data name="HarborFormPage_HelperText_IBAN" xml:space="preserve">
+        <value>Enter IBAN</value>
+    </data>
+    <data name="HarborFormPage_HelperText_SupportEmail" xml:space="preserve">
+        <value>Enter support email</value>
+    </data>
+    <data name="HarborFormPage_HelperText_SupportPhoneNumber" xml:space="preserve">
+        <value>Enter support phone number</value>
+    </data>
+    <data name="HarborPage_HarborControls_CreateNewButton" xml:space="preserve">
+        <value>Create new harbor</value>
+    </data>
+    <data name="HarborPage_HarborControls_GetBookingHistoryButton" xml:space="preserve">
+        <value>Get booking history</value>
+    </data>
+    <data name="HarborPage_HarborControls_DeleteButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_Title" xml:space="preserve">
+        <value>Harbor editing</value>
+    </data>
+    <data name="HarborPage_HarborEditTab_Title" xml:space="preserve">
+        <value>Harbor editing</value>
+    </data>
+    <data name="HarborPage_HarborPhotosPart_Title" xml:space="preserve">
+        <value>Photos</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_Title" xml:space="preserve">
+        <value>Photos</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_DisplayNameLabel" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_DisplayNameHelperText" xml:space="preserve">
+        <value>Edit name</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_DescriptionLabel" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_DescriptionHelperText" xml:space="preserve">
+        <value>Edit description</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_GeolocationLongitudeLabel" xml:space="preserve">
+        <value>Longitude</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_GeolocationLongitudeHelperText" xml:space="preserve">
+        <value>Edit longitude</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_GeolocationLatitudeLabel" xml:space="preserve">
+        <value>Latitude</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_GeolocationLatitudeHelperText" xml:space="preserve">
+        <value>Edit latitude</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_BICLabel" xml:space="preserve">
+        <value>BIC</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_BICHelperText" xml:space="preserve">
+        <value>Edit BIC</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_IBANLabel" xml:space="preserve">
+        <value>IBAN</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_IBANHelperText" xml:space="preserve">
+        <value>Edit IBAN</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_SupportEmailLabel" xml:space="preserve">
+        <value>Support email</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_SupportEmailHelperText" xml:space="preserve">
+        <value>Edit support email</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_SupportPhoneNumberLabel" xml:space="preserve">
+        <value>Support phone number</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_SupportPhoneNumberHelperText" xml:space="preserve">
+        <value>Edit support phone number</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_HarborSaveErrorAlert" xml:space="preserve">
+        <value>Harbor save error</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_HarborSaveSuccessAlert" xml:space="preserve">
+        <value>Harbor save success</value>
+    </data>
+    <data name="HarborPage_HarborEditPart_HarborSaveButton" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_DeletePhotoErrorAlert" xml:space="preserve">
+        <value>Delete photo error</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_DeletePhotoSuccessAlert" xml:space="preserve">
+        <value>Delete photo success</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_EmptyData" xml:space="preserve">
+        <value>Noone photo is here</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_UploadTab" xml:space="preserve">
+        <value>Add harbor photo</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_NewHarborPhoto" xml:space="preserve">
+        <value>Add harbor photo</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_UploadPhotoErrorAlert" xml:space="preserve">
+        <value>Upload photo error</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_UploadPhotoSuccessAlert" xml:space="preserve">
+        <value>Upload photo success</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_UploadPhotoButton" xml:space="preserve">
+        <value>Upload photo</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_SendPhotoButton" xml:space="preserve">
+        <value>Save photo</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsPart_Title" xml:space="preserve">
+        <value>Documents</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_Title" xml:space="preserve">
+        <value>Documents</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentNumber" xml:space="preserve">
+        <value>Document number</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DeleteHarborDocumentErrorAlert" xml:space="preserve">
+        <value>Delete document error</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DeleteHarborDocumentSuccessAlert" xml:space="preserve">
+        <value>Delete document success</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_EmptyData" xml:space="preserve">
+        <value>Noone document is here</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_UploadTitle" xml:space="preserve">
+        <value>Add document</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentName" xml:space="preserve">
+        <value>Document name</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentUploadErrorAlert" xml:space="preserve">
+        <value>Document upload error</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentUploadSuccessAlert" xml:space="preserve">
+        <value>Document upload success</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_DocumentUploadButton" xml:space="preserve">
+        <value>Upload</value>
+    </data>
+    <data name="HarborPage_HarborDocumentsTab_SendDocumentButton" xml:space="preserve">
+        <value>Save document</value>
+    </data>
+    <data name="ServicesManagePage_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="ServicesManagePage_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceEditButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceSuccessAlert" xml:space="preserve">
+        <value>Edit service success</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceErrorAlert" xml:space="preserve">
+        <value>Edit service error</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceDescriptionHelperText" xml:space="preserve">
+        <value>Edit description</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_PriceLabel" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_PriceHelperText" xml:space="preserve">
+        <value>Edit price</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceDisplayNameHelperText" xml:space="preserve">
+        <value>Edit name</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceDisplayNameLabel" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_ServiceDescriptionLabel" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="ServicesManagePage_EditTab_Title" xml:space="preserve">
+        <value>Edit service</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceCreateButton" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceSuccessAlert" xml:space="preserve">
+        <value>Create service success</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceErrorAlert" xml:space="preserve">
+        <value>Create service error</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_PriceHelperText" xml:space="preserve">
+        <value>Enter price</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_PriceLabel" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceDescriptionHelperText" xml:space="preserve">
+        <value>Enter description</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceDescriptionLabel" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceDisplayNameHelperText" xml:space="preserve">
+        <value>Enter name</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_Title" xml:space="preserve">
+        <value>Creeate service</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_DeleteButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_EditButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_Price" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_Title" xml:space="preserve">
+        <value>Services</value>
+    </data>
+    <data name="HarborPage_ServicesPart_Title" xml:space="preserve">
+        <value>Services</value>
+    </data>
+    <data name="ServicesManagePage_CreateTab_ServiceDisplayNameLabel" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="ServicesManagePage_ListTab_EmptyData" xml:space="preserve">
+        <value>Empty data</value>
+    </data>
+    <data name="HarborPage_BerthPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="HarborPage_BerthPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HarborPage_BerthPart_DeleteBerthButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HarborPage_BerthPart_EditBerthButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="HarborPage_BerthPart_Berth_TypeDescriptionText" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="HarborPage_BerthPart_Berth_TypeNameText" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="HarborPage_BerthPart_BerthPriceText" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="HarborPage_BerthPart_BerthIsActive" xml:space="preserve">
+        <value>Is active</value>
+    </data>
+    <data name="HarborPage_BerthPart_BerthDescriptionText" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="HarborPage_BerthPart_Berth_ReviewAmountText" xml:space="preserve">
+        <value>Review amount</value>
+    </data>
+    <data name="HarborPage_BerthPart_ActivateBerthButton" xml:space="preserve">
+        <value>Activate</value>
+    </data>
+    <data name="HarborPage_BerthPart_DisableBerthButton" xml:space="preserve">
+        <value>Disabele</value>
+    </data>
+    <data name="HarborPage_BerthPart_GetBookingsButton" xml:space="preserve">
+        <value>Get booking history</value>
+    </data>
+    <data name="HarborPage_BerthPart_CreateBerthButton" xml:space="preserve">
+        <value>Create new berth</value>
+    </data>
+    <data name="HarborPage_BerthPart_Title" xml:space="preserve">
+        <value>Berths</value>
+    </data>
+    <data name="HarborPage_BerthPart_Berth_SuitableTypesText" xml:space="preserve">
+        <value>Suitable types</value>
+    </data>
+    <data name="HarborPage_HarborPart_ReviewAmountText" xml:space="preserve">
+        <value>Reviews amount</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_EmptyData" xml:space="preserve">
+        <value>Noone reviews does exist</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_Actions" xml:space="preserve">
+        <value>Actions</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_NotPayed" xml:space="preserve">
+        <value>Is not payed</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_Payed" xml:space="preserve">
+        <value>Payed status</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_IsPayed" xml:space="preserve">
+        <value>Is payed</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewMark" xml:space="preserve">
+        <value>Review mark</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewMinuses" xml:space="preserve">
+        <value>Review minuses</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewPluses" xml:space="preserve">
+        <value>Review pluses</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewBody" xml:space="preserve">
+        <value>Review body</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_Review" xml:space="preserve">
+        <value>Review</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewDate" xml:space="preserve">
+        <value>Review date</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_CreateButton" xml:space="preserve">
+        <value>Create review</value>
+    </data>
+    <data name="HomePage_ReviewsPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="HomePage_ReviewsPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="HomePage_ReviewsPart_EditDialog_Title" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_CancelButton" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_SubmitButton" xml:space="preserve">
+        <value>Submit</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_RequiredBerth" xml:space="preserve">
+        <value>Berth is required</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMaximalReviewMark" xml:space="preserve">
+        <value>Review mark must be smoller than {0}</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMinimalReviewMark" xml:space="preserve">
+        <value>Review mark must be bigger than {0}</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMaximalReviewBodyLength" xml:space="preserve">
+        <value>Review body must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMinimalReviewBodyLength" xml:space="preserve">
+        <value>Review body must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_RequiredReviewBody" xml:space="preserve">
+        <value>Review body is required</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMaximalReviewPlusesLength" xml:space="preserve">
+        <value>Review pluses must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMinimalReviewPlusesLength" xml:space="preserve">
+        <value>Review pluses must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_RequiredReviewPluses" xml:space="preserve">
+        <value>Review pluses is required</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMaximalReviewMinusesLength" xml:space="preserve">
+        <value>Review minuses must be shorter than {0} characters</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_InvalidMinimalReviewMinusesLength" xml:space="preserve">
+        <value>Review minuses must be bigger than {0} characters</value>
+    </data>
+    <data name="HarborPage_ReviewValidator_RequiredReviewMinuses" xml:space="preserve">
+        <value>Review minuses is required</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_BerthDescription" xml:space="preserve">
+        <value>Berth description</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_BerthName" xml:space="preserve">
+        <value>Berth name</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_BerthHelperText" xml:space="preserve">
+        <value>Select berth</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_BerthLabel" xml:space="preserve">
+        <value>Berth selection</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewMark" xml:space="preserve">
+        <value>Review mark</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewBodyLabel" xml:space="preserve">
+        <value>Review body</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewBodyHelperText" xml:space="preserve">
+        <value>Enter review body</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewPlusesLabel" xml:space="preserve">
+        <value>Review pluses</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewPlusesHelperText" xml:space="preserve">
+        <value>Enter review pluses</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewMinusesLabel" xml:space="preserve">
+        <value>Review minuses</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewFormDialog_ReviewMinusesHelperText" xml:space="preserve">
+        <value>Enter review minuses</value>
+    </data>
+    <data name="HomePage_ReviewsPart_CreateDialog_Title" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_ReviewAmountText" xml:space="preserve">
+        <value>Reviews amount</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_Title" xml:space="preserve">
+        <value>Reviews</value>
+    </data>
+    <data name="HarborPage_ReviewsPart_CreateErrorAlert" xml:space="preserve">
+        <value>Create review error</value>
+    </data>
+    <data name="HarborPage_HarborPhotosTab_EditErrorAlert" xml:space="preserve">
+        <value>Edit review error</value>
+    </data>
+    <data name="BerthFormPage_CreateButton" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="BerthFormPage_SuccessAlert" xml:space="preserve">
+        <value>Create berth success</value>
+    </data>
+    <data name="BerthFormPage_ErrorAlert" xml:space="preserve">
+        <value>Create berth error</value>
+    </data>
+    <data name="BerthFormPage_ShipTypeDescription" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BerthFormPage_ShipTypeName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BerthFormPage_ShipType_Text" xml:space="preserve">
+        <value>Select suitable ship type</value>
+    </data>
+    <data name="BerthFormPage_ShipType_Label" xml:space="preserve">
+        <value>Ship type selection</value>
+    </data>
+    <data name="BerthFormPage_PriceLabel" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="BerthFormPage_DescriptionLabel" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BerthFormPage_DisplayNameLabel" xml:space="preserve">
+        <value>Berth name</value>
+    </data>
+    <data name="BerthFormPage_DisplayNameHelperText" xml:space="preserve">
+        <value>Enter berth name</value>
+    </data>
+    <data name="BerthFormPage_PriceHelperText" xml:space="preserve">
+        <value>Enter price</value>
+    </data>
+    <data name="BerthFormPage_ToBerthPageButton" xml:space="preserve">
+        <value>Open last created berth</value>
+    </data>
+    <data name="BerthFormPage_Title" xml:space="preserve">
+        <value>Berth creation</value>
+    </data>
+    <data name="BerthFormPage_DescriptionHelperText" xml:space="preserve">
+        <value>Enter description</value>
+    </data>
+    <data name="BerthPage_BerthPhotoTab_NewBerthPhotoSizeError" xml:space="preserve">
+        <value>File size bigger than {0} bytes</value>
+    </data>
+    <data name="ProfilePage_UserPhotoTab_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="HarborPage_HarborPhotoTab_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="HarborPage_HarborDocumentTab_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_SendPhotoButton" xml:space="preserve">
+        <value>Save photo</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_UploadPhotoButton" xml:space="preserve">
+        <value>Upload</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_UploadPhotoSuccessAlert" xml:space="preserve">
+        <value>Photo upload success</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_UploadPhotoErrorAlert" xml:space="preserve">
+        <value>Photo upload error</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_NewBerthPhoto" xml:space="preserve">
+        <value>New berth photo</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_UploadTab" xml:space="preserve">
+        <value>Add new photo</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_EmptyData" xml:space="preserve">
+        <value>Noone photo now is here</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_DeletePhotoSuccessAlert" xml:space="preserve">
+        <value>Photo delete success</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_DeletePhotoErrorAlert" xml:space="preserve">
+        <value>Photo delete error</value>
+    </data>
+    <data name="BerthPage_BerthPhotosTab_Title" xml:space="preserve">
+        <value>Photos</value>
+    </data>
+    <data name="BerthPage_BerthPhotosPart_Title" xml:space="preserve">
+        <value>Photos</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_BerthSaveButton" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_BerthSaveSuccessAlert" xml:space="preserve">
+        <value>Berth save success</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_BerthSaveErrorAlert" xml:space="preserve">
+        <value>Berth save error</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_ShipTypeDescription" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_ShipTypeName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_ShipType_Text" xml:space="preserve">
+        <value>Select suitable ship type</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_ShipType_Label" xml:space="preserve">
+        <value>Suitable ship types selection</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_PriceHelperText" xml:space="preserve">
+        <value>Edit price</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_PriceLabel" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_DescriptionHelperText" xml:space="preserve">
+        <value>Edit description</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_DescriptionLabel" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_DisplayNameHelperText" xml:space="preserve">
+        <value>Edit name</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_DisplayNameLabel" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BerthPage_BerthEditPart_Title" xml:space="preserve">
+        <value>Berth editing</value>
+    </data>
+    <data name="BerthPage_BerthControls_DeleteButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="BerthPage_BerthControls_GetBookingHistoryButton" xml:space="preserve">
+        <value>Get booking history</value>
+    </data>
+    <data name="BerthPage_BerthControls_CreateNewButton" xml:space="preserve">
+        <value>Create new berth</value>
+    </data>
+    <data name="BerthPage_BerthPart_DeleteDialog_Title" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="BerthPage_BerthPart_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="BookingHistoryPage_CreateButton" xml:space="preserve">
+        <value>Create new booking</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_InvalidStartDateByEndDate" xml:space="preserve">
+        <value>Start date must be earlier than end date</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_InvalidStartDateByDateNow" xml:space="preserve">
+        <value>Start date must be after now</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredStartDate" xml:space="preserve">
+        <value>Start date is required</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_InvalidEndDateByStartDate" xml:space="preserve">
+        <value>Start date must be earlier than end date</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_InvalidEndDateByDateNow" xml:space="preserve">
+        <value>End date must be after now</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredEndDate" xml:space="preserve">
+        <value>End date is required</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredShip" xml:space="preserve">
+        <value>Ship is required</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredHarbor" xml:space="preserve">
+        <value>Harbor is required</value>
+    </data>
+    <data name="BookingFormPage_BookingValidator_RequiredBerth" xml:space="preserve">
+        <value>Berth is required</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_Title" xml:space="preserve">
+        <value>Ship select</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_Text" xml:space="preserve">
+        <value>Select ship</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_Label" xml:space="preserve">
+        <value>Ship selection</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_ShipTypeName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_ShipDescription" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BookingFormPage_ShipTab_NextButton" xml:space="preserve">
+        <value>Next</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_Title" xml:space="preserve">
+        <value>Harbor select</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_BackButton" xml:space="preserve">
+        <value>Back</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_NextButton" xml:space="preserve">
+        <value>Next</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Title" xml:space="preserve">
+        <value>Berth select</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Berth_Label" xml:space="preserve">
+        <value>Berth selection</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Berth_Text" xml:space="preserve">
+        <value>Select berth</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_NextButton" xml:space="preserve">
+        <value>Next</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_BackButton" xml:space="preserve">
+        <value>Back</value>
+    </data>
+    <data name="BookingFormPage_DateTab_BackButton" xml:space="preserve">
+        <value>Back</value>
+    </data>
+    <data name="BookingFormPage_DateTab_NextButton" xml:space="preserve">
+        <value>Next</value>
+    </data>
+    <data name="BookingFormPage_DateTab_Title" xml:space="preserve">
+        <value>Dates select</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Title" xml:space="preserve">
+        <value>Services selection</value>
+    </data>
+    <data name="BookingFormPage_ErrorAlert" xml:space="preserve">
+        <value>Booking save error</value>
+    </data>
+    <data name="BookingFormPage_BerthTab_Price" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_BackButton" xml:space="preserve">
+        <value>Back</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Price" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Services_Label" xml:space="preserve">
+        <value>Service selection</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_Services_Text" xml:space="preserve">
+        <value>Select service</value>
+    </data>
+    <data name="BookingFormPage_ServicesTab_DisplayName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="BookingFormPage_CreateButton" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_Text" xml:space="preserve">
+        <value>Select harbor</value>
+    </data>
+    <data name="BookingFormPage_HarborTab_Label" xml:space="preserve">
+        <value>Harbor selection</value>
+    </data>
+    <data name="BookingFormPage_DateTab_SelectStartDate" xml:space="preserve">
+        <value>Select start date</value>
+    </data>
+    <data name="BookingFormPage_DateTab_StartDate" xml:space="preserve">
+        <value>Start date</value>
+    </data>
+    <data name="BookingFormPage_DateTab_EndDate" xml:space="preserve">
+        <value>End date</value>
+    </data>
+    <data name="BookingFormPage_DateTab_SelectEndDate" xml:space="preserve">
+        <value>Select end date</value>
+    </data>
+    <data name="BookingFormPage_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="BookingFormPage_EditButton" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="BookingHistoryPage_BerthName" xml:space="preserve">
+        <value>Berth name</value>
+    </data>
+    <data name="MapPage_CurrentPosition_ButtonLabel" xml:space="preserve">
+        <value>Current location</value>
+    </data>
+    <data name="MapPage_CurrentPosition_InformWindow" xml:space="preserve">
+        <value>You are here</value>
+    </data>
+    <data name="MapPage_ShipType_Label" xml:space="preserve">
+        <value>Ship type selection</value>
+    </data>
+    <data name="MapPage_ShipType_Text" xml:space="preserve">
+        <value>Select ship type</value>
+    </data>
+    <data name="MapPage_TypeName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="MapPage_Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+</root>

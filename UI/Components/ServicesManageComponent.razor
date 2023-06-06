@@ -1,0 +1,397 @@
+﻿@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Net.Http.Json
+@using Domain.Dtos
+@using IoC.Constants
+@using Microsoft.Extensions.Localization
+@using UI.FormEntities
+@using UI.FormEntities.Harbor
+@using UI.Services
+@using UI.Validators.Harbor
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject NavigationManager NavManager
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject ServiceValidator ServiceValidator
+@inject IDialogService DialogService
+
+<MudTabs Elevation="2" Rounded="true" PanelClass="pa-6" Centered="true" ActivePanelIndex="@_activeTab">
+    <MudTabPanel @onclick="@(() => switchTab(0))" Text="@Localization["ServicesManagePage_ListTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudPaper Class="d-flex flex-column flex-grow-1 gap-4 ma-2 pa-2" Elevation="0">
+                        @foreach (var service in _services)
+                        {
+                            <MudPaper Class="d-flex flex-row flex-grow-1 gap-2 pa-2" MaxWidth="400" Elevation="1">
+                                <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+                                    <MudText Typo="@Typo.h6">
+                                        @Localization["ServicesManagePage_ListTab_DisplayName"]:
+                                        @service.DisplayName
+                                    </MudText>
+                                    <MudText Typo="@Typo.subtitle2">
+                                        @Localization["ServicesManagePage_ListTab_Description"]:
+                                        @service.Description
+                                    </MudText>
+                                    <MudText Typo="@Typo.subtitle2">
+                                        @Localization["ServicesManagePage_ListTab_Price"]:
+                                        @service.Price$
+                                    </MudText>
+                                    
+                                </MudPaper>
+                                @if (IsOwner)
+                                {
+                                    <MudPaper Class="d-flex flex-column align-center gap-2" MaxWidth="400" Elevation="0">
+                                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning"
+                                                   @onclick="() => serviceEditAction(service)" FullWidth="true">
+                                            @Localization["ServicesManagePage_ListTab_EditButton"]
+                                        </MudButton>
+                                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                                                   @onclick="() => serviceDeleteAction(service)" FullWidth="true">
+                                            @Localization["ServicesManagePage_ListTab_DeleteButton"]
+                                        </MudButton>
+                                    </MudPaper>
+                                }
+                            </MudPaper>
+                        }
+                        @if (!_services.Any())
+                        {
+                            <MudText Typo="@Typo.h6">
+                                @Localization["ServicesManagePage_ListTab_EmptyData"]
+                            </MudText>
+                        }
+                    </MudPaper>
+
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    @if (IsOwner)
+    {
+            <MudTabPanel @onclick="@(() => switchTab(1))" Text="@Localization["ServicesManagePage_CreateTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudForm @ref="createForm" Model="@_serviceFormCreate" Validation="@(ServiceValidator.ValidateValue)" ValidationDelay="0">
+                        <MudCardContent>
+                            <MudTextField Label="@Localization["ServicesManagePage_CreateTab_ServiceDisplayNameLabel"]"
+                                          HelperText="@Localization["ServicesManagePage_CreateTab_ServiceDisplayNameHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_serviceFormCreate.DisplayName" For="@(() => _serviceFormCreate.DisplayName)"/>
+                            <MudTextField Label="@Localization["ServicesManagePage_CreateTab_ServiceDescriptionLabel"]"
+                                          HelperText="@Localization["ServicesManagePage_CreateTab_ServiceDescriptionHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_serviceFormCreate.Description" For="@(() => _serviceFormCreate.Description)"/>
+                            <MudNumericField T="double" Label="@Localization["ServicesManagePage_CreateTab_PriceLabel"]"
+                                             HelperText="@Localization["ServicesManagePage_CreateTab_PriceHelperText"]"
+                                             Class="mt-3"
+                                             @bind-Value="_serviceFormCreate.Price" For="@(() => _serviceFormCreate.Price)"/>
+                        </MudCardContent>
+                    </MudForm>
+                    <MudCardActions>
+                        @if (_createServiceErrorAlertVisibile)
+                        {
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.CreateServiceError))">
+                                @Localization["ServicesManagePage_CreateTab_ServiceErrorAlert"]:
+                                @_createServiceError
+                            </MudAlert>
+                        }
+                        @if (_createServiceSuccessAlertVisibile)
+                        {
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.CreateServiceSuccess))">
+                                @Localization["ServicesManagePage_CreateTab_ServiceSuccessAlert"]
+                            </MudAlert>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                   @onclick="serviceSave">
+                            @Localization["ServicesManagePage_CreateTab_ServiceCreateButton"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    <MudTabPanel @onclick="@(() => switchTab(2))" Text="@Localization["ServicesManagePage_EditTab_Title"]" Disabled="!didEditTabOpen">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudForm @ref="editForm" Model="@_serviceFormEdit" Validation="@(ServiceValidator.ValidateValue)" ValidationDelay="0">
+                        <MudCardContent>
+                            <MudTextField Label="@Localization["ServicesManagePage_EditTab_ServiceDisplayNameLabel"]"
+                                          HelperText="@Localization["ServicesManagePage_EditTab_ServiceDisplayNameHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_serviceFormEdit.DisplayName" For="@(() => _serviceFormEdit.DisplayName)"/>
+                            <MudTextField Label="@Localization["ServicesManagePage_EditTab_ServiceDescriptionLabel"]"
+                                          HelperText="@Localization["ServicesManagePage_EditTab_ServiceDescriptionHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_serviceFormEdit.Description" For="@(() => _serviceFormEdit.Description)"/>
+                            <MudNumericField T="double" Label="@Localization["ServicesManagePage_EditTab_PriceLabel"]"
+                                             HelperText="@Localization["ServicesManagePage_EditTab_PriceHelperText"]"
+                                             Class="mt-3"
+                                             @bind-Value="_serviceFormEdit.Price" For="@(() => _serviceFormEdit.Price)"/>
+                        </MudCardContent>
+                    </MudForm>
+                    <MudCardActions>
+                        @if (_editServiceErrorAlertVisibile)
+                        {
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.EditServiceError))">
+                                @Localization["ServicesManagePage_EditTab_ServiceErrorAlert"]:
+                                @_editServiceError
+                            </MudAlert>
+                        }
+                        @if (_editServiceSuccessAlertVisibile)
+                        {
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.EditServiceSuccess))">
+                                @Localization["ServicesManagePage_EditTab_ServiceSuccessAlert"]
+                            </MudAlert>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                   @onclick="serviceEdit">
+                            @Localization["ServicesManagePage_EditTab_ServiceEditButton"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    }
+</MudTabs>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    
+    [Parameter]
+    public bool IsOwner { get; set; }
+    
+    private MudForm createForm;
+    private MudForm editForm;
+
+    private List<ServiceDto> _services = new List<ServiceDto>();
+    private ServiceForm _serviceFormCreate = new ServiceForm();
+    private ServiceForm _serviceFormEdit = new ServiceForm();
+    private bool _createServiceErrorAlertVisibile = false;
+    private bool _createServiceSuccessAlertVisibile = false;
+    private string _createServiceError = "";
+    private bool _editServiceErrorAlertVisibile = false;
+    private bool _editServiceSuccessAlertVisibile = false;
+    private string _editServiceError = "";
+    private int _activeTab = 0;
+    private bool didEditTabOpen = false;
+
+    private async Task closeAlert(AlertDestination alertDirection)
+    {
+        switch (alertDirection)
+        {
+            case AlertDestination.CreateServiceError:
+                _createServiceError = "";
+                _createServiceErrorAlertVisibile = false;
+                break;
+            case AlertDestination.CreateServiceSuccess:
+                _createServiceSuccessAlertVisibile = false;
+                break;
+            case AlertDestination.EditServiceError:
+                _editServiceError = "";
+                _editServiceErrorAlertVisibile = false;
+                break;
+            case AlertDestination.EditServiceSuccess:
+                _editServiceSuccessAlertVisibile = false;
+                break;
+        }
+    }
+
+    private void switchTab(int i)
+    {
+        _activeTab = i;
+        StateHasChanged();
+    }
+
+    private async Task serviceSave()
+    {
+        createForm.Validate();
+
+        if (!createForm.IsValid)
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.PostAsJsonAsync(ApiRoutes.Service.Controller, new ServiceDto
+        {
+            Description = _serviceFormCreate.Description,
+            DisplayName = _serviceFormCreate.DisplayName,
+            Price = _serviceFormCreate.Price,
+            HarborId = Guid.Parse(Id)
+        });
+
+        if (response.IsSuccessStatusCode)
+        {
+            _createServiceError = "";
+            _createServiceSuccessAlertVisibile = true;
+            _createServiceErrorAlertVisibile = false;
+        }
+        else
+        {
+            _createServiceError = await response.Content.ReadAsStringAsync();
+            _createServiceSuccessAlertVisibile = false;
+            _createServiceErrorAlertVisibile = true;
+        }
+
+        response = await Client.GetAsync(ApiRoutes.Service.Controller + "?id=" + Id);
+
+        _services = await response.Content.ReadFromJsonAsync<List<ServiceDto>>();
+
+        StateHasChanged();
+    }
+
+    private async Task serviceEdit()
+    {
+        editForm.Validate();
+
+        if (!editForm.IsValid)
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.PutAsJsonAsync(ApiRoutes.Service.Controller, new ServiceDto
+        {
+            Description = _serviceFormEdit.Description,
+            DisplayName = _serviceFormEdit.DisplayName,
+            Price = _serviceFormEdit.Price,
+            Id = _serviceFormEdit.Id,
+            HarborId = _serviceFormEdit.HarborId
+        });
+        
+
+        if (response.IsSuccessStatusCode)
+        {
+            _editServiceError = "";
+            _editServiceSuccessAlertVisibile = true;
+            _editServiceErrorAlertVisibile = false;
+        }
+        else
+        {
+            _editServiceError = await response.Content.ReadAsStringAsync();
+            _editServiceSuccessAlertVisibile = false;
+            _editServiceErrorAlertVisibile = true;
+        }
+
+        response = await Client.GetAsync(ApiRoutes.Service.Controller + "?id=" + Id);
+
+        _services = await response.Content.ReadFromJsonAsync<List<ServiceDto>>();
+
+        StateHasChanged();
+    }
+
+    private async Task serviceEditAction(ServiceDto service)
+    {
+        _serviceFormEdit = new ServiceForm()
+        {
+            Description = service.Description,
+            DisplayName = service.DisplayName,
+            Price = service.Price,
+            Id = service.Id,
+            HarborId = service.HarborId
+        };
+
+        didEditTabOpen = true;
+        _activeTab = 2;
+        StateHasChanged();
+    }
+
+    private async Task serviceDeleteAction(ServiceDto service)
+    {
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+            Localization["ServicesManagePage_DeleteDialog_Title"],
+            parameters, options)).Result;
+
+        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        {
+            var response = await Client.DeleteAsync(string.Format(
+                "{0}?id={1}",
+                ApiRoutes.Service.Controller,
+                service.Id));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["ServicesManagePage_ErrorDialog_Title"],
+                    parameters, options)).Result;
+            }
+
+            response = await Client.GetAsync(ApiRoutes.Service.Controller + "?id=" + Id);
+
+            _services = await response.Content.ReadFromJsonAsync<List<ServiceDto>>();
+            
+            if (service.Id.Equals(_serviceFormEdit.Id))
+            {
+                didEditTabOpen = false;
+                _activeTab = 0;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        HttpResponseMessage response;
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+        }
+
+        response = await Client.GetAsync(ApiRoutes.Service.Controller + "?id=" + Id);
+
+        _services = await response.Content.ReadFromJsonAsync<List<ServiceDto>>();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,363 @@
+﻿@page "/ShipTypesManagePage"
+@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Net.Http.Json
+@using Domain.Dtos
+@using IoC.Constants
+@using Microsoft.Extensions.Localization
+@using UI.FormEntities
+@using UI.FormEntities.Admin
+@using UI.Services
+@using UI.Validators.Admin
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject NavigationManager NavManager
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject ShipTypeValidator ShipTypeValidator
+@inject IDialogService DialogService
+
+<NavBar/>
+<MudTabs Elevation="2" Rounded="true" PanelClass="pa-6" Centered="true" ActivePanelIndex="@_activeTab">
+    <MudTabPanel @onclick="@(() => switchTab(0))" Text="@Localization["ShipTypesManagePage_ListTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudPaper Class="d-flex flex-column flex-grow-1 gap-4 ma-2 pa-2" Elevation="0">
+                        @foreach (var shipType in _shipTypes)
+                        {
+                            <MudPaper Class="d-flex flex-row flex-grow-1 gap-2 pa-2" MaxWidth="400" Elevation="1">
+                                <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+                                    <MudText Typo="@Typo.h6">
+                                        @Localization["ShipTypesManagePage_ListTab_TypeName"]:
+                                        @shipType.TypeName
+                                    </MudText>
+                                    <MudText Typo="@Typo.subtitle2">
+                                        @Localization["ShipTypesManagePage_ListTab_Description"]:
+                                        @shipType.Description
+                                    </MudText>
+                                </MudPaper>
+                                <MudPaper Class="d-flex flex-column align-center gap-2" MaxWidth="400" Elevation="0">
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning"
+                                               @onclick="() => shipTypeEditAction(shipType)" FullWidth="true">
+                                        @Localization["ShipTypesManagePage_ListTab_EditButton"]
+                                    </MudButton>
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                                               @onclick="() => shipTypeDeleteAction(shipType)" FullWidth="true">
+                                        @Localization["ShipTypesManagePage_ListTab_DeleteButton"]
+                                    </MudButton>
+                                </MudPaper>
+                            </MudPaper>
+                        }
+                    </MudPaper>
+
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    <MudTabPanel @onclick="@(() => switchTab(1))" Text="@Localization["ShipTypesManagePage_CreateTab_Title"]">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudForm @ref="createForm" Model="@_shipTypeFormCreate" Validation="@(ShipTypeValidator.ValidateValue)" ValidationDelay="0">
+                        <MudCardContent>
+                            <MudTextField Label="@Localization["ShipTypesManagePage_CreateTab_ShipTypeNameLabel"]"
+                                          HelperText="@Localization["ShipTypesManagePage_CreateTab_ShipTypeNameHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_shipTypeFormCreate.TypeName" For="@(() => _shipTypeFormCreate.TypeName)"/>
+                            <MudTextField Label="@Localization["ShipTypesManagePage_CreateTab_ShipTypeDescriptionLabel"]"
+                                          HelperText="@Localization["ShipTypesManagePage_CreateTab_ShipTypeDescriptionHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_shipTypeFormCreate.Description" For="@(() => _shipTypeFormCreate.Description)"/>
+                        </MudCardContent>
+                    </MudForm>
+                    <MudCardActions>
+                        @if (_createShipTypeErrorAlertVisibile)
+                        {
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.CreateShipTypeError))">
+                                @Localization["ShipTypesManagePage_CreateTab_ShipTypeErrorAlert"]:
+                                @_createShipTypeError
+                            </MudAlert>
+                        }
+                        @if (_createShipTypeSuccessAlertVisibile)
+                        {
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.CreateShipTypeSuccess))">
+                                @Localization["ShipTypesManagePage_CreateTab_ShipTypeSuccessAlert"]
+                            </MudAlert>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                   @onclick="shipTypeSave">
+                            @Localization["ShipTypesManagePage_CreateTab_ShipTypeCreateButton"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    <MudTabPanel @onclick="@(() => switchTab(2))" Text="@Localization["ShipTypesManagePage_EditTab_Title"]" Disabled="!didEditTabOpen">
+        <MudGrid>
+            <MudItem xs="12" sm="7" Class="mx-auto pa-6">
+                <MudCard>
+                    <MudForm @ref="editForm" Model="@_shipTypeFormEdit" Validation="@(ShipTypeValidator.ValidateValue)" ValidationDelay="0">
+                        <MudCardContent>
+                            <MudTextField Label="@Localization["ShipTypesManagePage_EditTab_ShipTypeNameLabel"]"
+                                          HelperText="@Localization["ShipTypesManagePage_EditTab_ShipTypeNameHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_shipTypeFormEdit.TypeName" For="@(() => _shipTypeFormEdit.TypeName)"/>
+                            <MudTextField Label="@Localization["ShipTypesManagePage_EditTab_ShipTypeDescriptionLabel"]"
+                                          HelperText="@Localization["ShipTypesManagePage_EditTab_ShipTypeDescriptionHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_shipTypeFormEdit.Description" For="@(() => _shipTypeFormEdit.Description)"/>
+                        </MudCardContent>
+                    </MudForm>
+                    <MudCardActions>
+                        @if (_editShipTypeErrorAlertVisibile)
+                        {
+                            <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.EditShipTypeError))">
+                                @Localization["ShipTypesManagePage_EditTab_ShipTypeErrorAlert"]:
+                                @_editShipTypeError
+                            </MudAlert>
+                        }
+                        @if (_editShipTypeSuccessAlertVisibile)
+                        {
+                            <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                      CloseIconClicked="(() => closeAlert(AlertDestination.EditShipTypeSuccess))">
+                                @Localization["ShipTypesManagePage_EditTab_ShipTypeSuccessAlert"]
+                            </MudAlert>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                   @onclick="shipTypeEdit">
+                            @Localization["ShipTypesManagePage_EditTab_ShipTypeEditButton"]
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+</MudTabs>
+
+
+@code {
+    private MudForm createForm;
+    private MudForm editForm;
+
+    private List<ShipTypeDto> _shipTypes = new List<ShipTypeDto>();
+    private ShipTypeForm _shipTypeFormCreate = new ShipTypeForm();
+    private ShipTypeForm _shipTypeFormEdit = new ShipTypeForm();
+    private bool _createShipTypeErrorAlertVisibile = false;
+    private bool _createShipTypeSuccessAlertVisibile = false;
+    private string _createShipTypeError = "";
+    private bool _editShipTypeErrorAlertVisibile = false;
+    private bool _editShipTypeSuccessAlertVisibile = false;
+    private string _editShipTypeError = "";
+    private int _activeTab = 0;
+    private bool didEditTabOpen = false;
+
+    private async Task closeAlert(AlertDestination alertDirection)
+    {
+        switch (alertDirection)
+        {
+            case AlertDestination.CreateShipTypeError:
+                _createShipTypeError = "";
+                _createShipTypeErrorAlertVisibile = false;
+                break;
+            case AlertDestination.CreateShipTypeSuccess:
+                _createShipTypeSuccessAlertVisibile = false;
+                break;
+            case AlertDestination.EditShipTypeError:
+                _editShipTypeError = "";
+                _editShipTypeErrorAlertVisibile = false;
+                break;
+            case AlertDestination.EditShipTypeSuccess:
+                _editShipTypeSuccessAlertVisibile = false;
+                break;
+        }
+    }
+
+    private void switchTab(int i)
+    {
+        _activeTab = i;
+        StateHasChanged();
+    }
+
+    private async Task shipTypeSave()
+    {
+        createForm.Validate();
+
+        if (!createForm.IsValid)
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.PostAsJsonAsync(ApiRoutes.ShipType.Controller, new ShipTypeDto
+        {
+            Description = _shipTypeFormCreate.Description,
+            TypeName = _shipTypeFormCreate.TypeName
+        });
+
+        if (response.IsSuccessStatusCode)
+        {
+            _createShipTypeError = "";
+            _createShipTypeSuccessAlertVisibile = true;
+            _createShipTypeErrorAlertVisibile = false;
+        }
+        else
+        {
+            _createShipTypeError = await response.Content.ReadAsStringAsync();
+            _createShipTypeSuccessAlertVisibile = false;
+            _createShipTypeErrorAlertVisibile = true;
+        }
+
+        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+
+        StateHasChanged();
+    }
+
+    private async Task shipTypeEdit()
+    {
+        editForm.Validate();
+
+        if (!editForm.IsValid)
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.PutAsJsonAsync(ApiRoutes.ShipType.Controller, new ShipTypeDto
+        {
+            Description = _shipTypeFormEdit.Description,
+            Id = _shipTypeFormEdit.Id,
+            TypeName = _shipTypeFormEdit.TypeName
+        });
+
+        if (response.IsSuccessStatusCode)
+        {
+            _editShipTypeError = "";
+            _editShipTypeSuccessAlertVisibile = true;
+            _editShipTypeErrorAlertVisibile = false;
+        }
+        else
+        {
+            _editShipTypeError = await response.Content.ReadAsStringAsync();
+            _editShipTypeSuccessAlertVisibile = false;
+            _editShipTypeErrorAlertVisibile = true;
+        }
+
+        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+
+        StateHasChanged();
+    }
+
+    private async Task shipTypeEditAction(ShipTypeDto shipType)
+    {
+        _shipTypeFormEdit = new ShipTypeForm()
+        {
+            Description = shipType.Description,
+            Id = shipType.Id,
+            TypeName = shipType.TypeName
+        };
+
+        didEditTabOpen = true;
+        _activeTab = 2;
+        StateHasChanged();
+    }
+
+    private async Task shipTypeDeleteAction(ShipTypeDto shipType)
+    {
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        if (string.IsNullOrEmpty(token))
+        {
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+            Localization["ShipTypesManagePage_DeleteDialog_Title"],
+            parameters, options)).Result;
+
+        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        {
+            var response = await Client.DeleteAsync(string.Format(
+                "{0}?id={1}",
+                ApiRoutes.ShipType.Controller,
+                shipType.Id));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["ShipTypesManagePage_ErrorDialog_Title"],
+                    parameters, options)).Result;
+            }
+
+            response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+
+            if (shipType.Id.Equals(_shipTypeFormEdit.Id))
+            {
+                didEditTabOpen = false;
+                _activeTab = 0;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+        if (userDto == null)
+        {
+            await LocalStorageService.RemoveAsync("token");
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+
+        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+
+}

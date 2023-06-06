@@ -1,0 +1,100 @@
+﻿@using Domain.Dtos
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using UI.Services
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+
+<MudDialog>
+    <DialogContent>
+        <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+            <MudText Typo="@Typo.subtitle1">
+                @Localization["BookingHistoryPage_BookingPayDialog_HarborNameText"]:
+                @BookingDataForCheckDto.HarborName
+            </MudText>
+            <MudText Typo="@Typo.subtitle1">
+                @Localization["BookingHistoryPage_BookingPayDialog_BerthNameText"]:
+                @BookingDataForCheckDto.BerthName
+            </MudText>
+            <MudText Typo="@Typo.subtitle1">
+                @Localization["BookingHistoryPage_BookingPayDialog_StartDateText"]:
+                @BookingDataForCheckDto.StartDate
+            </MudText>
+            <MudText Typo="@Typo.subtitle1">
+                @Localization["BookingHistoryPage_BookingPayDialog_EndDateText"]:
+                @BookingDataForCheckDto.EndDate
+            </MudText>
+            <MudText Typo="@Typo.subtitle1">
+                @Localization["BookingHistoryPage_BookingPayDialog_IBANText"]:
+                @BookingDataForCheckDto.IBAN
+            </MudText>
+            <MudText Typo="@Typo.subtitle1">
+                @Localization["BookingHistoryPage_BookingPayDialog_BICText"]:
+                @BookingDataForCheckDto.BIC
+            </MudText>
+            <MudText Typo="@Typo.subtitle1">
+                @Localization["BookingHistoryPage_BookingPayDialog_TotalCostText"]:
+                @BookingDataForCheckDto.TotalCost$
+            </MudText>
+            @if (BookingDataForCheckDto.Services.Any())
+            {
+                <MudPaper Class="d-flex flex-column justify-start flex-grow-1 gap-1" Elevation="0">
+                    <MudText Typo="@Typo.subtitle1">
+                        @Localization["BookingHistoryPage_BookingPayDialog_Services"]:
+                    </MudText>
+                    <MudPaper Class="d-flex flex-row flex-wrap flex-grow-1 gap-2" Elevation="0">
+                        @foreach (var additionalService in BookingDataForCheckDto.Services)
+                        {
+                            <MudPaper Class="d-flex flex-column justify-start flex-grow-1 gap-1" Elevation="1">
+                                <MudText Typo="@Typo.subtitle2">
+                                    @Localization["BookingHistoryPage_BookingPayDialog_Services_DisplayName"]:
+                                    @additionalService.DisplayName
+                                </MudText>
+                                <MudText Typo="@Typo.subtitle2">
+                                    @Localization["BookingHistoryPage_BookingPayDialog_Services_Description"]:
+                                    @additionalService.Description
+                                </MudText>
+                                <MudText Typo="@Typo.subtitle2">
+                                    @Localization["BookingHistoryPage_BookingPayDialog_Services_Price"]:
+                                    @additionalService.Price$
+                                </MudText>
+                            </MudPaper>
+                        }
+                    </MudPaper>
+                </MudPaper>
+            }
+        </MudPaper>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Warning" OnClick="Cancel">
+            @Localization["BookingHistoryPage_BookingPayDialog_CancelButton"]
+        </MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Submit">
+            @Localization["BookingHistoryPage_BookingPayDialog_SubmitButton"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] 
+    public BookingDataForCheckDto BookingDataForCheckDto { get; set; }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+}

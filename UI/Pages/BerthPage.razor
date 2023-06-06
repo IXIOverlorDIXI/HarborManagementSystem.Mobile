@@ -1,0 +1,575 @@
+﻿@page "/HarborPage/{HarborId}/BerthPage/{BerthId}"
+
+@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Net.Http.Json
+@using Domain.Dtos
+@using IoC.Constants
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Localization
+@using UI.FormEntities
+@using UI.FormEntities.Harbor
+@using UI.Services
+@using UI.Validators.Harbor
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+@inject NavigationManager NavManager
+@inject HttpClient Client
+@inject IStorageService LocalStorageService
+@inject IDialogService DialogService
+@inject BerthValidator BerthValidator
+@inject IJSRuntime JSRuntime
+
+<NavBar/>
+@if (isOwner && isAuthorizated)
+{
+    <MudPaper Class="d-flex justify-start flex-wrap gap-2 mx-3 my-2" Elevation="0">
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info"
+                   OnClick="createBerth">
+            @Localization["BerthPage_BerthControls_CreateNewButton"]
+        </MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                   OnClick="getBookingsForBerth">
+            @Localization["BerthPage_BerthControls_GetBookingHistoryButton"]
+        </MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                   OnClick="deleteBerth">
+            @Localization["BerthPage_BerthControls_DeleteButton"]
+        </MudButton>
+    </MudPaper>
+}
+<MudContainer Style="width: 100%">
+    <MudGrid JustifyContent="JustifyContent.Start" Class="d-flex d-column" AlignItems="AlignItems.Center" Height="100%" Style="width: 100%">
+        @if (isOwner && isAuthorizated)
+        {
+            <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+                <MudExpansionPanel Text="@Localization["BerthPage_BerthEditPart_Title"]" Style="width: 100%">
+                    <MudItem xs="12" sm="7" Class="mx-auto pa-6" Style="width: 100%">
+                        <MudCard>
+                            <MudForm @ref="berthEditForm" Model="@_berthForm" Validation="@(BerthValidator.ValidateValue)" ValidationDelay="0">
+                                <MudCardContent>
+                                    <MudTextField Label="@Localization["BerthPage_BerthEditPart_DisplayNameLabel"]"
+                                                  HelperText="@Localization["BerthPage_BerthEditPart_DisplayNameHelperText"]"
+                                                  Class="mt-3"
+                                                  @bind-Value="_berthForm.DisplayName" For="@(() => _berthForm.DisplayName)"/>
+                                    <MudTextField Label="@Localization["BerthPage_BerthEditPart_DescriptionLabel"]"
+                                                  HelperText="@Localization["BerthPage_BerthEditPart_DescriptionHelperText"]"
+                                                  Class="mt-3"
+                                                  @bind-Value="_berthForm.Description" For="@(() => _berthForm.Description)"/>
+                                    <MudNumericField Label="@Localization["BerthPage_BerthEditPart_PriceLabel"]"
+                                          HelperText="@Localization["BerthPage_BerthEditPart_PriceHelperText"]"
+                                          Class="mt-3"
+                                          @bind-Value="_berthForm.Price" For="@(() => _berthForm.Price)"/>
+                                    <MudSelect T="ShipTypeDto"
+                                               @bind-SelectedValues="@_berthForm.SuitableShipTypes"
+                                               Label="@Localization["BerthPage_BerthEditPart_ShipType_Label"]"
+                                               Text="@Localization["BerthPage_BerthEditPart_ShipType_Text"]"
+                                               MultiSelection="true" Comparer="@shipTypeDtoComparer">
+                                        @foreach (var type in _shipTypes)
+                                        {
+                                            <MudSelectItem T="ShipTypeDto" Value="@type">
+                                                <div class="d-flex flex-column gap-1 ma-0 pa-0">
+                                                    <MudText Typo="Typo.subtitle1">
+                                                        @Localization["BerthPage_BerthEditPart_ShipTypeName"]:
+                                                        @type.TypeName
+                                                    </MudText>
+                                                    <MudText Typo="Typo.subtitle2">
+                                                        @Localization["BerthPage_BerthEditPart_ShipTypeDescription"]:
+                                                        @type.Description
+                                                    </MudText>
+                                                </div>
+                                            </MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                    
+                                </MudCardContent>
+                            </MudForm>
+                            <MudCardActions>
+                                @if (_berthErrorAlertVisible)
+                                {
+                                    <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                              CloseIconClicked="(() => closeAlert(AlertDestination.EditBerthError))">
+                                        @Localization["BerthPage_BerthEditPart_BerthSaveErrorAlert"]: @_berthFormError
+                                    </MudAlert>
+                                }
+                                @if (_berthSuccessVisible)
+                                {
+                                    <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center" ShowCloseIcon="true"
+                                              CloseIconClicked="(() => closeAlert(AlertDestination.EditBerthSuccess))">
+                                        @Localization["BerthPage_BerthEditPart_BerthSaveSuccessAlert"]
+                                    </MudAlert>
+                                }
+                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                                           @onclick="berthSave">
+                                    @Localization["BerthPage_BerthEditPart_BerthSaveButton"]
+                                </MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        }
+
+        <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+            <MudExpansionPanel Text="@Localization["BerthPage_BerthPhotosPart_Title"]" Style="width: 100%">
+                <MudItem Class="mx-1 pa-1" Style="width: 100%">
+                    <MudTabs Elevation="2" Rounded="true" PanelClass="pa-0" Centered="true" Style="width: 100%">
+                        <MudTabPanel Text="@Localization["BerthPage_BerthPhotosTab_Title"]">
+                            <MudCard Style="width: 100%">
+                                @if (_currentBerthPhotos.Any())
+                                {
+                                    <MudPaper Class="d-flex justify-center flex-wrap gap-2" Elevation="0">
+                                        @foreach (var photo in _currentBerthPhotos)
+                                        {
+                                            <MudPaper Class="d-flex flex-column align-content-start gap-0" Elevation="0">
+                                                <MudImage
+                                                    Src="@photo.Url"
+                                                    Height="200" Width="200" ObjectFit="ObjectFit.Fill"/>
+                                                @if (isOwner)
+                                                {
+                                                    <MudIconButton Style="width: 200px" Color="Color.Error"
+                                                                   OnClick="() => berthPhotoDelete(photo)"
+                                                                   Icon="@Icons.Material.Filled.Delete"/>
+                                                }
+
+                                            </MudPaper>
+                                        }
+                                    </MudPaper>
+                                    if (_berthPhotoDeleteErrorAlertVisible)
+                                    {
+                                        <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                                  ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteBerthPhotoError))">
+                                            @Localization["BerthPage_BerthPhotosTab_DeletePhotoErrorAlert"]: @_berthDeletePhotoError
+                                        </MudAlert>
+                                    }
+                                    if (_berthPhotoDeleteSuccessAlertVisible)
+                                    {
+                                        <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                                  ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.DeleteBerthPhotoSuccess))">
+                                            @Localization["BerthPage_BerthPhotosTab_DeletePhotoSuccessAlert"]
+                                        </MudAlert>
+                                    }
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.h5" Align="Align.Start" Class="ma-2">
+                                        @Localization["BerthPage_BerthPhotosTab_EmptyData"]
+                                    </MudText>
+                                }
+                            </MudCard>
+                        </MudTabPanel>
+                        @if (isOwner && isAuthorizated)
+                        {
+                            <MudTabPanel Text="@Localization["BerthPage_BerthPhotosTab_UploadTab"]">
+                                <MudCard Style="width: 100%">
+                                    <MudCardContent Style="width: 100%">
+                                        <MudPaper Class="d-flex flex-row justify-center align-content-center gap-4" Elevation="0">
+                                            @if (_photo != null)
+                                            {
+                                                <MudPaper Class="d-flex flex-column justify-center align-content-center gap-2" Elevation="0">
+                                                    <MudText Typo="@Typo.subtitle2">@Localization["BerthPage_BerthPhotosTab_NewBerthPhoto"]</MudText>
+                                                    <MudImage ObjectPosition="ObjectPosition.Center" Class="d-flex align-center"
+                                                              Height="200" Width="200" ObjectFit="ObjectFit.Fill"
+                                                              Src="@(_photoContent != null ? $"data:{_photo.ContentType};base64,{Convert.ToBase64String(_photoContent)}" : null)"/>
+                                                </MudPaper>
+                                            }
+                                        </MudPaper>
+                                    </MudCardContent>
+                                    <MudCardActions>
+                                        <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
+                                            <MudPaper Class="d-flex flex-row flex-grow-1 gap-2" Elevation="0">
+                                                @if (_berthPhotoUploadErrorAlertVisible)
+                                                {
+                                                    <MudAlert Severity="Severity.Error" ContentAlignment="HorizontalAlignment.Center"
+                                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.UploadBerthPhotoError))">
+                                                        @Localization["BerthPage_BerthPhotosTab_UploadPhotoErrorAlert"]: @_berthUploadPhotoError
+                                                    </MudAlert>
+                                                }
+                                                @if (_berthPhotoUploadSuccessAlertVisible)
+                                                {
+                                                    <MudAlert Severity="Severity.Success" ContentAlignment="HorizontalAlignment.Center"
+                                                              ShowCloseIcon="true" CloseIconClicked="(() => closeAlert(AlertDestination.UploadBerthPhotoSuccess))">
+                                                        @Localization["BerthPage_BerthPhotosTab_UploadPhotoSuccessAlert"]
+                                                    </MudAlert>
+                                                }
+                                            </MudPaper>
+                                            <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
+                                                <MudFileUpload T="IBrowserFile" FilesChanged="HandlePhotoSelection" Accept=".jpg, .jpeg, .png">
+                                                    <ButtonTemplate>
+                                                        <MudFab HtmlTag="label"
+                                                                Variant="@Variant.Filled"
+                                                                Color="Color.Primary"
+                                                                Icon="@Icons.Material.Filled.Image"
+                                                                Label="@Localization["BerthPage_BerthPhotosTab_UploadPhotoButton"]"
+                                                                for="@context"/>
+                                                    </ButtonTemplate>
+                                                </MudFileUpload>
+
+                                                @if (_photo != null)
+                                                {
+                                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                                                               Class="ml-auto" @onclick="berthPhotoSave">
+                                                        @Localization["BerthPage_BerthPhotosTab_SendPhotoButton"]
+                                                    </MudButton>
+                                                }
+                                            </MudPaper>
+                                        </MudPaper>
+                                    </MudCardActions>
+                                </MudCard>
+                            </MudTabPanel>
+                        }
+                    </MudTabs>
+                </MudItem>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudGrid>
+</MudContainer>
+
+
+@code {
+
+    [Parameter]
+    public string HarborId { get; set; }
+    
+    [Parameter]
+    public string BerthId { get; set; }
+    
+    private bool isAdmin = false;
+    private bool isOwner = false;
+    private bool isAuthorizated = false;
+    private MudForm berthEditForm;
+    private Guid harborId;
+    private IEqualityComparer<ShipTypeDto> shipTypeDtoComparer = EqualityComparerFactory
+        .Create<ShipTypeDto>(
+            x => x.Id.GetHashCode(),
+            (x, y) => x.Id.Equals(y.Id));
+
+
+    private BerthForm _berthForm = new BerthForm();
+    private List<ShipTypeDto> _shipTypes { get; set; } = new List<ShipTypeDto>();
+    private string _berthFormError = "";
+    private bool _berthErrorAlertVisible = false;
+    private bool _berthSuccessVisible = false;
+
+    private IBrowserFile _photo = null;
+    private byte[] _photoContent = default;
+    private List<BerthPhotoDto> _currentBerthPhotos = new List<BerthPhotoDto>();
+
+    private readonly int _maxPhotoSize = 10 * 1024 * 1024;
+    private string _berthUploadPhotoError = "";
+    private string _berthDeletePhotoError = "";
+    private bool _berthPhotoUploadErrorAlertVisible = false;
+    private bool _berthPhotoUploadSuccessAlertVisible = false;
+    private bool _berthPhotoDeleteSuccessAlertVisible = false;
+    private bool _berthPhotoDeleteErrorAlertVisible = false;
+    
+    private void getBookingsForBerth() => NavManager.NavigateTo(
+        string.Format("{0}/{1}/{2}",
+            PageNavigateConstants.BookingHistoryPage,
+            (int)BookingHistoryPageType.BookingsForBerth,
+            BerthId));
+
+    private void createBerth() => NavManager.NavigateTo(PageNavigateConstants.BerthFormPage);
+
+    private async Task deleteBerth()
+    {
+        var token = await LocalStorageService.GetAsync<string>("token");
+
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+            Localization["BerthPage_BerthPart_DeleteDialog_Title"],
+            parameters, options)).Result;
+
+        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        {
+            var response = await Client.DeleteAsync(string.Format(
+                "{0}?id={1}",
+                ApiRoutes.Berth.Controller,
+                BerthId));
+
+            parameters = new DialogParameters();
+            parameters.Add("Error", await response.Content.ReadAsStringAsync());
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["BerthPage_BerthPart_ErrorDialog_Title"],
+                    parameters, options)).Result;
+
+                return;
+            }
+
+            NavManager.NavigateTo((string.Format("{0}/{1}",
+                PageNavigateConstants.HarborPage,
+                HarborId)));
+        }
+    }
+
+    private async Task berthSave()
+    {
+        berthEditForm.Validate();
+
+        if (!berthEditForm.IsValid)
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        var berthDto = new BerthDataDto()
+        {
+            DisplayName = _berthForm.DisplayName,
+            Description = _berthForm.Description,
+            HarborId = Guid.Parse(HarborId),
+            Id = Guid.Parse(BerthId),
+            Price = _berthForm.Price,
+            SuitableShipTypes = _berthForm.SuitableShipTypes.ToList()
+        };
+
+        var response = await Client.PutAsJsonAsync(ApiRoutes.Berth.Controller, berthDto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            _berthSuccessVisible = true;
+            _berthErrorAlertVisible = false;
+        }
+        else
+        {
+            _berthFormError = await response.Content.ReadAsStringAsync();
+            _berthSuccessVisible = false;
+            _berthErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task berthPhotoSave()
+    {
+        if (_photo == null)
+        {
+            _berthPhotoUploadErrorAlertVisible = true;
+            _berthPhotoUploadSuccessAlertVisible = false;
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+
+        var fileDto = new BerthPhotoDataDto()
+        {
+            FileNameWithExtension = _photo.Name,
+            FileStream = _photoContent,
+            BerthId = Guid.Parse(HarborId)
+        };
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            response = await Client.PostAsJsonAsync(ApiRoutes.Berth.Photos, fileDto);
+        }
+        catch (Exception e)
+        {
+            _berthUploadPhotoError = e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _berthPhotoUploadSuccessAlertVisible = true;
+            _berthPhotoUploadErrorAlertVisible = false;
+
+            response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
+            _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
+        }
+        else
+        {
+            _berthUploadPhotoError = await response.Content.ReadAsStringAsync();
+            _berthPhotoUploadSuccessAlertVisible = false;
+            _berthPhotoUploadErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task berthPhotoDelete(BerthPhotoDto berthPhoto)
+    {
+        if (DefaultFileLinks.DefaultImage.Equals(berthPhoto.Url))
+        {
+            return;
+        }
+
+        var token = await LocalStorageService.GetAsync<string>("token");
+        Client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        HttpResponseMessage response = default;
+
+        try
+        {
+            response = await Client.DeleteAsync(ApiRoutes.Berth.Photos + "?id=" + berthPhoto.PhotoId);
+        }
+        catch (Exception e)
+        {
+            _berthDeletePhotoError = e.Message;
+        }
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            _berthPhotoDeleteSuccessAlertVisible = true;
+            _berthPhotoDeleteErrorAlertVisible = false;
+            response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
+            _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
+        }
+        else
+        {
+            _berthDeletePhotoError = await response.Content.ReadAsStringAsync();
+            _berthPhotoDeleteSuccessAlertVisible = false;
+            _berthPhotoDeleteErrorAlertVisible = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task HandlePhotoSelection(IBrowserFile file)
+    {
+        _photo = file;
+
+        if (_photo != null)
+        {
+            var maxFileSizeInBytes = _maxPhotoSize;
+            if (_photo.Size > maxFileSizeInBytes)
+            {
+                _photo = null;
+                
+                var parameters = new DialogParameters();
+                parameters.Add("Error", string.Format(
+                    Localization["BerthPage_BerthPhotoTab_NewBerthPhotoSizeError"],
+                    _maxPhotoSize));
+                var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["HomePage_HarborPart_DeleteDialog_Title"],
+                    parameters, options)).Result;
+                
+                return;
+            }
+
+            try
+            {
+                _photoContent = new byte[_photo.Size];
+                await using (var stream = _photo.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                {
+                    await stream.ReadAsync(_photoContent, 0, (int)_photo.Size);
+                }
+            }
+            catch (Exception e)
+            {
+                _berthPhotoUploadSuccessAlertVisible = false;
+                _berthPhotoUploadErrorAlertVisible = true;
+                _berthUploadPhotoError = e.Message;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task closeAlert(AlertDestination alertDirection)
+    {
+        switch (alertDirection)
+        {
+            case AlertDestination.EditBerthError:
+                _berthFormError = "";
+                _berthErrorAlertVisible = false;
+                break;
+            case AlertDestination.EditBerthSuccess:
+                _berthSuccessVisible = false;
+                break;
+            case AlertDestination.UploadBerthPhotoError:
+                _berthUploadPhotoError = "";
+                _berthPhotoUploadErrorAlertVisible = false;
+                break;
+            case AlertDestination.UploadBerthPhotoSuccess:
+                _berthPhotoUploadSuccessAlertVisible = false;
+                break;
+            case AlertDestination.DeleteBerthPhotoError:
+                _berthDeletePhotoError = "";
+                _berthPhotoDeleteErrorAlertVisible = false;
+                break;
+            case AlertDestination.DeleteBerthPhotoSuccess:
+                _berthPhotoDeleteSuccessAlertVisible = false;
+                break;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        HttpResponseMessage response;
+        
+        var token = await LocalStorageService.GetAsync<string>("token");
+        
+        if (!string.IsNullOrEmpty(token))
+        {
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            response = await Client.GetAsync(ApiRoutes.Berth.ById + "?id=" + BerthId);
+
+            var berthData = await response.Content.ReadFromJsonAsync<BerthPreviewDataDto>();
+
+            _berthForm = new BerthForm()
+            {
+                DisplayName = berthData.DisplayName,
+                Description = berthData.Description,
+                Price = berthData.Price,
+                SuitableShipTypes = berthData.SuitableShipTypes
+            };
+            
+            isOwner = berthData.IsOwner;
+            isAuthorizated = true;
+        }
+
+        response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
+
+        _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
+        
+        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+
+        StateHasChanged();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        StateHasChanged();
+    }
+
+}

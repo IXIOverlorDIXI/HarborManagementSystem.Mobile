@@ -1,0 +1,167 @@
+﻿@using IoC.Constants
+@using Microsoft.AspNetCore.Components
+@using System.Net.Http.Headers
+@using System.Text.Json
+@using Domain.Dtos
+@using IoC.Constants
+@using System.Globalization
+@using System.Net.Http.Headers
+@using Microsoft.Extensions.Localization
+@using UI.Services
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<Localizations.Localization> Localization
+
+<MudPaper Class="d-flex flex-column align-center flex-grow-1 gap-4 ma-8" Elevation="0">
+    <div class="d-flex flex-column align-center flex-grow-1">
+        <MudText Typo="Typo.h4">@Localization[ChartTitleLocalizationKey]</MudText>
+        <MudChart ChartType="ChartType.Line" ChartSeries="@_series" XAxisLabels="@_xAxisLabels" Width="100%" Height="350"
+                  ChartOptions="options">
+        </MudChart>
+        <MudPaper Class="d-flex flex-row align-center flex-grow-1 gap-4 ma-2 pa-2" Elevation="0">
+            <MudMenu Label=@Localization["LineChart_InterpolationAlgorithmLabel"] FullWidth="true">
+                <MudMenuItem OnClick="() => OnClickMenu(InterpolationOption.NaturalSpline)">
+                    @Localization["LineChart_InterpolationAlgorithm_NaturalSplineText"]
+                </MudMenuItem>
+                <MudMenuItem OnClick="() => OnClickMenu(InterpolationOption.EndSlope)">
+                    @Localization["LineChart_InterpolationAlgorithm_EndSlopeText"]
+                </MudMenuItem>
+                <MudMenuItem OnClick="() => OnClickMenu(InterpolationOption.Periodic)">
+                    @Localization["LineChart_InterpolationAlgorithm_PeriodicText"]
+                </MudMenuItem>
+                <MudMenuItem OnClick="() => OnClickMenu(InterpolationOption.Straight)">
+                    @Localization["LineChart_InterpolationAlgorithm_StraightText"]
+                </MudMenuItem>
+            </MudMenu>
+            @if (!GenericModeOff)
+            {
+                <MudSwitch @bind-Checked="@_byOneMode" Label="@Localization["LineChart_SwitchLabel"]"
+                           @onclick="UpdateChartMode"/>
+            }
+        </MudPaper>
+    </div>
+</MudPaper>
+
+@code {
+
+    [Parameter]
+    public bool GenericModeOff { get; set; } = false;
+    
+    [Parameter]
+    public string ChartTitleLocalizationKey { get; set; }
+    
+    [Parameter]
+    public string ChartDataByOneLocalizationKey { get; set; }
+
+    [Parameter]
+    public string ChartDataMinLocalizationKey { get; set; }
+
+    [Parameter]
+    public string ChartDataMaxLocalizationKey { get; set; }
+
+    [Parameter]
+    public string ChartDataAverageLocalizationKey { get; set; }
+
+    [Parameter]
+    public double[] DataAverage { get; set; }
+
+    [Parameter]
+    public double[] DataMin { get; set; }
+
+    [Parameter]
+    public double[] DataMax { get; set; }
+
+    [Parameter]
+    public string[] XAxisLabels { get; set; }
+
+    [Parameter]
+    public List<Tuple<string, double>> DataByOne { get; set; }
+    
+    private bool _byOneMode = true;
+    private double[] _data = new double[] { 0, 0, 0, 0 };
+
+    private string[] _xAxisLabels = { "NaN", "NaN", "NaN", "NaN" };
+
+    private ChartOptions options = new ChartOptions();
+
+    private List<ChartSeries> _series = new List<ChartSeries>()
+    {
+        new ChartSeries()
+        {
+            Name = "Series",
+            Data = new double[] { 0, 0, 0, 0 }
+        }
+    };
+
+    private void OnClickMenu(InterpolationOption interpolationOption)
+    {
+        options.InterpolationOption = interpolationOption;
+        StateHasChanged();
+    }
+    
+    private void UpdateChartMode()
+    {
+        if (_byOneMode)
+        {
+            if (DataByOne.Count >= 4)
+            {
+                _series = new List<ChartSeries>()
+                {
+                    new ChartSeries()
+                    {
+                        Data = DataByOne.Select(x => x.Item2).ToArray(),
+                        Name = Localization[ChartDataByOneLocalizationKey]
+                    },
+                };
+
+                _xAxisLabels = DataByOne.Select(x => x.Item1).ToArray();
+            }
+        }
+        else
+        {
+            if (XAxisLabels != null && !GenericModeOff)
+            {
+                _series = new List<ChartSeries>()
+                {
+                    new ChartSeries()
+                    {
+                        Data = DataAverage,
+                        Name = Localization[ChartDataAverageLocalizationKey]
+                    },
+                    new ChartSeries()
+                    {
+                        Data = DataMin,
+                        Name = Localization[ChartDataMinLocalizationKey]
+                    },
+                    new ChartSeries()
+                    {
+                        Data = DataMax,
+                        Name = Localization[ChartDataMaxLocalizationKey]
+                    }
+                };
+
+                _xAxisLabels = XAxisLabels;
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalizationService.CultureChanged += UpdatePage;
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        UpdateChartMode();
+    }
+
+    private void UpdatePage()
+    {
+        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+        UpdateChartMode();
+        StateHasChanged();
+    }
+
+}
