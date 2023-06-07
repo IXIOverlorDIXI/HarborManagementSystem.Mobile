@@ -17,7 +17,6 @@
 @inject SubscriptionValidator SubscriptionValidator
 @inject IDialogService DialogService
 
-<NavBar/>
 <MudTabs Elevation="2" Rounded="true" PanelClass="pa-6" Centered="true" ActivePanelIndex="@_activeTab">
     <MudTabPanel @onclick="@(() => switchTab(0))" Text="@Localization["SubscriptionsManagePage_ListTab_Title"]">
         <MudGrid>

@@ -8,32 +8,66 @@
 @inject UserAuthorizationHelpService UserAuthorizationHelpService
 @inject LocalizationService LocalizationService
 @inject IStringLocalizer<Localizations.Localization> Localization
+@inject IDialogService DialogService
 
-<MudPaper Class="d-flex justify-content-between align-items-center mb-2 mt-2 mr-4 ml-4" Elevation="0">
-    <MudPaper Class="d-flex justify-content-start align-items-center flex-grow-1 gap-4" Elevation="0">
-        <MudButton Variant="Variant.Text" @onclick="navigateToMainPage">@Localization["NavBarComponent_MainPage"]</MudButton>
-        <MudButton Variant="Variant.Text" @onclick="navigateToSubscriptionPage">@Localization["NavBarComponent_SubscriptionPage"]</MudButton>
-    </MudPaper>
+<div class="top-row ps-3 navbar navbar-dark" style="background-color: darkblue">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">HMS</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
 
-    <MudPaper Class="d-flex flex-row-reverse align-items-center flex-grow-1 gap-4" Elevation="0">
+<div class="@NavMenuCssClass z-10" style="background-color: darkblue">
+    <MudPaper Class="d-flex flex-column align-content-center ma-2 gap-2" Elevation="0" Style="background-color: transparent">
+        <Localization/>
+        <MudButton Variant="Variant.Outlined" @onclick="navigateToMainPage" FullWidth="true" Style="background-color: aliceblue">
+            @Localization["NavBarComponent_MainPage"]
+        </MudButton>
+        <MudButton Variant="Variant.Outlined" @onclick="navigateToSubscriptionPage" FullWidth="true" Style="background-color: aliceblue">
+            @Localization["NavBarComponent_SubscriptionPage"]
+        </MudButton>
+        <MudButton Variant="Variant.Outlined" @onclick="navigateToMapPage" FullWidth="true" Style="background-color: aliceblue">
+            @Localization["NavBarComponent_Map"]
+        </MudButton>
+        
         @if (UserAuthorizationHelpService.IsUserAuthenticated ?? false)
         {
-            <MudButton Variant="Variant.Outlined" @onclick="logout">@Localization["NavBarComponent_Logout"]</MudButton>
-            <MudButton Variant="Variant.Outlined" @onclick="navigateToProfilePage">@Localization["NavBarComponent_Profile"]</MudButton>
-            <MudButton Variant="Variant.Outlined" @onclick="navigateToPaymentHistoryPage">@Localization["NavBarComponent_PaymentHistory"]</MudButton>
-            <MudButton Variant="Variant.Outlined" @onclick="navigateToBookingHistoryPage">@Localization["NavBarComponent_navigateToBookingHistory"]</MudButton>
-            <MudButton Variant="Variant.Outlined" @onclick="navigateToHomePage">@Localization["NavBarComponent_Home"]</MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToHomePage" FullWidth="true" Style="background-color: aliceblue">
+                @Localization["NavBarComponent_Home"]
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToBookingHistoryPage" FullWidth="true" Style="background-color: aliceblue">
+                @Localization["NavBarComponent_navigateToBookingHistory"]
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToPaymentHistoryPage" FullWidth="true" Style="background-color: aliceblue">
+                @Localization["NavBarComponent_PaymentHistory"]
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToProfilePage" FullWidth="true" Style="background-color: aliceblue">
+                @Localization["NavBarComponent_Profile"]
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="logout" FullWidth="true" Style="background-color: aliceblue">
+                @Localization["NavBarComponent_Logout"]
+            </MudButton>
         }
         else
         {
-            <MudButton Variant="Variant.Outlined" @onclick="navigateToAuthorizationPage">@Localization["NavBarComponent_Authorization"]</MudButton>
+            <MudButton Variant="Variant.Outlined" @onclick="navigateToAuthorizationPage" FullWidth="true" Style="background-color: aliceblue">
+                @Localization["NavBarComponent_Authorization"]
+            </MudButton>
         }
-        <MudButton Variant="Variant.Outlined" @onclick="navigateToMapPage">@Localization["NavBarComponent_Map"]</MudButton>
-        <Localization/>
     </MudPaper>
-</MudPaper>
+</div>
 
 @code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
 
     private async Task logout()
     {
@@ -64,17 +98,30 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var culture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
-        CultureInfo.DefaultThreadCurrentCulture = culture;
-        LocalizationService.CultureChanged += UpdateLocalization;
-
-        if (UserAuthorizationHelpService.IsUserAuthenticated == null)
+        try
         {
-            await UserAuthorizationHelpService.IsCredentialsRight();
-            StateHasChanged();
+            var culture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            LocalizationService.CultureChanged += UpdateLocalization;
+
+            if (UserAuthorizationHelpService.IsUserAuthenticated == null)
+            {
+                await UserAuthorizationHelpService.IsCredentialsRight();
+                StateHasChanged();
+            }
+            UserAuthorizationHelpService.AuthenticationStateChanged += UpdateNavbar;
         }
-        UserAuthorizationHelpService.AuthenticationStateChanged += UpdateNavbar;
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
 
     private void UpdateNavbar()

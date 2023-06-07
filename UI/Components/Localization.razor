@@ -13,16 +13,18 @@
 @inject UserAuthorizationHelpService UserAuthorizationHelpService
 @inject HttpClient Client
 @inject IStringLocalizer<Localizations.Localization> Localizations
+@inject IDialogService DialogService
 
-<MudPaper Width="200px" Elevation="0" Class="m-0 p-0">
-    <MudContainer Class="m-0 p-0">
+<MudPaper Elevation="0" Class="m-0 p-0" Style="background-color: aliceblue; width: 100%">
+    <MudContainer Class="m-0 p-0" Style="background-color: aliceblue; width: 100%">
         <MudSelect T="string" Label="@Localizations["LocalizationsComponent_MudSelect_Label"]" 
                    Variant="Variant.Outlined" ValueChanged="ChangeLanguage" 
-                   Class="small-mud-select m-0 p-0" FullWidth="true">
-            <MudSelectItem Value="@("en")">
+                   Class="small-mud-select m-0 p-0" 
+                   Style="background-color: aliceblue; width: 100%" FullWidth="true">
+            <MudSelectItem Value="@("en")" Style="background-color: aliceblue; width: 100%">
                 English
             </MudSelectItem>
-            <MudSelectItem Value="@("uk")">
+            <MudSelectItem Value="@("uk")" Style="background-color: aliceblue; width: 100%">
                 Українська
             </MudSelectItem>
         </MudSelect>
@@ -66,7 +68,9 @@
     
     protected override async Task OnInitializedAsync()
     {
-        string localization = "";
+        try
+        {
+            string localization = "";
         CultureInfo culture = null;
         
         if (UserAuthorizationHelpService.IsUserAuthenticated == null)
@@ -120,6 +124,17 @@
         CultureInfo.DefaultThreadCurrentUICulture = culture;
         CultureInfo.DefaultThreadCurrentCulture = culture;
         LocalizationService.CultureChanged += UpdateComponent;
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localizations["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
 
     private void UpdateComponent()

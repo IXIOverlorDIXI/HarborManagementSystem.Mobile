@@ -48,8 +48,8 @@ namespace UI.Services
             {
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    var localStorageService = scope.ServiceProvider.GetRequiredService<StorageService>();
-                    token = await localStorageService.GetAsync<string>("token");
+                    var localStorageService = scope.ServiceProvider.GetRequiredService<IStorageService>();
+                    token = await localStorageService.GetAsync<string>(SavedDataSections.Token);
                 }
             }
             catch (Exception e)
@@ -99,10 +99,10 @@ namespace UI.Services
             {
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    var localStorageService = scope.ServiceProvider.GetRequiredService<StorageService>();
+                    var localStorageService = scope.ServiceProvider.GetRequiredService<IStorageService>();
                     var client = scope.ServiceProvider.GetRequiredService<HttpClient>();
                     
-                    var token = await localStorageService.GetAsync<string>("token");
+                    var token = await localStorageService.GetAsync<string>(SavedDataSections.Token);
                     
                     if (token != null)
                     {
@@ -170,7 +170,7 @@ namespace UI.Services
                     var localStorageService = scope.ServiceProvider.GetRequiredService<IStorageService>();
                     var client = scope.ServiceProvider.GetRequiredService<HttpClient>();
 
-                    var token = await localStorageService.GetAsync<string>("token");
+                    var token = await localStorageService.GetAsync<string>(SavedDataSections.Token);
 
                     if (token != null)
                     {

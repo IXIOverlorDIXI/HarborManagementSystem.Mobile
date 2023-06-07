@@ -13,6 +13,8 @@
             return errors == System.Net.Security.SslPolicyErrors.None;
         };
         return handler;
+#elif WINDOWS
+        return null;
 #elif IOS
             var handler = new NSUrlSessionHandler
             {
@@ -20,7 +22,7 @@
             };
             return handler;
 #else
-     throw new PlatformNotSupportedException("Only Android and iOS supported.");
+     throw new PlatformNotSupportedException("Only Android, Windows and iOS supported.");
 #endif
         }
 

@@ -10,8 +10,10 @@ public class StorageService : IStorageService
     {
         var filePath = GetFilePath(key);
         if (!File.Exists(filePath))
+        {
             return default;
-
+        }
+        
         var json = await File.ReadAllTextAsync(filePath);
         return JsonSerializer.Deserialize<T>(json);
     }

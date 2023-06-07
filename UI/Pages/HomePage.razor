@@ -14,8 +14,6 @@
 @inject IStorageService LocalStorageService
 @inject IDialogService DialogService
 
-<NavBar/>
-
 <MudContainer Style="width: 100%">
     <MudGrid JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Height="100%" Style="width: 100%">
 
@@ -247,7 +245,7 @@
                     parameters, options)).Result;
             }
 
-            response = await Client.GetAsync(ApiRoutes.Ship.Controller);
+            response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + _username);
 
             _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
 
@@ -324,7 +322,7 @@
         _isAdmin = userDto.IsAdmin;
         _username = userDto.Username;
 
-        response = await Client.GetAsync(ApiRoutes.Ship.Controller);
+        response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + _username);
 
         _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
 

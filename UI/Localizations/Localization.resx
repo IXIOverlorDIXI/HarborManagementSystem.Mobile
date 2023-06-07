@@ -2178,4 +2178,19 @@ Join our service now and discover a new level of convenience and security in bay
     <data name="MapPage_Description" xml:space="preserve">
         <value>Description</value>
     </data>
+    <data name="ServerError_ErrorDialog_Title" xml:space="preserve">
+        <value>Server does not alive now</value>
+    </data>
+    <data name="ServerError_ErrorDialog_Message" xml:space="preserve">
+        <value>Server does not alive now</value>
+    </data>
+    <data name="GlobalErrorHandling_ErrorDialog_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="SubscriptionPage_EmptyData" xml:space="preserve">
+        <value>Empty data</value>
+    </data>
+    <data name="WifiConnection_Text" xml:space="preserve">
+        <value>Network is not working</value>
+    </data>
 </root>
