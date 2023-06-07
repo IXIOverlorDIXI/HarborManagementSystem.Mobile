@@ -408,7 +408,7 @@
     {
         try
         {
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
@@ -462,7 +462,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -518,7 +518,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -582,7 +582,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -695,7 +695,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -758,7 +758,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -912,7 +912,7 @@
 
             HttpResponseMessage response;
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             if (!string.IsNullOrEmpty(token))
             {
@@ -925,7 +925,7 @@
 
                 if (userDto == null)
                 {
-                    await LocalStorageService.RemoveAsync("token");
+                    await LocalStorageService.RemoveAsync(SavedDataSections.Token);
                     NavManager.NavigateTo(PageNavigateConstants.IndexPage);
                 }
 

@@ -42,27 +42,19 @@
             {
                 return;
             }
+            await LocalStorageService.SetAsync(SavedDataSections.Language, changedLocalization);
 
-            try
+            CultureInfo culture = new CultureInfo(changedLocalization);
+            LocalizationService.SetCulture(culture);
+
+            if (UserAuthorizationHelpService.IsUserAuthenticated == null)
             {
-                await LocalStorageService.SetAsync("LocalizationCulture", changedLocalization);
-
-                CultureInfo culture = new CultureInfo(changedLocalization);
-                LocalizationService.SetCulture(culture);
-
-                if (UserAuthorizationHelpService.IsUserAuthenticated == null)
-                {
-                    await UserAuthorizationHelpService.IsCredentialsRight();
-                }
-
-                if (UserAuthorizationHelpService.IsUserAuthenticated ?? false)
-                {
-                    await UserAuthorizationHelpService.SetLanguageSettings(changedLocalization);
-                }
+                await UserAuthorizationHelpService.IsCredentialsRight();
             }
-            catch (Exception e)
+
+            if (UserAuthorizationHelpService.IsUserAuthenticated ?? false)
             {
-                await LocalStorageService.SetAsync("Error", e.Message);
+                await UserAuthorizationHelpService.SetLanguageSettings(changedLocalization);
             }
         }
         catch (Exception e)
@@ -75,6 +67,7 @@
                 Localizations["GlobalErrorHandling_ErrorDialog_Title"],
                 parameters, options)).Result;
         }
+        
         StateHasChanged();
     }
 
@@ -93,28 +86,21 @@
 
             if (UserAuthorizationHelpService.IsUserAuthenticated ?? false)
             {
-                try
+                var settings = await UserAuthorizationHelpService.GetSettings();
+                string language = "";
+
+                var settingsJson = JObject.Parse(settings);
+
+                if (!settingsJson.Properties().Any(x => x.Name.Equals("language")))
                 {
-                    var settings = await UserAuthorizationHelpService.GetSettings();
-                    string language = "";
-
-                    var settingsJson = JObject.Parse(settings);
-
-                    if (!settingsJson.Properties().Any(x => x.Name.Equals("language")))
-                    {
-                        throw new Exception("language does not save");
-                    }
-
-                    language = settingsJson["language"].ToString();
-
-                    if (!string.IsNullOrEmpty(language))
-                    {
-                        culture = new CultureInfo(language);
-                    }
+                    throw new Exception("language does not save");
                 }
-                catch (Exception e)
+
+                language = settingsJson["language"].ToString();
+
+                if (!string.IsNullOrEmpty(language))
                 {
-                    await LocalStorageService.SetAsync("Error", e.Message);
+                    culture = new CultureInfo(language);
                 }
             }
 
@@ -122,7 +108,7 @@
             {
                 try
                 {
-                    localization = await LocalStorageService.GetAsync<string>("LocalizationCulture");
+                    localization = await LocalStorageService.GetAsync<string>(SavedDataSections.Language);
                     culture = new CultureInfo(localization);
                 }
                 catch (Exception e)

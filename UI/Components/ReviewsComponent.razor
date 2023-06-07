@@ -244,7 +244,7 @@ else
     {
         try
         {
-        var token = await LocalStorageService.GetAsync<string>("token");
+        var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
         Client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", token);
@@ -316,7 +316,7 @@ else
 
         HttpResponseMessage response = default;
         
-        var token = await LocalStorageService.GetAsync<string>("token");
+        var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
         
         if (!string.IsNullOrEmpty(token))
         {
@@ -329,7 +329,7 @@ else
 
             if (userDto == null)
             {
-                await LocalStorageService.RemoveAsync("token");
+                await LocalStorageService.RemoveAsync(SavedDataSections.Token);
                 NavManager.NavigateTo(PageNavigateConstants.IndexPage);
             }
             

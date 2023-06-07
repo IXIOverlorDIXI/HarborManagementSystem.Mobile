@@ -126,7 +126,7 @@
 
             HttpResponseMessage response;
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             var review = new ReviewDataDto()
             {
@@ -206,7 +206,7 @@
 
             HttpResponseMessage response;
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             if (!string.IsNullOrEmpty(token))
             {
@@ -219,7 +219,7 @@
 
                 if (userDto == null)
                 {
-                    await LocalStorageService.RemoveAsync("token");
+                    await LocalStorageService.RemoveAsync(SavedDataSections.Token);
                     NavManager.NavigateTo(PageNavigateConstants.IndexPage);
                 }
             }

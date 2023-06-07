@@ -88,7 +88,7 @@
             CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             if (string.IsNullOrEmpty(token))
             {

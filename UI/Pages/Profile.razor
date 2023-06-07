@@ -238,7 +238,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -288,7 +288,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -411,7 +411,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -467,7 +467,7 @@
                 return;
             }
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
@@ -545,7 +545,7 @@
             CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-            var token = await LocalStorageService.GetAsync<string>("token");
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             if (string.IsNullOrEmpty(token))
             {
@@ -561,7 +561,7 @@
 
             if (userDto == null)
             {
-                await LocalStorageService.RemoveAsync("token");
+                await LocalStorageService.RemoveAsync(SavedDataSections.Token);
                 NavManager.NavigateTo(PageNavigateConstants.IndexPage);
             }
 
