@@ -13,6 +13,7 @@
 @inject HttpClient Client
 @inject IStorageService LocalStorageService
 @inject NavigationManager NavManager
+@inject IDialogService DialogService
 
 <MudDialog>
     <DialogContent>
@@ -20,11 +21,11 @@
             <MudForm @ref="form" Model="@_reviewForm" Validation="@(ReviewValidator.ValidateValue)" ValidationDelay="0">
                 <MudCardContent>
                     <MudItem Class="mx-1 pa-1" Style="width: 100%">
-                        <MudPaper Class="d-flex flex-row align-center gap-1" Elevation="0" >
+                        <MudPaper Class="d-flex flex-row align-center gap-1" Elevation="0">
                             <MudText Typo="@Typo.subtitle2">
                                 @Localization["HarborPage_ReviewsPart_ReviewFormDialog_ReviewMark"]
                             </MudText>
-                            <MudRating Class="mt-3" @bind-SelectedValue="_reviewForm.ReviewMark" 
+                            <MudRating Class="mt-3" @bind-SelectedValue="_reviewForm.ReviewMark"
                                        MaxValue="5"/>
                         </MudPaper>
                     </MudItem>
@@ -79,7 +80,7 @@
                 @Localization["HarborPage_HarborPhotosTab_EditErrorAlert"]: @_reviewEditFormError
             </MudAlert>
         }
-        
+
         <MudButton Color="Color.Warning" OnClick="Cancel">
             @Localization["HarborPage_ReviewsPart_ReviewFormDialog_CancelButton"]
         </MudButton>
@@ -88,17 +89,25 @@
         </MudButton>
     </DialogActions>
 </MudDialog>
-@code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public ReviewDataDto Review { get; set; }
-    [Parameter] public bool IsCreating { get; set; }
-    [Parameter] public string Id { get; set; }
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public ReviewDataDto Review { get; set; }
+
+    [Parameter]
+    public bool IsCreating { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
 
     private MudForm form;
     private ReviewForm _reviewForm = new ReviewForm();
     private List<BerthPreviewDataDto> _berths = new List<BerthPreviewDataDto>();
-    
+
     private string _reviewCreateFormError = "";
     private bool _reviewCreateErrorAlertVisible = false;
     private string _reviewEditFormError = "";
@@ -106,58 +115,72 @@
 
     private async Task Submit()
     {
-        form.Validate();
-        
-        if (!form.IsValid)
+        try
         {
-            return;
-        }
-        
-        HttpResponseMessage response;
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
+            form.Validate();
 
-        var review = new ReviewDataDto()
-        {
-            BerthId = _reviewForm.BerthId,
-            Date = DateTime.Now,
-            ReviewMark = _reviewForm.ReviewMark,
-            ReviewBody = _reviewForm.ReviewBody,
-            ReviewPluses = _reviewForm.ReviewPluses,
-            ReviewMinuses = _reviewForm.ReviewMinuses,
-            Id = Review.Id
-        };
+            if (!form.IsValid)
+            {
+                return;
+            }
 
-        if (IsCreating)
-        {
-            response = await Client.PostAsJsonAsync(ApiRoutes.Review.Controller, review);
-        }
-        else
-        {
-            response = await Client.PutAsJsonAsync(ApiRoutes.Review.Controller, review);
-        }
+            HttpResponseMessage response;
 
-        if (!response.IsSuccessStatusCode)
-        {
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            var review = new ReviewDataDto()
+            {
+                BerthId = _reviewForm.BerthId,
+                Date = DateTime.Now,
+                ReviewMark = _reviewForm.ReviewMark,
+                ReviewBody = _reviewForm.ReviewBody,
+                ReviewPluses = _reviewForm.ReviewPluses,
+                ReviewMinuses = _reviewForm.ReviewMinuses,
+                Id = Review.Id
+            };
+
             if (IsCreating)
             {
-                _reviewCreateFormError = await response.Content.ReadAsStringAsync();
-                _reviewCreateErrorAlertVisible = true;
+                response = await Client.PostAsJsonAsync(ApiRoutes.Review.Controller, review);
             }
             else
             {
-                _reviewEditFormError = await response.Content.ReadAsStringAsync();;
-                _reviewEditErrorAlertVisible = true;
+                response = await Client.PutAsJsonAsync(ApiRoutes.Review.Controller, review);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (IsCreating)
+                {
+                    _reviewCreateFormError = await response.Content.ReadAsStringAsync();
+                    _reviewCreateErrorAlertVisible = true;
+                }
+                else
+                {
+                    _reviewEditFormError = await response.Content.ReadAsStringAsync();
+                    ;
+                    _reviewEditErrorAlertVisible = true;
+                }
+            }
+            else
+            {
+                MudDialog.Close(DialogResult.Ok(true));
             }
         }
-        else
+        catch (Exception e)
         {
-            MudDialog.Close(DialogResult.Ok(true));
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
     void Cancel() => MudDialog.Cancel();
-    
+
     private async Task closeAlert(AlertDestination alertDirection)
     {
         switch (alertDirection)
@@ -172,48 +195,61 @@
                 break;
         }
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-        
-        HttpResponseMessage response;
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (!string.IsNullOrEmpty(token))
+        try
         {
-            Client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-            response = await Client.GetAsync(ApiRoutes.Account.Controller);
+            HttpResponseMessage response;
 
-            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-            if (userDto == null)
+            if (!string.IsNullOrEmpty(token))
             {
-                await LocalStorageService.RemoveAsync("token");
-                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                Client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+                var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+                if (userDto == null)
+                {
+                    await LocalStorageService.RemoveAsync("token");
+                    NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                }
             }
+
+            _reviewForm = new ReviewForm()
+            {
+                BerthId = Review.BerthId,
+                ReviewMark = Review.ReviewMark,
+                ReviewBody = Review.ReviewBody,
+                ReviewPluses = Review.ReviewPluses,
+                ReviewMinuses = Review.ReviewMinuses,
+            };
+
+            response = await Client.GetAsync(ApiRoutes.Berth.Controller + "?id=" + Id);
+
+            _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
+
+            _reviewForm.ReviewMark = 3;
         }
-        
-        _reviewForm = new ReviewForm()
+        catch (Exception e)
         {
-            BerthId = Review.BerthId,
-            ReviewMark = Review.ReviewMark,
-            ReviewBody = Review.ReviewBody,
-            ReviewPluses = Review.ReviewPluses,
-            ReviewMinuses = Review.ReviewMinuses,
-        };
-        
-        response = await Client.GetAsync(ApiRoutes.Berth.Controller + "?id=" + Id);
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
 
-        _reviewForm.ReviewMark = 3;
-        
         StateHasChanged();
     }
 
@@ -224,4 +260,5 @@
 
         StateHasChanged();
     }
+
 }

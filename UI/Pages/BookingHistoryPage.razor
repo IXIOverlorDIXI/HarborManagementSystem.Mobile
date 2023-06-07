@@ -69,7 +69,7 @@
                             @Localization["BookingHistoryPage_BerthName"]:
                             @booking.BerthName
                         </MudText>
-                        
+
                         <MudText Typo="@Typo.subtitle1">
                             @Localization["BookingHistoryPage_StartDate"]:
                             @booking.StartDate
@@ -105,9 +105,9 @@
                                 </MudPaper>
                             </MudPaper>
                         }
-                        
+
                     </MudPaper>
-                    @if(_ownBookings.Any(x => x.Id.Equals(booking.Id)))
+                    @if (_ownBookings.Any(x => x.Id.Equals(booking.Id)))
                     {
                         <MudPaper Class="d-flex flex-column flex-grow-1 gap-2" Elevation="0">
                             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success"
@@ -134,7 +134,7 @@
                             }
                         </MudPaper>
                     }
-                    
+
                 </MudPaper>
             }
             @if (!_bookings.Any())
@@ -159,50 +159,134 @@
     private List<BookingPreviewDataDto> _ownBookings = new List<BookingPreviewDataDto>();
     private string username = "";
     private BookingHistoryPageType _type;
-    
+
     private void createBooking() => NavManager.NavigateTo(PageNavigateConstants.BookingFormPage);
-    
+
     private async Task payForBooking(BookingPreviewDataDto booking)
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
+        try
+        {
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await Client.GetAsync(string.Format("{0}?id={1}",
-            ApiRoutes.Booking.BookingDataForCheck, booking.Id));
+            var response = await Client.GetAsync(string.Format("{0}?id={1}",
+                ApiRoutes.Booking.BookingDataForCheck, booking.Id));
 
-        var dataForCheck = await response.Content.ReadFromJsonAsync<BookingDataForCheckDto>();
-        
-        if (dataForCheck != null)
+            var dataForCheck = await response.Content.ReadFromJsonAsync<BookingDataForCheckDto>();
+
+            if (dataForCheck != null)
+            {
+                var parameters = new DialogParameters();
+                var options = new DialogOptions { CloseOnEscapeKey = true };
+                parameters.Add("BookingDataForCheckDto", dataForCheck);
+
+                var confirmationResult = await (await DialogService.ShowAsync<BookingPayDialog>(
+                    Localization["BookingHistoryPage_BookingPayDialog_Title"],
+                    parameters, options)).Result;
+
+                if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+                {
+                    response = await Client.PostAsJsonAsync(
+                        ApiRoutes.BookingCheck.Controller,
+                        new BookingCheckDataDto
+                        {
+                            BankTransactionId = Guid.NewGuid().ToString(),
+                            BookingId = booking.Id,
+                            Date = DateTime.Now,
+                            Description = string.Format("You have payed {0}$ for booking berth: {1} in harbor: {2}",
+                                dataForCheck.TotalCost, dataForCheck.BerthName, dataForCheck.HarborName),
+                            TotalCost = dataForCheck.TotalCost
+                        });
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        parameters = new DialogParameters();
+                        parameters.Add("Error", await response.Content.ReadAsStringAsync());
+
+                        await (await DialogService.ShowAsync<ErrorDialog>(
+                            Localization["BookingHistoryPage_ErrorDialog_Title"],
+                            parameters, options)).Result;
+                    }
+
+                    switch (_type)
+                    {
+                        case BookingHistoryPageType.OwnBookings:
+                            response = await Client.GetAsync(string.Format("{0}?username={1}",
+                                ApiRoutes.Booking.OwnBookings,
+                                username));
+                            break;
+                        case BookingHistoryPageType.BookingsForBerth:
+                            response = await Client.GetAsync(string.Format("{0}?id={1}",
+                                ApiRoutes.Booking.BookingsForBerth,
+                                Id));
+                            break;
+                        case BookingHistoryPageType.BookingsForHarbor:
+                            response = await Client.GetAsync(string.Format("{0}?id={1}",
+                                ApiRoutes.Booking.BookingsForHarbor,
+                                Id));
+                            break;
+                        case BookingHistoryPageType.BookingsForShip:
+                            response = await Client.GetAsync(string.Format("{0}?id={1}",
+                                ApiRoutes.Booking.OwnBookingsForShip,
+                                Id));
+                            break;
+                    }
+
+                    _bookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
+
+                    StateHasChanged();
+                }
+            }
+        }
+        catch (Exception e)
         {
             var parameters = new DialogParameters();
             var options = new DialogOptions { CloseOnEscapeKey = true };
-            parameters.Add("BookingDataForCheckDto", dataForCheck);
+            parameters.Add("Error", e.Message);
 
-            var confirmationResult = await (await DialogService.ShowAsync<BookingPayDialog>(
-                Localization["BookingHistoryPage_BookingPayDialog_Title"],
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+    }
+
+    private async Task editBooking(BookingPreviewDataDto booking)
+    {
+        NavManager.NavigateTo(string.Format("{0}/{1}",
+            PageNavigateConstants.BookingFormPage,
+            booking.Id));
+    }
+
+    private async Task deleteBooking(BookingPreviewDataDto booking)
+    {
+        try
+        {
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+                Localization["BookingHistoryPage_DeleteDialog_Title"],
                 parameters, options)).Result;
 
             if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
             {
-                response = await Client.PostAsJsonAsync(
-                    ApiRoutes.BookingCheck.Controller,
-                    new BookingCheckDataDto
-                    {
-                        BankTransactionId = Guid.NewGuid().ToString(),
-                        BookingId = booking.Id,
-                        Date = DateTime.Now,
-                        Description = string.Format("You have payed {0}$ for booking berth: {1} in harbor: {2}",
-                            dataForCheck.TotalCost, dataForCheck.BerthName, dataForCheck.HarborName),
-                        TotalCost = dataForCheck.TotalCost
-                    });
+                var response = await Client.DeleteAsync(string.Format(
+                    "{0}?id={1}",
+                    ApiRoutes.Booking.Controller,
+                    booking.Id));
 
                 if (!response.IsSuccessStatusCode)
                 {
                     parameters = new DialogParameters();
                     parameters.Add("Error", await response.Content.ReadAsStringAsync());
-                    
+
                     await (await DialogService.ShowAsync<ErrorDialog>(
                         Localization["BookingHistoryPage_ErrorDialog_Title"],
                         parameters, options)).Result;
@@ -237,45 +321,45 @@
                 StateHasChanged();
             }
         }
-    }
-    
-    private async Task editBooking(BookingPreviewDataDto booking)
-    {
-        NavManager.NavigateTo(string.Format("{0}/{1}",
-            PageNavigateConstants.BookingFormPage,
-            booking.Id));
-    }
-    
-    private async Task deleteBooking(BookingPreviewDataDto booking)
-    {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-        
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
-            Localization["BookingHistoryPage_DeleteDialog_Title"],
-            parameters, options)).Result;
-
-        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        catch (Exception e)
         {
-            var response = await Client.DeleteAsync(string.Format(
-                "{0}?id={1}",
-                ApiRoutes.Booking.Controller,
-                booking.Id));
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-            if (!response.IsSuccessStatusCode)
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+    }
+
+    private async Task getDataAsync()
+    {
+        try
+        {
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
             {
-                parameters = new DialogParameters();
-                parameters.Add("Error", await response.Content.ReadAsStringAsync());
-                
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["BookingHistoryPage_ErrorDialog_Title"],
-                    parameters, options)).Result;
+                await LocalStorageService.RemoveAsync(SavedDataSections.Token);
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
             }
+
+            username = userDto.Username;
+
+            response = await Client.GetAsync(ApiRoutes.Booking.OwnBookings + "?username=" + username);
+
+            _ownBookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
+
+            _type = (BookingHistoryPageType)Enum
+                .ToObject(typeof(BookingHistoryPageType), Type);
 
             switch (_type)
             {
@@ -302,78 +386,46 @@
             }
 
             _bookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
-
-            StateHasChanged();
         }
-    }
-
-    private async Task getDataAsync()
-    {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
-
-        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
-
-        if (userDto == null)
+        catch (Exception e)
         {
-            await LocalStorageService.RemoveAsync("token");
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-
-        username = userDto.Username;
-        
-        response = await Client.GetAsync(ApiRoutes.Booking.OwnBookings + "?username=" + username);
-
-        _ownBookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
-
-        _type = (BookingHistoryPageType)Enum
-            .ToObject(typeof(BookingHistoryPageType), Type);
-
-        switch (_type)
-        {
-            case BookingHistoryPageType.OwnBookings:
-                response = await Client.GetAsync(string.Format("{0}?username={1}",
-                    ApiRoutes.Booking.OwnBookings,
-                    username));
-                break;
-            case BookingHistoryPageType.BookingsForBerth:
-                response = await Client.GetAsync(string.Format("{0}?id={1}",
-                    ApiRoutes.Booking.BookingsForBerth,
-                    Id));
-                break;
-            case BookingHistoryPageType.BookingsForHarbor:
-                response = await Client.GetAsync(string.Format("{0}?id={1}",
-                    ApiRoutes.Booking.BookingsForHarbor,
-                    Id));
-                break;
-            case BookingHistoryPageType.BookingsForShip:
-                response = await Client.GetAsync(string.Format("{0}?id={1}",
-                    ApiRoutes.Booking.OwnBookingsForShip,
-                    Id));
-                break;
-        }
-
-        _bookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
     }
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            await getDataAsync();
         }
-        
-        await getDataAsync();
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
 
     private void UpdatePage()
@@ -383,4 +435,5 @@
 
         StateHasChanged();
     }
+
 }

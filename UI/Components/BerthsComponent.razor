@@ -94,11 +94,10 @@
                                         </MudText>
 
                                     </MudPaper>
-
                                 }
                             </MudPaper>
                         </MudPaper>
-                        
+
                         <MudPaper Class="d-flex flex-column align-center gap-1" Elevation="0">
                             <MudRating ReadOnly="true" SelectedValue="@((int)(berth.AverageRate))"/>
                             <MudText Typo="@Typo.subtitle2">
@@ -163,32 +162,45 @@
 
     private async Task turnBerthMode(BerthPreviewDataDto berth)
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
+        try
+        {
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await Client.PutAsync(string.Format(
-            "{0}?id={1}",
-            ApiRoutes.Berth.TurnOffOnTheBerth,
-            berth.Id), null);
+            var response = await Client.PutAsync(string.Format(
+                "{0}?id={1}",
+                ApiRoutes.Berth.TurnOffOnTheBerth,
+                berth.Id), null);
 
-        if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
+            {
+                var parameters = new DialogParameters();
+                parameters.Add("Error", await response.Content.ReadAsStringAsync());
+
+                var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                await (await DialogService.ShowAsync<ErrorDialog>(
+                    Localization["HarborPage_BerthPart_ErrorDialog_Title"],
+                    parameters, options)).Result;
+            }
+            else
+            {
+                response = await Client.GetAsync(ApiRoutes.Berth.Controller + "?id=" + Id);
+
+                _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
+            }
+        }
+        catch (Exception e)
         {
             var parameters = new DialogParameters();
-            parameters.Add("Error", await response.Content.ReadAsStringAsync());
-            
             var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
             await (await DialogService.ShowAsync<ErrorDialog>(
-                Localization["HarborPage_BerthPart_ErrorDialog_Title"],
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
                 parameters, options)).Result;
-        }
-        else
-        {
-            response = await Client.GetAsync(ApiRoutes.Berth.Controller + "?id=" + Id);
-
-            _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
         }
 
         StateHasChanged();
@@ -196,72 +208,98 @@
 
     private async Task deleteBerth(BerthPreviewDataDto berth)
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
-            Localization["HarborPage_BerthPart_DeleteDialog_Title"],
-            parameters, options)).Result;
-
-        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        try
         {
-            var response = await Client.DeleteAsync(string.Format(
-                "{0}?id={1}",
-                ApiRoutes.Berth.Controller,
-                berth.Id));
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
-            if (!response.IsSuccessStatusCode)
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+                Localization["HarborPage_BerthPart_DeleteDialog_Title"],
+                parameters, options)).Result;
+
+            if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
             {
-                parameters = new DialogParameters();
-                parameters.Add("Error", await response.Content.ReadAsStringAsync());
-                
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["HarborPage_BerthPart_ErrorDialog_Title"],
-                    parameters, options)).Result;
+                var response = await Client.DeleteAsync(string.Format(
+                    "{0}?id={1}",
+                    ApiRoutes.Berth.Controller,
+                    berth.Id));
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    parameters = new DialogParameters();
+                    parameters.Add("Error", await response.Content.ReadAsStringAsync());
+
+                    await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["HarborPage_BerthPart_ErrorDialog_Title"],
+                        parameters, options)).Result;
+                }
+
+                response = await Client.GetAsync(ApiRoutes.Berth.Controller + "?id=" + Id);
+
+                _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
+
+                StateHasChanged();
             }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-            response = await Client.GetAsync(ApiRoutes.Berth.Controller + "?id=" + Id);
-
-            _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
-
-            StateHasChanged();
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        HttpResponseMessage response;
-
-        if (!string.IsNullOrEmpty(token))
+        try
         {
-            Client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-            response = await Client.GetAsync(ApiRoutes.Account.Controller);
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
-            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+            HttpResponseMessage response;
 
-            if (userDto == null)
+            if (!string.IsNullOrEmpty(token))
             {
-                await LocalStorageService.RemoveAsync("token");
-                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                Client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+                var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+                if (userDto == null)
+                {
+                    await LocalStorageService.RemoveAsync(SavedDataSections.Token);
+                    NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                }
             }
+
+            response = await Client.GetAsync(ApiRoutes.Berth.Controller + "?id=" + Id);
+
+            _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
         }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        response = await Client.GetAsync(ApiRoutes.Berth.Controller + "?id=" + Id);
-
-        _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
 
     private void UpdatePage()

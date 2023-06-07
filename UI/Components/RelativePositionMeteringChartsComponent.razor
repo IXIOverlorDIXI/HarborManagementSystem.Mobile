@@ -7,8 +7,9 @@
 @inject NavigationManager NavManager
 @inject HttpClient Client
 @inject IStorageService LocalStorageService
+@inject IDialogService DialogService
 
-<MudExpansionPanel Text="@Localization["StatisticsPage_RelativePositionComponent_Title"]" >
+<MudExpansionPanel Text="@Localization["StatisticsPage_RelativePositionComponent_Title"]">
     <MudItem Style="width: 100%">
         <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%">
             @Localization["StatisticsPage_RelativePositionComponent_Title"]
@@ -17,149 +18,104 @@
         {
             <MudPaper Class="d-flex flex-row flex-wrap flex-grow-1 gap-2 ma-2 pa-2" Elevation="0">
                 <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_backDistanceMaximalData"
-                        DataMin="@_backDistanceMinimalData"
-                        DataAverage="@_backDistanceData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), x.BackDistance))
-                                       .ToList())"/>
-                    <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_frontDistanceMaximalData"
-                        DataMin="@_frontDistanceMinimalData"
-                        DataAverage="@_frontDistanceData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), x.FrontDistance))
-                                       .ToList())"/>
-                    <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_rightDistanceMaximalData"
-                        DataMin="@_rightDistanceMinimalData"
-                        DataAverage="@_rightDistanceData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), x.RightDistance))
-                                       .ToList())"/>
-                    <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_leftDistanceMaximalData"
-                        DataMin="@_leftDistanceMinimalData"
-                        DataAverage="@_leftDistanceData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), x.LeftDistance))
-                                       .ToList())"/>
-                    <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_rollAngleMaximalData"
-                        DataMin="@_rollAngleMinimalData"
-                        DataAverage="@_rollAngleData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), Math.Abs(x.RollAngle)))
-                                       .ToList())"/>
-                    <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_rotationAngleMaximalData"
-                        DataMin="@_rotationAngleMinimalData"
-                        DataAverage="@_rotationAngleData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), Math.Abs(x.RotationAngle)))
-                                       .ToList())"/>
-                    <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_tiltAngleMaximalData"
-                        DataMin="@_tiltAngleMinimalData"
-                        DataAverage="@_tiltAngleData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), Math.Abs(x.TiltAngle)))
-                                       .ToList())"/>
-                    <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_heightHeadAboveWaterMaximalData"
-                        DataMin="@_heightHeadAboveWaterMinimalData"
-                        DataAverage="@_heightHeadAboveWaterData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), x.HeightHeadAboveWater))
-                                       .ToList())"/>
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_BackDistanceChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_backDistanceMaximalData"
+                    DataMin="@_backDistanceMinimalData"
+                    DataAverage="@_backDistanceData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.BackDistance)) .ToList())"/>
                 <LineChartDiagram
-                        ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataAverageLocalizationKey"
-                        ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataByOneLocalizationKey"
-                        ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataMaxLocalizationKey"
-                        ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataMinLocalizationKey"
-                        ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_TitleLocalizationKey"
-                        XAxisLabels="@_relativePositionMeteringDates"
-                        DataMax="@_heightTailAboveWaterMaximalData"
-                        DataMin="@_heightTailAboveWaterMinimalData"
-                        DataAverage="@_heightTailAboveWaterData"
-                        DataByOne="@(RelativePositionMeteringData
-                                       .OrderBy(x => x.MeteringDate)
-                                       .TakeLast(20)
-                                       .Select(x => 
-                                           new Tuple<string, double>(x.MeteringDate.ToString(), x.HeightTailAboveWater))
-                                       .ToList())"/>
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_FrontDistanceChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_frontDistanceMaximalData"
+                    DataMin="@_frontDistanceMinimalData"
+                    DataAverage="@_frontDistanceData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.FrontDistance)) .ToList())"/>
+                <LineChartDiagram
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_RightDistanceChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_rightDistanceMaximalData"
+                    DataMin="@_rightDistanceMinimalData"
+                    DataAverage="@_rightDistanceData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.RightDistance)) .ToList())"/>
+                <LineChartDiagram
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_LeftDistanceChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_leftDistanceMaximalData"
+                    DataMin="@_leftDistanceMinimalData"
+                    DataAverage="@_leftDistanceData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.LeftDistance)) .ToList())"/>
+                <LineChartDiagram
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_RollAngleChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_rollAngleMaximalData"
+                    DataMin="@_rollAngleMinimalData"
+                    DataAverage="@_rollAngleData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), Math.Abs(x.RollAngle))) .ToList())"/>
+                <LineChartDiagram
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_RotationAngleChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_rotationAngleMaximalData"
+                    DataMin="@_rotationAngleMinimalData"
+                    DataAverage="@_rotationAngleData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), Math.Abs(x.RotationAngle))) .ToList())"/>
+                <LineChartDiagram
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_TiltAngleChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_tiltAngleMaximalData"
+                    DataMin="@_tiltAngleMinimalData"
+                    DataAverage="@_tiltAngleData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), Math.Abs(x.TiltAngle))) .ToList())"/>
+                <LineChartDiagram
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_HeightHeadAboveWaterChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_heightHeadAboveWaterMaximalData"
+                    DataMin="@_heightHeadAboveWaterMinimalData"
+                    DataAverage="@_heightHeadAboveWaterData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.HeightHeadAboveWater)) .ToList())"/>
+                <LineChartDiagram
+                    ChartDataAverageLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataAverageLocalizationKey"
+                    ChartDataByOneLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataByOneLocalizationKey"
+                    ChartDataMaxLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataMaxLocalizationKey"
+                    ChartDataMinLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_DataMinLocalizationKey"
+                    ChartTitleLocalizationKey="StatisticsPage_RelativePositionComponent_HeightTailAboveWaterChart_TitleLocalizationKey"
+                    XAxisLabels="@_relativePositionMeteringDates"
+                    DataMax="@_heightTailAboveWaterMaximalData"
+                    DataMin="@_heightTailAboveWaterMinimalData"
+                    DataAverage="@_heightTailAboveWaterData"
+                    DataByOne="@(RelativePositionMeteringData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.HeightTailAboveWater)) .ToList())"/>
             </MudPaper>
         }
         else
@@ -173,214 +129,242 @@
 
 
 @code {
+
     [Parameter]
     public List<RelativePositionMeteringDto> RelativePositionMeteringData { get; set; }
 
-    private string[] _relativePositionMeteringDates = { "NaN", "NaN", "NaN", "NaN" }; 
-    
-    private double[] _backDistanceData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _frontDistanceData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _leftDistanceData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rightDistanceData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rotationAngleData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _tiltAngleData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rollAngleData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _heightHeadAboveWaterData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _heightTailAboveWaterData = new double[] { 0, 0, 0, 0 } ;
-    
-    private double[] _backDistanceMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _frontDistanceMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _leftDistanceMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rightDistanceMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rotationAngleMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _tiltAngleMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rollAngleMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _heightHeadAboveWaterMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _heightTailAboveWaterMinimalData = new double[] { 0, 0, 0, 0 } ;
-    
-    private double[] _backDistanceMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _frontDistanceMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _leftDistanceMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rightDistanceMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rotationAngleMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _tiltAngleMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _rollAngleMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _heightHeadAboveWaterMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _heightTailAboveWaterMaximalData = new double[] { 0, 0, 0, 0 } ;
+    private string[] _relativePositionMeteringDates = { "NaN", "NaN", "NaN", "NaN" };
+
+    private double[] _backDistanceData = new double[] { 0, 0, 0, 0 };
+    private double[] _frontDistanceData = new double[] { 0, 0, 0, 0 };
+    private double[] _leftDistanceData = new double[] { 0, 0, 0, 0 };
+    private double[] _rightDistanceData = new double[] { 0, 0, 0, 0 };
+    private double[] _rotationAngleData = new double[] { 0, 0, 0, 0 };
+    private double[] _tiltAngleData = new double[] { 0, 0, 0, 0 };
+    private double[] _rollAngleData = new double[] { 0, 0, 0, 0 };
+    private double[] _heightHeadAboveWaterData = new double[] { 0, 0, 0, 0 };
+    private double[] _heightTailAboveWaterData = new double[] { 0, 0, 0, 0 };
+
+    private double[] _backDistanceMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _frontDistanceMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _leftDistanceMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _rightDistanceMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _rotationAngleMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _tiltAngleMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _rollAngleMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _heightHeadAboveWaterMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _heightTailAboveWaterMinimalData = new double[] { 0, 0, 0, 0 };
+
+    private double[] _backDistanceMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _frontDistanceMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _leftDistanceMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _rightDistanceMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _rotationAngleMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _tiltAngleMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _rollAngleMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _heightHeadAboveWaterMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _heightTailAboveWaterMaximalData = new double[] { 0, 0, 0, 0 };
 
 
     private async Task buildRelativePositionMetterings()
     {
-        var relativePositionMeteringDtos = RelativePositionMeteringData
-            .Where(x => 
-                x.MeteringDate >= new DateTime(
-                DateTime.Today.Year - 1,
-                DateTime.Today.Month,
-                DateTime.Today.Day) && x.MeteringDate <= DateTime.Now)
-            .ToList();
-
-        if (relativePositionMeteringDtos.Any())
+        try
         {
-            var orderedList = relativePositionMeteringDtos.OrderBy(x => x.MeteringDate).ToList();
-            
-            var firstEdge = relativePositionMeteringDtos.MinBy(x => x.MeteringDate).MeteringDate;
-            var secondEdge = DateTime.Now;
-            
-            int monthAmount = (secondEdge.Year - firstEdge.Year) * 12
-                              + (secondEdge.Month - firstEdge.Month);
+            var relativePositionMeteringDtos = RelativePositionMeteringData
+                .Where(x =>
+                    x.MeteringDate >= new DateTime(
+                        DateTime.Today.Year - 1,
+                        DateTime.Today.Month,
+                        DateTime.Today.Day) && x.MeteringDate <= DateTime.Now)
+                .ToList();
 
-            if (monthAmount < 4)
+            if (relativePositionMeteringDtos.Any())
             {
-                var m = secondEdge.Month;
-                var y = secondEdge.Year;
-                if (m <= 4)
-                {
-                    m = 12 + m - 4;
-                    y -= 1;
-                }
-                else
-                {
-                    m -= 4;
-                }
-                firstEdge = new DateTime(y, m, secondEdge.Day);
-                monthAmount = 5;
-            }
+                var orderedList = relativePositionMeteringDtos.OrderBy(x => x.MeteringDate).ToList();
 
-            _relativePositionMeteringDates = new string[monthAmount];
-            
-            _backDistanceData = new double[monthAmount];
-            _frontDistanceData = new double[monthAmount];
-            _leftDistanceData = new double[monthAmount];
-            _rightDistanceData = new double[monthAmount];
-            _rotationAngleData = new double[monthAmount];
-            _tiltAngleData = new double[monthAmount];
-            _rollAngleData = new double[monthAmount];
-            _heightHeadAboveWaterData = new double[monthAmount];
-            _heightTailAboveWaterData = new double[monthAmount];
-            
-            _backDistanceMinimalData = new double[monthAmount];
-            _frontDistanceMinimalData = new double[monthAmount];
-            _leftDistanceMinimalData = new double[monthAmount];
-            _rightDistanceMinimalData = new double[monthAmount];
-            _rotationAngleMinimalData = new double[monthAmount];
-            _tiltAngleMinimalData = new double[monthAmount];
-            _rollAngleMinimalData = new double[monthAmount];
-            _heightHeadAboveWaterMinimalData = new double[monthAmount];
-            _heightTailAboveWaterMinimalData = new double[monthAmount];
-            
-            _backDistanceMaximalData = new double[monthAmount];
-            _frontDistanceMaximalData = new double[monthAmount];
-            _leftDistanceMaximalData = new double[monthAmount];
-            _rightDistanceMaximalData = new double[monthAmount];
-            _rotationAngleMaximalData = new double[monthAmount];
-            _tiltAngleMaximalData = new double[monthAmount];
-            _rollAngleMaximalData = new double[monthAmount];
-            _heightHeadAboveWaterMaximalData = new double[monthAmount];
-            _heightTailAboveWaterMaximalData = new double[monthAmount];
-            
-            for (int i = 0, month = firstEdge.Month, year = firstEdge.Year;
-                i < monthAmount; i++)
-            {
-                _relativePositionMeteringDates[i] = month switch
-                {
-                    1 => String.Concat("Jan\n", year),
-                    2 => String.Concat("Feb\n", year),
-                    3 => String.Concat("Mar\n", year),
-                    4 => String.Concat("Apr\n", year),
-                    5 => String.Concat("May\n", year),
-                    6 => String.Concat("Jun\n", year),
-                    7 => String.Concat("Jul\n", year),
-                    8 => String.Concat("Aug\n", year),
-                    9 => String.Concat("Sep\n", year),
-                    10 => String.Concat("Oct\n", year),
-                    11 => String.Concat("Nov\n", year),
-                    12 => String.Concat("Dec\n", year),
-                    _ => _relativePositionMeteringDates[i]
-                    };
+                var firstEdge = relativePositionMeteringDtos.MinBy(x => x.MeteringDate).MeteringDate;
+                var secondEdge = DateTime.Now;
 
-                var tempDtosList = orderedList
-                    .Where(x => x.MeteringDate.Month == month && x.MeteringDate.Year == year)
-                    .ToList();
+                int monthAmount = (secondEdge.Year - firstEdge.Year) * 12
+                                  + (secondEdge.Month - firstEdge.Month);
 
-                if (tempDtosList.Any())
+                if (monthAmount < 4)
                 {
-                    _backDistanceData[i] = tempDtosList.Average(x => x.BackDistance);
-                    _frontDistanceData[i] = tempDtosList.Average(x => x.FrontDistance);
-                    _leftDistanceData[i] = tempDtosList.Average(x => x.LeftDistance);
-                    _rightDistanceData[i] = tempDtosList.Average(x => x.RightDistance);
-                    _rotationAngleData[i] = Math.Abs(tempDtosList.Average(x => x.RotationAngle));
-                    _tiltAngleData[i] = Math.Abs(tempDtosList.Average(x => x.TiltAngle));
-                    _rollAngleData[i] = Math.Abs(tempDtosList.Average(x => x.RollAngle));
-                    _heightHeadAboveWaterData[i] = tempDtosList.Average(x => x.HeightHeadAboveWater);
-                    _heightTailAboveWaterData[i] = tempDtosList.Average(x => x.HeightTailAboveWater);
-                    
-                    _backDistanceMinimalData[i] = tempDtosList.Min(x => x.BackDistance);
-                    _frontDistanceMinimalData[i] = tempDtosList.Min(x => x.FrontDistance);
-                    _leftDistanceMinimalData[i] = tempDtosList.Min(x => x.LeftDistance);
-                    _rightDistanceMinimalData[i] = tempDtosList.Min(x => x.RightDistance);
-                    _rotationAngleMinimalData[i] = Math.Abs(tempDtosList.Min(x => x.RotationAngle));
-                    _tiltAngleMinimalData[i] = Math.Abs(tempDtosList.Min(x => x.TiltAngle));
-                    _rollAngleMinimalData[i] = Math.Abs(tempDtosList.Min(x => x.RollAngle));
-                    _heightHeadAboveWaterMinimalData[i] = tempDtosList.Min(x => x.HeightHeadAboveWater);
-                    _heightTailAboveWaterMinimalData[i] = tempDtosList.Min(x => x.HeightTailAboveWater);
-                    
-                    _backDistanceMaximalData[i] = tempDtosList.Max(x => x.BackDistance);
-                    _frontDistanceMaximalData[i] = tempDtosList.Max(x => x.FrontDistance);
-                    _leftDistanceMaximalData[i] = tempDtosList.Max(x => x.LeftDistance);
-                    _rightDistanceMaximalData[i] = tempDtosList.Max(x => x.RightDistance);
-                    _rotationAngleMaximalData[i] = Math.Abs(tempDtosList.Max(x => x.RotationAngle));
-                    _tiltAngleMaximalData[i] = Math.Abs(tempDtosList.Max(x => x.TiltAngle));
-                    _rollAngleMaximalData[i] = Math.Abs(tempDtosList.Max(x => x.RollAngle));
-                    _heightHeadAboveWaterMaximalData[i] = tempDtosList.Max(x => x.HeightHeadAboveWater);
-                    _heightTailAboveWaterMaximalData[i] = tempDtosList.Max(x => x.HeightTailAboveWater);
+                    var m = secondEdge.Month;
+                    var y = secondEdge.Year;
+                    if (m <= 4)
+                    {
+                        m = 12 + m - 4;
+                        y -= 1;
+                    }
+                    else
+                    {
+                        m -= 4;
+                    }
+                    firstEdge = new DateTime(y, m, secondEdge.Day);
+                    monthAmount = 5;
                 }
-                else
+
+                _relativePositionMeteringDates = new string[monthAmount];
+
+                _backDistanceData = new double[monthAmount];
+                _frontDistanceData = new double[monthAmount];
+                _leftDistanceData = new double[monthAmount];
+                _rightDistanceData = new double[monthAmount];
+                _rotationAngleData = new double[monthAmount];
+                _tiltAngleData = new double[monthAmount];
+                _rollAngleData = new double[monthAmount];
+                _heightHeadAboveWaterData = new double[monthAmount];
+                _heightTailAboveWaterData = new double[monthAmount];
+
+                _backDistanceMinimalData = new double[monthAmount];
+                _frontDistanceMinimalData = new double[monthAmount];
+                _leftDistanceMinimalData = new double[monthAmount];
+                _rightDistanceMinimalData = new double[monthAmount];
+                _rotationAngleMinimalData = new double[monthAmount];
+                _tiltAngleMinimalData = new double[monthAmount];
+                _rollAngleMinimalData = new double[monthAmount];
+                _heightHeadAboveWaterMinimalData = new double[monthAmount];
+                _heightTailAboveWaterMinimalData = new double[monthAmount];
+
+                _backDistanceMaximalData = new double[monthAmount];
+                _frontDistanceMaximalData = new double[monthAmount];
+                _leftDistanceMaximalData = new double[monthAmount];
+                _rightDistanceMaximalData = new double[monthAmount];
+                _rotationAngleMaximalData = new double[monthAmount];
+                _tiltAngleMaximalData = new double[monthAmount];
+                _rollAngleMaximalData = new double[monthAmount];
+                _heightHeadAboveWaterMaximalData = new double[monthAmount];
+                _heightTailAboveWaterMaximalData = new double[monthAmount];
+
+                for (int i = 0, month = firstEdge.Month, year = firstEdge.Year;
+                    i < monthAmount; i++)
                 {
-                    _backDistanceData[i] = 0;
-                    _frontDistanceData[i] = 0;
-                    _leftDistanceData[i] = 0;
-                    _rightDistanceData[i] = 0;
-                    _rotationAngleData[i] = 0;
-                    _tiltAngleData[i] = 0;
-                    _rollAngleData[i] = 0;
-                    _heightHeadAboveWaterData[i] = 0;
-                    _heightTailAboveWaterData[i] = 0;
-                    
-                    _backDistanceMinimalData[i] = 0;
-                    _frontDistanceMinimalData[i] = 0;
-                    _leftDistanceMinimalData[i] = 0;
-                    _rightDistanceMinimalData[i] = 0;
-                    _rotationAngleMinimalData[i] = 0;
-                    _tiltAngleMinimalData[i] = 0;
-                    _rollAngleMinimalData[i] = 0;
-                    _heightHeadAboveWaterMinimalData[i] = 0;
-                    _heightTailAboveWaterMinimalData[i] = 0;
-                    
-                    _backDistanceMaximalData[i] = 0;
-                    _frontDistanceMaximalData[i] = 0;
-                    _leftDistanceMaximalData[i] = 0;
-                    _rightDistanceMaximalData[i] = 0;
-                    _rotationAngleMaximalData[i] = 0;
-                    _tiltAngleMaximalData[i] = 0;
-                    _rollAngleMaximalData[i] = 0;
-                    _heightHeadAboveWaterMaximalData[i] = 0;
-                    _heightTailAboveWaterMaximalData[i] = 0;
+                    _relativePositionMeteringDates[i] = month switch
+                    {
+                        1 => String.Concat("Jan\n", year),
+                        2 => String.Concat("Feb\n", year),
+                        3 => String.Concat("Mar\n", year),
+                        4 => String.Concat("Apr\n", year),
+                        5 => String.Concat("May\n", year),
+                        6 => String.Concat("Jun\n", year),
+                        7 => String.Concat("Jul\n", year),
+                        8 => String.Concat("Aug\n", year),
+                        9 => String.Concat("Sep\n", year),
+                        10 => String.Concat("Oct\n", year),
+                        11 => String.Concat("Nov\n", year),
+                        12 => String.Concat("Dec\n", year),
+                        _ => _relativePositionMeteringDates[i]
+                        };
+
+                    var tempDtosList = orderedList
+                        .Where(x => x.MeteringDate.Month == month && x.MeteringDate.Year == year)
+                        .ToList();
+
+                    if (tempDtosList.Any())
+                    {
+                        _backDistanceData[i] = tempDtosList.Average(x => x.BackDistance);
+                        _frontDistanceData[i] = tempDtosList.Average(x => x.FrontDistance);
+                        _leftDistanceData[i] = tempDtosList.Average(x => x.LeftDistance);
+                        _rightDistanceData[i] = tempDtosList.Average(x => x.RightDistance);
+                        _rotationAngleData[i] = Math.Abs(tempDtosList.Average(x => x.RotationAngle));
+                        _tiltAngleData[i] = Math.Abs(tempDtosList.Average(x => x.TiltAngle));
+                        _rollAngleData[i] = Math.Abs(tempDtosList.Average(x => x.RollAngle));
+                        _heightHeadAboveWaterData[i] = tempDtosList.Average(x => x.HeightHeadAboveWater);
+                        _heightTailAboveWaterData[i] = tempDtosList.Average(x => x.HeightTailAboveWater);
+
+                        _backDistanceMinimalData[i] = tempDtosList.Min(x => x.BackDistance);
+                        _frontDistanceMinimalData[i] = tempDtosList.Min(x => x.FrontDistance);
+                        _leftDistanceMinimalData[i] = tempDtosList.Min(x => x.LeftDistance);
+                        _rightDistanceMinimalData[i] = tempDtosList.Min(x => x.RightDistance);
+                        _rotationAngleMinimalData[i] = Math.Abs(tempDtosList.Min(x => x.RotationAngle));
+                        _tiltAngleMinimalData[i] = Math.Abs(tempDtosList.Min(x => x.TiltAngle));
+                        _rollAngleMinimalData[i] = Math.Abs(tempDtosList.Min(x => x.RollAngle));
+                        _heightHeadAboveWaterMinimalData[i] = tempDtosList.Min(x => x.HeightHeadAboveWater);
+                        _heightTailAboveWaterMinimalData[i] = tempDtosList.Min(x => x.HeightTailAboveWater);
+
+                        _backDistanceMaximalData[i] = tempDtosList.Max(x => x.BackDistance);
+                        _frontDistanceMaximalData[i] = tempDtosList.Max(x => x.FrontDistance);
+                        _leftDistanceMaximalData[i] = tempDtosList.Max(x => x.LeftDistance);
+                        _rightDistanceMaximalData[i] = tempDtosList.Max(x => x.RightDistance);
+                        _rotationAngleMaximalData[i] = Math.Abs(tempDtosList.Max(x => x.RotationAngle));
+                        _tiltAngleMaximalData[i] = Math.Abs(tempDtosList.Max(x => x.TiltAngle));
+                        _rollAngleMaximalData[i] = Math.Abs(tempDtosList.Max(x => x.RollAngle));
+                        _heightHeadAboveWaterMaximalData[i] = tempDtosList.Max(x => x.HeightHeadAboveWater);
+                        _heightTailAboveWaterMaximalData[i] = tempDtosList.Max(x => x.HeightTailAboveWater);
+                    }
+                    else
+                    {
+                        _backDistanceData[i] = 0;
+                        _frontDistanceData[i] = 0;
+                        _leftDistanceData[i] = 0;
+                        _rightDistanceData[i] = 0;
+                        _rotationAngleData[i] = 0;
+                        _tiltAngleData[i] = 0;
+                        _rollAngleData[i] = 0;
+                        _heightHeadAboveWaterData[i] = 0;
+                        _heightTailAboveWaterData[i] = 0;
+
+                        _backDistanceMinimalData[i] = 0;
+                        _frontDistanceMinimalData[i] = 0;
+                        _leftDistanceMinimalData[i] = 0;
+                        _rightDistanceMinimalData[i] = 0;
+                        _rotationAngleMinimalData[i] = 0;
+                        _tiltAngleMinimalData[i] = 0;
+                        _rollAngleMinimalData[i] = 0;
+                        _heightHeadAboveWaterMinimalData[i] = 0;
+                        _heightTailAboveWaterMinimalData[i] = 0;
+
+                        _backDistanceMaximalData[i] = 0;
+                        _frontDistanceMaximalData[i] = 0;
+                        _leftDistanceMaximalData[i] = 0;
+                        _rightDistanceMaximalData[i] = 0;
+                        _rotationAngleMaximalData[i] = 0;
+                        _tiltAngleMaximalData[i] = 0;
+                        _rollAngleMaximalData[i] = 0;
+                        _heightHeadAboveWaterMaximalData[i] = 0;
+                        _heightTailAboveWaterMaximalData[i] = 0;
+                    }
+
+                    year = month == 12 ? year + 1 : year;
+                    month = month == 12 ? 1 : month + 1;
                 }
-                
-                year = month == 12 ? year + 1 : year;
-                month = month == 12 ? 1 : month + 1;
             }
         }
-        await InvokeAsync(() => StateHasChanged());
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+
+        StateHasChanged();
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+        try
+        {
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-        await buildRelativePositionMetterings();
+            await buildRelativePositionMetterings();
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
 
     private void UpdatePage()
@@ -390,4 +374,5 @@
 
         StateHasChanged();
     }
+
 }

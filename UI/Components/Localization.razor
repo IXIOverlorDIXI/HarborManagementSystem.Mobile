@@ -17,9 +17,9 @@
 
 <MudPaper Elevation="0" Class="m-0 p-0" Style="background-color: aliceblue; width: 100%">
     <MudContainer Class="m-0 p-0" Style="background-color: aliceblue; width: 100%">
-        <MudSelect T="string" Label="@Localizations["LocalizationsComponent_MudSelect_Label"]" 
-                   Variant="Variant.Outlined" ValueChanged="ChangeLanguage" 
-                   Class="small-mud-select m-0 p-0" 
+        <MudSelect T="string" Label="@Localizations["LocalizationsComponent_MudSelect_Label"]"
+                   Variant="Variant.Outlined" ValueChanged="ChangeLanguage"
+                   Class="small-mud-select m-0 p-0"
                    Style="background-color: aliceblue; width: 100%" FullWidth="true">
             <MudSelectItem Value="@("en")" Style="background-color: aliceblue; width: 100%">
                 English
@@ -33,70 +33,31 @@
 
 
 @code {
+
     private async Task ChangeLanguage(string changedLocalization)
     {
-        if (changedLocalization.Equals(LocalizationService.GetCulture()))
-        {
-            return;
-        }
-        
         try
         {
-            await LocalStorageService.SetAsync("LocalizationCulture", changedLocalization);
-        
-            CultureInfo culture = new CultureInfo(changedLocalization);
-            LocalizationService.SetCulture(culture);
-
-            if (UserAuthorizationHelpService.IsUserAuthenticated == null)
+            if (changedLocalization.Equals(LocalizationService.GetCulture()))
             {
-                await UserAuthorizationHelpService.IsCredentialsRight();
+                return;
             }
 
-            if(UserAuthorizationHelpService.IsUserAuthenticated ?? false)
-            {
-                await UserAuthorizationHelpService.SetLanguageSettings(changedLocalization);
-            }
-        }
-        catch (Exception e)
-        {
-            await LocalStorageService.SetAsync("Error", e.Message);
-        }
-        
-        StateHasChanged();
-    }
-    
-    
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            string localization = "";
-        CultureInfo culture = null;
-        
-        if (UserAuthorizationHelpService.IsUserAuthenticated == null)
-        {
-            await UserAuthorizationHelpService.IsCredentialsRight();
-        }
-
-        if(UserAuthorizationHelpService.IsUserAuthenticated ?? false)
-        {
             try
             {
-                var settings = await UserAuthorizationHelpService.GetSettings();
-                string language = "";
-                
-                var settingsJson = JObject.Parse(settings);
+                await LocalStorageService.SetAsync("LocalizationCulture", changedLocalization);
 
-                if (!settingsJson.Properties().Any(x => x.Name.Equals("language")))
+                CultureInfo culture = new CultureInfo(changedLocalization);
+                LocalizationService.SetCulture(culture);
+
+                if (UserAuthorizationHelpService.IsUserAuthenticated == null)
                 {
-                    throw new Exception("language does not save");
+                    await UserAuthorizationHelpService.IsCredentialsRight();
                 }
-                
-                language = settingsJson["language"].ToString();
 
-                if (!string.IsNullOrEmpty(language))
+                if (UserAuthorizationHelpService.IsUserAuthenticated ?? false)
                 {
-                    culture = new CultureInfo(language);
+                    await UserAuthorizationHelpService.SetLanguageSettings(changedLocalization);
                 }
             }
             catch (Exception e)
@@ -104,26 +65,78 @@
                 await LocalStorageService.SetAsync("Error", e.Message);
             }
         }
-        
-        if (culture == null)
+        catch (Exception e)
         {
-            try
-            {
-                localization = await LocalStorageService.GetAsync<string>("LocalizationCulture");
-                culture = new CultureInfo(localization);
-            }
-            catch(Exception e)
-            {
-                localization = "en";
-                await LocalStorageService.SetAsync("Error", e.Message);
-                culture = new CultureInfo(localization);
-            }
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        LocalizationService.SetCulture(culture);
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
-        CultureInfo.DefaultThreadCurrentCulture = culture;
-        LocalizationService.CultureChanged += UpdateComponent;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localizations["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+        StateHasChanged();
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            string localization = "";
+            CultureInfo culture = null;
+
+            if (UserAuthorizationHelpService.IsUserAuthenticated == null)
+            {
+                await UserAuthorizationHelpService.IsCredentialsRight();
+            }
+
+            if (UserAuthorizationHelpService.IsUserAuthenticated ?? false)
+            {
+                try
+                {
+                    var settings = await UserAuthorizationHelpService.GetSettings();
+                    string language = "";
+
+                    var settingsJson = JObject.Parse(settings);
+
+                    if (!settingsJson.Properties().Any(x => x.Name.Equals("language")))
+                    {
+                        throw new Exception("language does not save");
+                    }
+
+                    language = settingsJson["language"].ToString();
+
+                    if (!string.IsNullOrEmpty(language))
+                    {
+                        culture = new CultureInfo(language);
+                    }
+                }
+                catch (Exception e)
+                {
+                    await LocalStorageService.SetAsync("Error", e.Message);
+                }
+            }
+
+            if (culture == null)
+            {
+                try
+                {
+                    localization = await LocalStorageService.GetAsync<string>("LocalizationCulture");
+                    culture = new CultureInfo(localization);
+                }
+                catch (Exception e)
+                {
+                    localization = "en";
+                    await LocalStorageService.SetAsync("Error", e.Message);
+                    culture = new CultureInfo(localization);
+                }
+            }
+
+            LocalizationService.SetCulture(culture);
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            LocalizationService.CultureChanged += UpdateComponent;
         }
         catch (Exception e)
         {
@@ -142,4 +155,5 @@
         CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
         CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
     }
+
 }

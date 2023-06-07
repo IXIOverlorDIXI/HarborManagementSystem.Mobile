@@ -28,10 +28,6 @@
                 <MudCard>
                     <MudForm @ref="@profileForm" Model="@_profileForm" Validation="@(ProfileFormValidation.ValidateValue)" ValidationDelay="0">
                         <MudCardContent>
-                            @* <MudTextField Label="@Localization["ProfilePage_ProfileTab_UsernameLabel"]" *@
-                            @*               HelperText="@Localization["ProfilePage_ProfileTab_UsernameHelperText"]" *@
-                            @*               Class="mt-3" *@
-                            @*               @bind-Value="_profileForm.Username" For="@(() => _profileForm.Username)"/> *@
                             <MudTextField Label="@Localization["ProfilePage_ProfileTab_DisplayNameLabel"]"
                                           HelperText="@Localization["ProfilePage_ProfileTab_DisplayNameHelperText"]"
                                           Class="mt-3"
@@ -122,8 +118,8 @@
                                         @Localization["ProfilePage_UserPhotoTab_UserPhotoDeleteSuccessAlert"]
                                     </MudAlert>
                                 }
-                                
-                                
+
+
 
                             </MudPaper>
                             <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
@@ -233,92 +229,118 @@
 
     private async Task profileSave()
     {
-        profileForm.Validate();
-
-        if (!profileForm.IsValid)
+        try
         {
-            return;
+            profileForm.Validate();
+
+            if (!profileForm.IsValid)
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var profileDto = new ProfileDto()
+            {
+                Username = _profileForm.Username,
+                DisplayName = _profileForm.DisplayName,
+                Email = _profileForm.Email,
+                PhoneNumber = _profileForm.PhoneNumber
+            };
+
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Profile.Controller, profileDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _currentUserEmail = profileDto.Email;
+                _profileSuccessVisible = true;
+                _profileErrorAlertVisible = false;
+            }
+            else
+            {
+                _profileFormError = await response.Content.ReadAsStringAsync();
+                _profileSuccessVisible = false;
+                _profileErrorAlertVisible = true;
+            }
         }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var profileDto = new ProfileDto()
+        catch (Exception e)
         {
-            Username = _profileForm.Username,
-            DisplayName = _profileForm.DisplayName,
-            Email = _profileForm.Email,
-            PhoneNumber = _profileForm.PhoneNumber
-        };
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        var response = await Client.PutAsJsonAsync(ApiRoutes.Profile.Controller, profileDto);
-
-        if (response.IsSuccessStatusCode)
-        {
-            _currentUserEmail = profileDto.Email;
-            _profileSuccessVisible = true;
-            _profileErrorAlertVisible = false;
-        }
-        else
-        {
-            _profileFormError = await response.Content.ReadAsStringAsync();
-            _profileSuccessVisible = false;
-            _profileErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
     private async Task userPhotoSave()
     {
-        if (_file == null)
-        {
-            _userPhotoUploadErrorAlertVisible = true;
-            _userPhotoUploadSuccessAlertVisible = false;
-            return;
-        }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-
-        var fileDto = new ProfilePhotoDataDto()
-        {
-            FileNameWithExtension = _file.Name,
-            FileStream = _fileContent
-        };
-
-        HttpResponseMessage response = default;
-
         try
         {
-            if (string.IsNullOrEmpty(_currentUserPhoto.Url))
+            if (_file == null)
             {
-                response = await Client.PostAsJsonAsync(ApiRoutes.Profile.Photo, fileDto);
+                _userPhotoUploadErrorAlertVisible = true;
+                _userPhotoUploadSuccessAlertVisible = false;
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+
+            var fileDto = new ProfilePhotoDataDto()
+            {
+                FileNameWithExtension = _file.Name,
+                FileStream = _fileContent
+            };
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                if (string.IsNullOrEmpty(_currentUserPhoto.Url))
+                {
+                    response = await Client.PostAsJsonAsync(ApiRoutes.Profile.Photo, fileDto);
+                }
+                else
+                {
+                    response = await Client.PutAsJsonAsync(ApiRoutes.Profile.Photo, fileDto);
+                }
+            }
+            catch (Exception e)
+            {
+                _changeUserPhotoUploadError += e.Message;
+            }
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _userPhotoUploadSuccessAlertVisible = true;
+                _userPhotoUploadErrorAlertVisible = false;
+                _file = null;
+                _fileContent = default;
+                _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
             }
             else
             {
-                response = await Client.PutAsJsonAsync(ApiRoutes.Profile.Photo, fileDto);
+                _userPhotoUploadSuccessAlertVisible = false;
+                _userPhotoUploadErrorAlertVisible = true;
             }
         }
         catch (Exception e)
         {
-            _changeUserPhotoUploadError += e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        if (response.IsSuccessStatusCode)
-        {
-            _userPhotoUploadSuccessAlertVisible = true;
-            _userPhotoUploadErrorAlertVisible = false;
-            _file = null;
-            _fileContent = default;
-            _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
-        }
-        else
-        {
-            _userPhotoUploadSuccessAlertVisible = false;
-            _userPhotoUploadErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -326,83 +348,109 @@
 
     private async Task HandleFileSelection(IBrowserFile file)
     {
-        _file = file;
-
-        if (_file != null)
-        {
-            var maxFileSizeInBytes = _maxPhotoSize;
-            if (_file.Size > maxFileSizeInBytes)
-            {
-                _file = null;
-                
-                var parameters = new DialogParameters();
-                parameters.Add("Error", string.Format(
-                    Localization["ProfilePage_UserPhotoTab_NewUserPhotoSizeError"],
-                    _maxPhotoSize));
-                var options = new DialogOptions { CloseOnEscapeKey = true };
-
-                var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["ProfilePage_UserPhotoTab_ErrorDialog_Title"],
-                    parameters, options)).Result;
-                
-                return;
-            }
-
-            try
-            {
-                _fileContent = new byte[_file.Size];
-                await using (var stream = _file.OpenReadStream(maxAllowedSize: _maxPhotoSize))
-                {
-                    await stream.ReadAsync(_fileContent, 0, (int)_file.Size);
-                }
-            }
-            catch (Exception e)
-            {
-                _userPhotoUploadSuccessAlertVisible = false;
-                _userPhotoUploadErrorAlertVisible = true;
-                _changeUserPhotoUploadError += e.Message;
-            }
-
-            StateHasChanged();
-        }
-    }
-    
-    private async Task userPhotoDelete()
-    {
-        if (DefaultFileLinks.DefaultUserPhoto.Equals(_currentUserPhoto.Url))
-        {
-            return;
-        }
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        HttpResponseMessage response = default;
-
         try
         {
-            response = await Client.DeleteAsync(ApiRoutes.Profile.Photo);
+            _file = file;
+
+            if (_file != null)
+            {
+                var maxFileSizeInBytes = _maxPhotoSize;
+                if (_file.Size > maxFileSizeInBytes)
+                {
+                    _file = null;
+
+                    var parameters = new DialogParameters();
+                    parameters.Add("Error", string.Format(
+                        Localization["ProfilePage_UserPhotoTab_NewUserPhotoSizeError"],
+                        _maxPhotoSize));
+                    var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                    var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["ProfilePage_UserPhotoTab_ErrorDialog_Title"],
+                        parameters, options)).Result;
+
+                    return;
+                }
+
+                try
+                {
+                    _fileContent = new byte[_file.Size];
+                    await using (var stream = _file.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                    {
+                        await stream.ReadAsync(_fileContent, 0, (int)_file.Size);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _userPhotoUploadSuccessAlertVisible = false;
+                    _userPhotoUploadErrorAlertVisible = true;
+                    _changeUserPhotoUploadError += e.Message;
+                }
+
+                StateHasChanged();
+            }
         }
         catch (Exception e)
         {
-            _userPhotoDeleteError = e.Message;
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
+    }
+
+    private async Task userPhotoDelete()
+    {
+        try
+        {
+            if (DefaultFileLinks.DefaultUserPhoto.Equals(_currentUserPhoto.Url))
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                response = await Client.DeleteAsync(ApiRoutes.Profile.Photo);
+            }
+            catch (Exception e)
+            {
+                _userPhotoDeleteError = e.Message;
+            }
 
 
-        if (response.IsSuccessStatusCode)
-        {
-            _userPhotoDeleteSuccessAlertVisible = true;
-            _userPhotoDeleteErrorAlertVisible = false;
-            _file = null;
-            _fileContent = default;
-            _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+            if (response.IsSuccessStatusCode)
+            {
+                _userPhotoDeleteSuccessAlertVisible = true;
+                _userPhotoDeleteErrorAlertVisible = false;
+                _file = null;
+                _fileContent = default;
+                _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+            }
+            else
+            {
+                _userPhotoDeleteError = await response.Content.ReadAsStringAsync();
+                _userPhotoDeleteSuccessAlertVisible = false;
+                _userPhotoDeleteErrorAlertVisible = true;
+            }
         }
-        else
+        catch (Exception e)
         {
-            _userPhotoDeleteError = await response.Content.ReadAsStringAsync();
-            _userPhotoDeleteSuccessAlertVisible = false;
-            _userPhotoDeleteErrorAlertVisible = true;
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -410,35 +458,48 @@
 
     private async Task changePassword()
     {
-        changePasswordForm.Validate();
-
-        if (!changePasswordForm.IsValid)
+        try
         {
-            return;
+            changePasswordForm.Validate();
+
+            if (!changePasswordForm.IsValid)
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var loginDto = new LoginDto()
+            {
+                Email = _currentUserEmail,
+                Password = _changePasswordForm.PasswordConfirm
+            };
+
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Account.ChangePassword, loginDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _changePasswordSuccessAlertVisible = true;
+                _changePasswordErrorAlertVisible = false;
+            }
+            else
+            {
+                _changePasswordFormError = await response.Content.ReadAsStringAsync();
+                _changePasswordSuccessAlertVisible = false;
+                _changePasswordErrorAlertVisible = true;
+            }
         }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var loginDto = new LoginDto()
+        catch (Exception e)
         {
-            Email = _currentUserEmail,
-            Password = _changePasswordForm.PasswordConfirm
-        };
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        var response = await Client.PutAsJsonAsync(ApiRoutes.Account.ChangePassword, loginDto);
-
-        if (response.IsSuccessStatusCode)
-        {
-            _changePasswordSuccessAlertVisible = true;
-            _changePasswordErrorAlertVisible = false;
-        }
-        else
-        {
-            _changePasswordFormError = await response.Content.ReadAsStringAsync();
-            _changePasswordSuccessAlertVisible = false;
-            _changePasswordErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
@@ -478,39 +539,52 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            response = await Client.GetAsync(ApiRoutes.Profile.Controller + "?username=" + userDto.Username);
+
+            _profileForm = await response.Content.ReadFromJsonAsync<ProfileForm>();
+
+            response = await Client.GetAsync(ApiRoutes.Profile.Photo + "?username=" + userDto.Username);
+
+            _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+
+            _currentUserEmail = _profileForm.Email;
         }
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
-
-        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
-
-        if (userDto == null)
+        catch (Exception e)
         {
-            await LocalStorageService.RemoveAsync("token");
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-
-        response = await Client.GetAsync(ApiRoutes.Profile.Controller + "?username=" + userDto.Username);
-
-        _profileForm = await response.Content.ReadFromJsonAsync<ProfileForm>();
-
-        response = await Client.GetAsync(ApiRoutes.Profile.Photo + "?username=" + userDto.Username);
-
-        _currentUserPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
-
-        _currentUserEmail = _profileForm.Email;
     }
 
     private void UpdatePage()

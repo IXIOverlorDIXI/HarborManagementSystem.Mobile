@@ -70,7 +70,7 @@
                                     </MudSelectItem>
                                 }
                             </MudSelect>
-                            
+
                         </MudCardContent>
                     </MudForm>
                     <MudCardActions>
@@ -152,23 +152,23 @@
                             </MudPaper>
                             <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
                                 <MudPaper Class="d-flex flex-row justify-start flex-grow-1 gap-2" Elevation="0">
-                                <MudFileUpload T="IBrowserFile" FilesChanged="HandleFileSelection" Accept=".jpg, .jpeg, .png">
-                                    <ButtonTemplate>
-                                        <MudFab HtmlTag="label"
-                                                Variant="@Variant.Filled"
-                                                Color="Color.Primary"
-                                                Icon="@Icons.Material.Filled.Image"
-                                                Label="@Localization["ShipPage_ShipPhotoTab_LoadShipPhotoButton"]"
-                                                for="@context"/>
-                                    </ButtonTemplate>
-                                </MudFileUpload>
-                                @if (!DefaultFileLinks.DefaultImage.Equals(_currentShipPhoto.Url))
-                                {
-                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
-                                               Class="ml-auto" @onclick="shipPhotoDelete">
-                                        @Localization["ShipPage_ShipPhotoTab_DeleteShipPhotoButton"]
-                                    </MudButton>
-                                }
+                                    <MudFileUpload T="IBrowserFile" FilesChanged="HandleFileSelection" Accept=".jpg, .jpeg, .png">
+                                        <ButtonTemplate>
+                                            <MudFab HtmlTag="label"
+                                                    Variant="@Variant.Filled"
+                                                    Color="Color.Primary"
+                                                    Icon="@Icons.Material.Filled.Image"
+                                                    Label="@Localization["ShipPage_ShipPhotoTab_LoadShipPhotoButton"]"
+                                                    for="@context"/>
+                                        </ButtonTemplate>
+                                    </MudFileUpload>
+                                    @if (!DefaultFileLinks.DefaultImage.Equals(_currentShipPhoto.Url))
+                                    {
+                                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Error"
+                                                   Class="ml-auto" @onclick="shipPhotoDelete">
+                                            @Localization["ShipPage_ShipPhotoTab_DeleteShipPhotoButton"]
+                                        </MudButton>
+                                    }
                                 </MudPaper>
 
                                 @if (_file != null)
@@ -189,9 +189,10 @@
 
 
 @code {
+
     [Parameter]
     public string Id { get; set; }
-    
+
     private MudForm editForm;
 
     private List<ShipTypeDto> _shipTypes = new List<ShipTypeDto>();
@@ -212,185 +213,237 @@
     private bool _shipPhotoDeleteErrorAlertVisible = false;
 
     private string _currentUserEmail = "";
-    
+
     private void getStatistics() => NavManager.NavigateTo(string.Format(
         "{0}/{1}",
         PageNavigateConstants.StatisticsPage,
         Id));
 
     private void getBookingsForShip() => NavManager.NavigateTo(
-        string.Format("{0}/{1}/{2}", 
+        string.Format("{0}/{1}/{2}",
             PageNavigateConstants.BookingHistoryPage,
             (int)BookingHistoryPageType.BookingsForShip,
             Id));
-    
+
     private void createShip() => NavManager.NavigateTo(PageNavigateConstants.ShipFormPage);
-    
+
     private async Task deleteShip()
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-        
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
-            Localization["HomePage_ShipPart_DeleteDialog_Title"],
-            parameters, options)).Result;
-
-        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        try
         {
-            var response = await Client.DeleteAsync(string.Format(
-                "{0}?id={1}",
-                ApiRoutes.Ship.Controller,
-                Id));
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-            if (!response.IsSuccessStatusCode)
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+                Localization["HomePage_ShipPart_DeleteDialog_Title"],
+                parameters, options)).Result;
+
+            if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
             {
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["HomePage_ShipPart_ErrorDialog_Title"],
-                    parameters, options)).Result;
-                
+                var response = await Client.DeleteAsync(string.Format(
+                    "{0}?id={1}",
+                    ApiRoutes.Ship.Controller,
+                    Id));
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["HomePage_ShipPart_ErrorDialog_Title"],
+                        parameters, options)).Result;
+
+                    return;
+                }
+
+                NavManager.NavigateTo(PageNavigateConstants.HomePage);
+            }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+    }
+
+    private async Task shipSave()
+    {
+        try
+        {
+            editForm.Validate();
+
+            if (!editForm.IsValid)
+            {
                 return;
             }
 
-            NavManager.NavigateTo(PageNavigateConstants.HomePage);
-        }
-    }
-    
-    private async Task shipSave()
-    {
-        editForm.Validate();
-        
-        if (!editForm.IsValid)
-        {
-            return;
-        }
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
 
-        var shipDto = new ShipDataDto()
-        {
-            DisplayName = _shipForm.DisplayName,
-            ShipTypeId = _shipForm.ShipTypeId,
-            Id = Guid.Parse(Id)
-        };
+            var shipDto = new ShipDataDto()
+            {
+                DisplayName = _shipForm.DisplayName,
+                ShipTypeId = _shipForm.ShipTypeId,
+                Id = Guid.Parse(Id)
+            };
 
-        var response = await Client.PutAsJsonAsync(ApiRoutes.Ship.Controller, shipDto);
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Ship.Controller, shipDto);
 
-        if (response.IsSuccessStatusCode)
-        {
-            _shipSuccessVisible = true;
-            _shipErrorAlertVisible = false;
+            if (response.IsSuccessStatusCode)
+            {
+                _shipSuccessVisible = true;
+                _shipErrorAlertVisible = false;
+            }
+            else
+            {
+                _shipFormError = await response.Content.ReadAsStringAsync();
+                _shipSuccessVisible = false;
+                _shipErrorAlertVisible = true;
+            }
         }
-        else
+        catch (Exception e)
         {
-            _shipFormError = await response.Content.ReadAsStringAsync();
-            _shipSuccessVisible = false;
-            _shipErrorAlertVisible = true;
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-        
+
         StateHasChanged();
     }
 
     private async Task shipPhotoSave()
     {
-        if (_file == null)
-        {
-            _shipPhotoUploadErrorAlertVisible = true;
-            _shipPhotoUploadSuccessAlertVisible = false;
-            return;
-        }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-
-        var fileDto = new ShipPhotoDataDto()
-        {
-            FileNameWithExtension = _file.Name,
-            FileStream = _fileContent,
-            ShipId = Guid.Parse(Id)
-        };
-
-        HttpResponseMessage response = default;
-
         try
         {
-            if (string.IsNullOrEmpty(_currentShipPhoto.Url))
+            if (_file == null)
             {
-                response = await Client.PostAsJsonAsync(ApiRoutes.Ship.Photo, fileDto);
+                _shipPhotoUploadErrorAlertVisible = true;
+                _shipPhotoUploadSuccessAlertVisible = false;
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+
+            var fileDto = new ShipPhotoDataDto()
+            {
+                FileNameWithExtension = _file.Name,
+                FileStream = _fileContent,
+                ShipId = Guid.Parse(Id)
+            };
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                if (string.IsNullOrEmpty(_currentShipPhoto.Url))
+                {
+                    response = await Client.PostAsJsonAsync(ApiRoutes.Ship.Photo, fileDto);
+                }
+                else
+                {
+                    response = await Client.PutAsJsonAsync(ApiRoutes.Ship.Photo, fileDto);
+                }
+            }
+            catch (Exception e)
+            {
+                _changeShipUploadPhotoError = e.Message;
+            }
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _shipPhotoUploadSuccessAlertVisible = true;
+                _shipPhotoUploadErrorAlertVisible = false;
+                _file = null;
+                _fileContent = default;
+                _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
             }
             else
             {
-                response = await Client.PutAsJsonAsync(ApiRoutes.Ship.Photo, fileDto);
+                _changeShipUploadPhotoError = await response.Content.ReadAsStringAsync();
+                _shipPhotoUploadSuccessAlertVisible = false;
+                _shipPhotoUploadErrorAlertVisible = true;
             }
         }
         catch (Exception e)
         {
-            _changeShipUploadPhotoError = e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        if (response.IsSuccessStatusCode)
-        {
-            _shipPhotoUploadSuccessAlertVisible = true;
-            _shipPhotoUploadErrorAlertVisible = false;
-            _file = null;
-            _fileContent = default;
-            _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
-        }
-        else
-        {
-            _changeShipUploadPhotoError = await response.Content.ReadAsStringAsync();
-            _shipPhotoUploadSuccessAlertVisible = false;
-            _shipPhotoUploadErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
     }
-    
+
     private async Task shipPhotoDelete()
     {
-        if (DefaultFileLinks.DefaultImage.Equals(_currentShipPhoto.Url))
-        {
-            return;
-        }
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        HttpResponseMessage response = default;
-
         try
         {
-            response = await Client.DeleteAsync(ApiRoutes.Ship.Photo + "?id=" + Id);
+            if (DefaultFileLinks.DefaultImage.Equals(_currentShipPhoto.Url))
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                response = await Client.DeleteAsync(ApiRoutes.Ship.Photo + "?id=" + Id);
+            }
+            catch (Exception e)
+            {
+                _changeShipDeletePhotoError = e.Message;
+            }
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _shipPhotoDeleteSuccessAlertVisible = true;
+                _shipPhotoDeleteErrorAlertVisible = false;
+                _file = null;
+                _fileContent = default;
+                _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+            }
+            else
+            {
+                _changeShipDeletePhotoError = await response.Content.ReadAsStringAsync();
+                _shipPhotoDeleteSuccessAlertVisible = false;
+                _shipPhotoDeleteErrorAlertVisible = true;
+            }
         }
         catch (Exception e)
         {
-            _changeShipDeletePhotoError = e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        if (response.IsSuccessStatusCode)
-        {
-            _shipPhotoDeleteSuccessAlertVisible = true;
-            _shipPhotoDeleteErrorAlertVisible = false;
-            _file = null;
-            _fileContent = default;
-            _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
-        }
-        else
-        {
-            _changeShipDeletePhotoError = await response.Content.ReadAsStringAsync();
-            _shipPhotoDeleteSuccessAlertVisible = false;
-            _shipPhotoDeleteErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -398,37 +451,50 @@
 
     private async Task HandleFileSelection(IBrowserFile file)
     {
-        _file = file;
-
-        if (_file != null)
+        try
         {
-            var maxFileSizeInBytes = _maxPhotoSize;
-            if (_file.Size > maxFileSizeInBytes)
-            {
-                _file = null;
-                await JSRuntime.InvokeVoidAsync("alert", 
-                    string.Format(
-                        Localization["ShipPage_ShipPhotoTab_NewShipPhotoSizeError"],
-                        _maxPhotoSize));
-                return;
-            }
+            _file = file;
 
-            try
+            if (_file != null)
             {
-                _fileContent = new byte[_file.Size];
-                await using (var stream = _file.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                var maxFileSizeInBytes = _maxPhotoSize;
+                if (_file.Size > maxFileSizeInBytes)
                 {
-                    await stream.ReadAsync(_fileContent, 0, (int)_file.Size);
+                    _file = null;
+                    await JSRuntime.InvokeVoidAsync("alert",
+                        string.Format(
+                            Localization["ShipPage_ShipPhotoTab_NewShipPhotoSizeError"],
+                            _maxPhotoSize));
+                    return;
                 }
-            }
-            catch (Exception e)
-            {
-                _shipPhotoUploadSuccessAlertVisible = false;
-                _shipPhotoUploadErrorAlertVisible = true;
-                _changeShipUploadPhotoError = e.Message;
-            }
 
-            StateHasChanged();
+                try
+                {
+                    _fileContent = new byte[_file.Size];
+                    await using (var stream = _file.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                    {
+                        await stream.ReadAsync(_fileContent, 0, (int)_file.Size);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _shipPhotoUploadSuccessAlertVisible = false;
+                    _shipPhotoUploadErrorAlertVisible = true;
+                    _changeShipUploadPhotoError = e.Message;
+                }
+
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
@@ -460,48 +526,60 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            response = await Client.GetAsync(ApiRoutes.Ship.ById + "?id=" + Id);
+
+            var shipData = await response.Content.ReadFromJsonAsync<ShipDataDto>();
+
+            _shipForm = new ShipForm
+            {
+                DisplayName = shipData.DisplayName,
+                ShipTypeId = shipData.ShipTypeId
+            };
+
+            response = await Client.GetAsync(ApiRoutes.Ship.Photo + "?id=" + Id);
+
+            _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+
+            response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
         }
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
-
-        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
-
-        if (userDto == null)
+        catch (Exception e)
         {
-            await LocalStorageService.RemoveAsync("token");
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-
-        response = await Client.GetAsync(ApiRoutes.Ship.ById + "?id=" + Id);
-
-        var shipData = await response.Content.ReadFromJsonAsync<ShipDataDto>();
-        
-        _shipForm = new ShipForm
-        {
-            DisplayName = shipData.DisplayName,
-            ShipTypeId = shipData.ShipTypeId
-        };
-
-        response = await Client.GetAsync(ApiRoutes.Ship.Photo + "?id=" + Id);
-
-        _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
-        
-        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
-
-        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
-
         StateHasChanged();
     }
 
@@ -512,4 +590,5 @@
 
         StateHasChanged();
     }
+
 }

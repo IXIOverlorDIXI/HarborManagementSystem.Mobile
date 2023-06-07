@@ -7,8 +7,9 @@
 @inject NavigationManager NavManager
 @inject HttpClient Client
 @inject IStorageService LocalStorageService
+@inject IDialogService DialogService
 
-<MudExpansionPanel Text="@Localization["StatisticsPage_StorageEnvironmentalCondition_Title"]" >
+<MudExpansionPanel Text="@Localization["StatisticsPage_StorageEnvironmentalCondition_Title"]">
     <MudItem Style="width: 100%">
         <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%">
             @Localization["StatisticsPage_StorageEnvironmentalCondition_Title"]
@@ -26,12 +27,7 @@
                     DataMax="@_airPollutionMaximalData"
                     DataMin="@_airPollutionMinimalData"
                     DataAverage="@_airPollutionData"
-                    DataByOne="@(StorageEnvironmentalConditionData
-                                   .OrderBy(x => x.MeteringDate)
-                                   .TakeLast(20)
-                                   .Select(x => 
-                                       new Tuple<string, double>(x.MeteringDate.ToString(), x.AirPollution))
-                                   .ToList())"/>
+                    DataByOne="@(StorageEnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.AirPollution)) .ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataByOneLocalizationKey"
@@ -42,12 +38,7 @@
                     DataMax="@_waterPollutionMaximalData"
                     DataMin="@_waterPollutionMinimalData"
                     DataAverage="@_waterPollutionData"
-                    DataByOne="@(StorageEnvironmentalConditionData
-                                   .OrderBy(x => x.MeteringDate)
-                                   .TakeLast(20)
-                                   .Select(x => 
-                                       new Tuple<string, double>(x.MeteringDate.ToString(), x.WaterPollution))
-                                   .ToList())"/>
+                    DataByOne="@(StorageEnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.WaterPollution)) .ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataByOneLocalizationKey"
@@ -58,12 +49,7 @@
                     DataMax="@_radiationLevelMaximalData"
                     DataMin="@_radiationLevelMinimalData"
                     DataAverage="@_radiationLevelData"
-                    DataByOne="@(StorageEnvironmentalConditionData
-                                   .OrderBy(x => x.MeteringDate)
-                                   .TakeLast(20)
-                                   .Select(x => 
-                                       new Tuple<string, double>(x.MeteringDate.ToString(), x.RadiationLevel))
-                                   .ToList())"/>
+                    DataByOne="@(StorageEnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.RadiationLevel)) .ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataByOneLocalizationKey"
@@ -74,12 +60,7 @@
                     DataMax="@_shipTemperatureMaximalData"
                     DataMin="@_shipTemperatureMinimalData"
                     DataAverage="@_shipTemperatureData"
-                    DataByOne="@(StorageEnvironmentalConditionData
-                                   .OrderBy(x => x.MeteringDate)
-                                   .TakeLast(20)
-                                   .Select(x => 
-                                       new Tuple<string, double>(x.MeteringDate.ToString(), x.ShipTemperature))
-                                   .ToList())"/>
+                    DataByOne="@(StorageEnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.ShipTemperature)) .ToList())"/>
             </MudPaper>
         }
         else
@@ -93,154 +74,181 @@
 
 
 @code {
+
     [Parameter]
     public List<StorageEnvironmentalConditionDto> StorageEnvironmentalConditionData { get; set; }
 
-    private string[] _storageEnvironmentalConditionDates = { "NaN", "NaN", "NaN", "NaN" }; 
-    
-    private double[] _airPollutionData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _waterPollutionData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _radiationLevelData = new double[] { 0, 0, 0, 0 } ;
-    private double[] _shipTemperatureData = new double[] { 0, 0, 0, 0 } ;
+    private string[] _storageEnvironmentalConditionDates = { "NaN", "NaN", "NaN", "NaN" };
 
-    private double[] _airPollutionMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _waterPollutionMinimalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _radiationLevelMinimalData = new double[] { 0, 0, 0, 0 } ;
-    private double[] _shipTemperatureMinimalData = new double[] { 0, 0, 0, 0 } ;
+    private double[] _airPollutionData = new double[] { 0, 0, 0, 0 };
+    private double[] _waterPollutionData = new double[] { 0, 0, 0, 0 };
+    private double[] _radiationLevelData = new double[] { 0, 0, 0, 0 };
+    private double[] _shipTemperatureData = new double[] { 0, 0, 0, 0 };
 
-    private double[] _airPollutionMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _waterPollutionMaximalData = new double[] { 0, 0, 0, 0 } ; 
-    private double[] _radiationLevelMaximalData = new double[] { 0, 0, 0, 0 } ;
-    private double[] _shipTemperatureMaximalData = new double[] { 0, 0, 0, 0 } ;
+    private double[] _airPollutionMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _waterPollutionMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _radiationLevelMinimalData = new double[] { 0, 0, 0, 0 };
+    private double[] _shipTemperatureMinimalData = new double[] { 0, 0, 0, 0 };
+
+    private double[] _airPollutionMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _waterPollutionMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _radiationLevelMaximalData = new double[] { 0, 0, 0, 0 };
+    private double[] _shipTemperatureMaximalData = new double[] { 0, 0, 0, 0 };
 
 
     private async Task buildStorageEnvironmentalCondition()
     {
-        var relativePositionMeteringDtos = StorageEnvironmentalConditionData
-            .Where(x => 
-                x.MeteringDate >= new DateTime(
-                DateTime.Today.Year - 1,
-                DateTime.Today.Month,
-                DateTime.Today.Day) && x.MeteringDate <= DateTime.Now)
-            .ToList();
-
-        if (relativePositionMeteringDtos.Any())
+        try
         {
-            var orderedList = relativePositionMeteringDtos.OrderBy(x => x.MeteringDate).ToList();
-            
-            var firstEdge = relativePositionMeteringDtos.MinBy(x => x.MeteringDate).MeteringDate;
-            var secondEdge = DateTime.Now;
-            
-            int monthAmount = (secondEdge.Year - firstEdge.Year) * 12
-                              + (secondEdge.Month - firstEdge.Month);
+            var relativePositionMeteringDtos = StorageEnvironmentalConditionData
+                .Where(x =>
+                    x.MeteringDate >= new DateTime(
+                        DateTime.Today.Year - 1,
+                        DateTime.Today.Month,
+                        DateTime.Today.Day) && x.MeteringDate <= DateTime.Now)
+                .ToList();
 
-            if (monthAmount < 4)
+            if (relativePositionMeteringDtos.Any())
             {
-                var m = secondEdge.Month;
-                var y = secondEdge.Year;
-                if (m <= 4)
+                var orderedList = relativePositionMeteringDtos.OrderBy(x => x.MeteringDate).ToList();
+
+                var firstEdge = relativePositionMeteringDtos.MinBy(x => x.MeteringDate).MeteringDate;
+                var secondEdge = DateTime.Now;
+
+                int monthAmount = (secondEdge.Year - firstEdge.Year) * 12
+                                  + (secondEdge.Month - firstEdge.Month);
+
+                if (monthAmount < 4)
                 {
-                    m = 12 + m - 4;
-                    y -= 1;
+                    var m = secondEdge.Month;
+                    var y = secondEdge.Year;
+                    if (m <= 4)
+                    {
+                        m = 12 + m - 4;
+                        y -= 1;
+                    }
+                    else
+                    {
+                        m -= 4;
+                    }
+                    firstEdge = new DateTime(y, m, secondEdge.Day);
+                    monthAmount = 5;
                 }
-                else
+
+                _storageEnvironmentalConditionDates = new string[monthAmount];
+
+                _airPollutionData = new double[monthAmount];
+                _waterPollutionData = new double[monthAmount];
+                _radiationLevelData = new double[monthAmount];
+                _shipTemperatureData = new double[monthAmount];
+
+                _airPollutionMinimalData = new double[monthAmount];
+                _waterPollutionMinimalData = new double[monthAmount];
+                _radiationLevelMinimalData = new double[monthAmount];
+                _shipTemperatureMinimalData = new double[monthAmount];
+
+                _airPollutionMaximalData = new double[monthAmount];
+                _waterPollutionMaximalData = new double[monthAmount];
+                _radiationLevelMaximalData = new double[monthAmount];
+                _shipTemperatureMaximalData = new double[monthAmount];
+
+                for (int i = 0, month = firstEdge.Month, year = firstEdge.Year;
+                    i < monthAmount; i++)
                 {
-                    m -= 4;
+                    _storageEnvironmentalConditionDates[i] = month switch
+                    {
+                        1 => String.Concat("Jan\n", year),
+                        2 => String.Concat("Feb\n", year),
+                        3 => String.Concat("Mar\n", year),
+                        4 => String.Concat("Apr\n", year),
+                        5 => String.Concat("May\n", year),
+                        6 => String.Concat("Jun\n", year),
+                        7 => String.Concat("Jul\n", year),
+                        8 => String.Concat("Aug\n", year),
+                        9 => String.Concat("Sep\n", year),
+                        10 => String.Concat("Oct\n", year),
+                        11 => String.Concat("Nov\n", year),
+                        12 => String.Concat("Dec\n", year),
+                        _ => _storageEnvironmentalConditionDates[i]
+                        };
+
+                    var tempDtosList = orderedList
+                        .Where(x => x.MeteringDate.Month == month && x.MeteringDate.Year == year)
+                        .ToList();
+
+                    if (tempDtosList.Any())
+                    {
+                        _airPollutionData[i] = tempDtosList.Average(x => x.AirPollution);
+                        _waterPollutionData[i] = tempDtosList.Average(x => x.WaterPollution);
+                        _radiationLevelData[i] = tempDtosList.Average(x => x.RadiationLevel);
+                        _shipTemperatureData[i] = tempDtosList.Average(x => x.ShipTemperature);
+
+                        _airPollutionMinimalData[i] = tempDtosList.Min(x => x.AirPollution);
+                        _waterPollutionMinimalData[i] = tempDtosList.Min(x => x.WaterPollution);
+                        _radiationLevelMinimalData[i] = tempDtosList.Min(x => x.RadiationLevel);
+                        _shipTemperatureMinimalData[i] = tempDtosList.Min(x => x.ShipTemperature);
+
+                        _airPollutionMaximalData[i] = tempDtosList.Max(x => x.AirPollution);
+                        _waterPollutionMaximalData[i] = tempDtosList.Max(x => x.WaterPollution);
+                        _radiationLevelMaximalData[i] = tempDtosList.Max(x => x.RadiationLevel);
+                        _shipTemperatureMaximalData[i] = tempDtosList.Max(x => x.ShipTemperature);
+                    }
+                    else
+                    {
+                        _airPollutionData[i] = 0;
+                        _waterPollutionData[i] = 0;
+                        _radiationLevelData[i] = 0;
+                        _shipTemperatureData[i] = 0;
+
+                        _airPollutionMinimalData[i] = 0;
+                        _waterPollutionMinimalData[i] = 0;
+                        _radiationLevelMinimalData[i] = 0;
+                        _shipTemperatureMinimalData[i] = 0;
+
+                        _airPollutionMaximalData[i] = 0;
+                        _waterPollutionMaximalData[i] = 0;
+                        _radiationLevelMaximalData[i] = 0;
+                        _shipTemperatureMaximalData[i] = 0;
+                    }
+
+                    year = month == 12 ? year + 1 : year;
+                    month = month == 12 ? 1 : month + 1;
                 }
-                firstEdge = new DateTime(y, m, secondEdge.Day);
-                monthAmount = 5;
-            }
-
-            _storageEnvironmentalConditionDates = new string[monthAmount];
-            
-            _airPollutionData = new double[monthAmount];
-            _waterPollutionData = new double[monthAmount];
-            _radiationLevelData = new double[monthAmount];
-            _shipTemperatureData = new double[monthAmount];
-
-            _airPollutionMinimalData = new double[monthAmount];
-            _waterPollutionMinimalData = new double[monthAmount];
-            _radiationLevelMinimalData = new double[monthAmount];
-            _shipTemperatureMinimalData = new double[monthAmount];
-
-            _airPollutionMaximalData = new double[monthAmount];
-            _waterPollutionMaximalData = new double[monthAmount];
-            _radiationLevelMaximalData = new double[monthAmount];
-            _shipTemperatureMaximalData = new double[monthAmount];
-
-            for (int i = 0, month = firstEdge.Month, year = firstEdge.Year;
-                i < monthAmount; i++)
-            {
-                _storageEnvironmentalConditionDates[i] = month switch
-                {
-                    1 => String.Concat("Jan\n", year),
-                    2 => String.Concat("Feb\n", year),
-                    3 => String.Concat("Mar\n", year),
-                    4 => String.Concat("Apr\n", year),
-                    5 => String.Concat("May\n", year),
-                    6 => String.Concat("Jun\n", year),
-                    7 => String.Concat("Jul\n", year),
-                    8 => String.Concat("Aug\n", year),
-                    9 => String.Concat("Sep\n", year),
-                    10 => String.Concat("Oct\n", year),
-                    11 => String.Concat("Nov\n", year),
-                    12 => String.Concat("Dec\n", year),
-                    _ => _storageEnvironmentalConditionDates[i]
-                    };
-
-                var tempDtosList = orderedList
-                    .Where(x => x.MeteringDate.Month == month && x.MeteringDate.Year == year)
-                    .ToList();
-
-                if (tempDtosList.Any())
-                {
-                    _airPollutionData[i] = tempDtosList.Average(x => x.AirPollution);
-                    _waterPollutionData[i] = tempDtosList.Average(x => x.WaterPollution);
-                    _radiationLevelData[i] = tempDtosList.Average(x => x.RadiationLevel);
-                    _shipTemperatureData[i] = tempDtosList.Average(x => x.ShipTemperature);
-
-                    _airPollutionMinimalData[i] = tempDtosList.Min(x => x.AirPollution);
-                    _waterPollutionMinimalData[i] = tempDtosList.Min(x => x.WaterPollution);
-                    _radiationLevelMinimalData[i] = tempDtosList.Min(x => x.RadiationLevel);
-                    _shipTemperatureMinimalData[i] = tempDtosList.Min(x => x.ShipTemperature);
-
-                    _airPollutionMaximalData[i] = tempDtosList.Max(x => x.AirPollution);
-                    _waterPollutionMaximalData[i] = tempDtosList.Max(x => x.WaterPollution);
-                    _radiationLevelMaximalData[i] = tempDtosList.Max(x => x.RadiationLevel);
-                    _shipTemperatureMaximalData[i] = tempDtosList.Max(x => x.ShipTemperature);
-                }
-                else
-                {
-                    _airPollutionData[i] = 0;
-                    _waterPollutionData[i] = 0;
-                    _radiationLevelData[i] = 0;
-                    _shipTemperatureData[i] = 0;
-
-                    _airPollutionMinimalData[i] = 0;
-                    _waterPollutionMinimalData[i] = 0;
-                    _radiationLevelMinimalData[i] = 0;
-                    _shipTemperatureMinimalData[i] = 0;
-
-                    _airPollutionMaximalData[i] = 0;
-                    _waterPollutionMaximalData[i] = 0;
-                    _radiationLevelMaximalData[i] = 0;
-                    _shipTemperatureMaximalData[i] = 0;
-                }
-                
-                year = month == 12 ? year + 1 : year;
-                month = month == 12 ? 1 : month + 1;
             }
         }
-        await InvokeAsync(StateHasChanged);
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+        StateHasChanged();
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+        try
+        {
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-        await buildStorageEnvironmentalCondition();
+            await buildStorageEnvironmentalCondition();
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
 
     private void UpdatePage()
@@ -250,4 +258,5 @@
 
         StateHasChanged();
     }
+
 }

@@ -19,32 +19,32 @@
 
         @if (_isAdmin)
         {
-        <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
-            <MudExpansionPanel Text="@Localization["HomePage_AdminPart_Title"]">
-                <MudItem Style="width: 100%">
-                    <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%" Class="mb-2">
-                        @Localization["HomePage_AdminPart_Title"]
-                    </MudText>
-                    <MudPaper Class="d-flex justify-start flex-grow-1 gap-2" Elevation="0">
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
-                                   OnClick="manageShipTypes">
-                            @Localization["HomePage_AdminPart_ManageShipTypesButton"]
-                        </MudButton>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
-                                   OnClick="manageSubscriptions">
-                            @Localization["HomePage_AdminPart_ManageSubscriptionsButton"]
-                        </MudButton>
-                    </MudPaper>
-                </MudItem>
-            </MudExpansionPanel>
-        </MudExpansionPanels>
+            <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
+                <MudExpansionPanel Text="@Localization["HomePage_AdminPart_Title"]">
+                    <MudItem Style="width: 100%">
+                        <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%" Class="mb-2">
+                            @Localization["HomePage_AdminPart_Title"]
+                        </MudText>
+                        <MudPaper Class="d-flex justify-start flex-grow-1 gap-2" Elevation="0">
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                                       OnClick="manageShipTypes">
+                                @Localization["HomePage_AdminPart_ManageShipTypesButton"]
+                            </MudButton>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Default"
+                                       OnClick="manageSubscriptions">
+                                @Localization["HomePage_AdminPart_ManageSubscriptionsButton"]
+                            </MudButton>
+                        </MudPaper>
+                    </MudItem>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
         }
         <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
             <MudExpansionPanel Text="@Localization["HomePage_UserPart_ShipPart_Title"]">
                 <MudItem Style="width: 100%">
                     <MudText Typo="Typo.h3" Align="Align.Start" Style="width: 100%">@Localization["HomePage_UserPart_ShipPart_Title"]</MudText>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info"
-                                OnClick="createShip" Class="mt-2">
+                               OnClick="createShip" Class="mt-2">
                         @Localization["HomePage_UserPart_ShipPart_CreateShipButton"]
                     </MudButton>
                     <MudPaper Class="d-flex flex-row flex-wrap flex-grow-1 gap-4 ma-2 pa-2" Elevation="0">
@@ -105,7 +105,7 @@
                                OnClick="createHarbor" Disabled="_currentSubscription.MaxHarborAmount <= _harbors.Count">
                         @if (_currentSubscription.MaxHarborAmount <= _harbors.Count)
                         {
-                            @string.Format(Localization["HomePage_UserPart_HarborPart_CreateButton_Disabled"], 
+                            @string.Format(Localization["HomePage_UserPart_HarborPart_CreateButton_Disabled"],
                                 _currentSubscription.MaxHarborAmount,
                                 _harbors.Count)
                         }
@@ -120,7 +120,7 @@
                             <MudPaper Class="d-flex flex-column flex-grow-1 gap-2 pa-2" Elevation="1"
                                       @onclick="() => harborDetails(harbor)" Style="cursor: pointer">
                                 <MudPaper Class="d-flex flex-row gap-1" MaxHeight="180" Elevation="0">
-                                    <MudPaper Class="d-flex flex-column align-content-center gap-1" 
+                                    <MudPaper Class="d-flex flex-column align-content-center gap-1"
                                               MaxHeight="180" MaxWidth="80" Elevation="0">
                                         @for (int i = 0; i < harbor.Photos.Count && i < 3; i++)
                                         {
@@ -190,13 +190,13 @@
         ship.Id));
 
     private void getBookingsForShip(ShipPreviewDataDto ship) => NavManager.NavigateTo(
-        string.Format("{0}/{1}/{2}", 
+        string.Format("{0}/{1}/{2}",
             PageNavigateConstants.BookingHistoryPage,
             (int)BookingHistoryPageType.BookingsForShip,
             ship.Id));
-    
+
     private void getBookingsForHarbor(HarborPreviewDataDto harbor) => NavManager.NavigateTo(
-        string.Format("{0}/{1}/{2}", 
+        string.Format("{0}/{1}/{2}",
             PageNavigateConstants.BookingHistoryPage,
             (int)BookingHistoryPageType.BookingsForHarbor,
             harbor.Id));
@@ -204,7 +204,7 @@
     private void shipDetails(ShipPreviewDataDto ship) => NavManager.NavigateTo((string.Format("{0}/{1}",
         PageNavigateConstants.ShipPage,
         ship.Id)));
-    
+
     private void harborDetails(HarborPreviewDataDto harbor) => NavManager.NavigateTo((string.Format("{0}/{1}",
         PageNavigateConstants.HarborPage,
         harbor.Id)));
@@ -219,37 +219,50 @@
 
     private async Task deleteShip(ShipPreviewDataDto ship)
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-        
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
-            Localization["HomePage_ShipPart_DeleteDialog_Title"],
-            parameters, options)).Result;
-
-        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        try
         {
-            var response = await Client.DeleteAsync(string.Format(
-                "{0}?id={1}",
-                ApiRoutes.Ship.Controller,
-                ship.Id));
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-            if (!response.IsSuccessStatusCode)
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+                Localization["HomePage_ShipPart_DeleteDialog_Title"],
+                parameters, options)).Result;
+
+            if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
             {
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["HomePage_ShipPart_ErrorDialog_Title"],
-                    parameters, options)).Result;
+                var response = await Client.DeleteAsync(string.Format(
+                    "{0}?id={1}",
+                    ApiRoutes.Ship.Controller,
+                    ship.Id));
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["HomePage_ShipPart_ErrorDialog_Title"],
+                        parameters, options)).Result;
+                }
+
+                response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + _username);
+
+                _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+
+                StateHasChanged();
             }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-            response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + _username);
-
-            _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
-
-            StateHasChanged();
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
@@ -259,80 +272,106 @@
 
     private async Task deleteHarbor(HarborPreviewDataDto harbor)
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-        
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
-            Localization["HomePage_HarborPart_DeleteDialog_Title"],
-            parameters, options)).Result;
-
-        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        try
         {
-            var response = await Client.DeleteAsync(string.Format(
-                "{0}?id={1}",
-                ApiRoutes.Harbor.Controller,
-                harbor.Id));
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-            if (!response.IsSuccessStatusCode)
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+                Localization["HomePage_HarborPart_DeleteDialog_Title"],
+                parameters, options)).Result;
+
+            if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
             {
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["HomePage_HarborPart_ErrorDialog_Title"],
-                    parameters, options)).Result;
+                var response = await Client.DeleteAsync(string.Format(
+                    "{0}?id={1}",
+                    ApiRoutes.Harbor.Controller,
+                    harbor.Id));
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["HomePage_HarborPart_ErrorDialog_Title"],
+                        parameters, options)).Result;
+                }
+
+                response = await Client.GetAsync(ApiRoutes.Harbor.OwnHarbors + "?username=" + _username);
+
+                _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+
+                StateHasChanged();
             }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-            response = await Client.GetAsync(ApiRoutes.Harbor.OwnHarbors + "?username=" + _username);
-
-            _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
-
-            StateHasChanged();
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            _isAdmin = userDto.IsAdmin;
+            _username = userDto.Username;
+
+            response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + _username);
+
+            _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+
+            response = await Client.GetAsync(ApiRoutes.Harbor.OwnHarbors + "?username=" + _username);
+
+            _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+
+            response = await Client.GetAsync(ApiRoutes.Subscription.CurrentSubscription + "?username=" + _username);
+
+            _currentSubscription = await response.Content.ReadFromJsonAsync<SubscriptionDto>();
         }
-        
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
-
-        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
-
-        if (userDto == null)
+        catch (Exception e)
         {
-            await LocalStorageService.RemoveAsync("token");
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-
-        _isAdmin = userDto.IsAdmin;
-        _username = userDto.Username;
-
-        response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + _username);
-
-        _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
-
-        response = await Client.GetAsync(ApiRoutes.Harbor.OwnHarbors + "?username=" + _username);
-
-        _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
-        
-        response = await Client.GetAsync(ApiRoutes.Subscription.CurrentSubscription + "?username=" + _username);
-
-        _currentSubscription = await response.Content.ReadFromJsonAsync<SubscriptionDto>();
     }
 
     private void UpdatePage()

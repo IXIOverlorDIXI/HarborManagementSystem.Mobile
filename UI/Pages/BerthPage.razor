@@ -43,7 +43,7 @@
         {
             <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
                 <MudExpansionPanel Text="@Localization["BerthPage_BerthEditPart_Title"]" Style="width: 100%">
-                    <MudItem xs="12" sm="7" Class="mx-auto pa-6" Style="width: 100%">
+                    <MudItem xs="12" sm="7" Class="mx-auto pa-2" Style="width: 100%">
                         <MudCard>
                             <MudForm @ref="berthEditForm" Model="@_berthForm" Validation="@(BerthValidator.ValidateValue)" ValidationDelay="0">
                                 <MudCardContent>
@@ -56,9 +56,9 @@
                                                   Class="mt-3"
                                                   @bind-Value="_berthForm.Description" For="@(() => _berthForm.Description)"/>
                                     <MudNumericField Label="@Localization["BerthPage_BerthEditPart_PriceLabel"]"
-                                          HelperText="@Localization["BerthPage_BerthEditPart_PriceHelperText"]"
-                                          Class="mt-3"
-                                          @bind-Value="_berthForm.Price" For="@(() => _berthForm.Price)"/>
+                                                     HelperText="@Localization["BerthPage_BerthEditPart_PriceHelperText"]"
+                                                     Class="mt-3"
+                                                     @bind-Value="_berthForm.Price" For="@(() => _berthForm.Price)"/>
                                     <MudSelect T="ShipTypeDto"
                                                @bind-SelectedValues="@_berthForm.SuitableShipTypes"
                                                Label="@Localization["BerthPage_BerthEditPart_ShipType_Label"]"
@@ -80,7 +80,7 @@
                                             </MudSelectItem>
                                         }
                                     </MudSelect>
-                                    
+
                                 </MudCardContent>
                             </MudForm>
                             <MudCardActions>
@@ -111,8 +111,8 @@
 
         <MudExpansionPanels Elevation="1" Class="mt-6" Style="width: 100%">
             <MudExpansionPanel Text="@Localization["BerthPage_BerthPhotosPart_Title"]" Style="width: 100%">
-                <MudItem Class="mx-1 pa-1" Style="width: 100%">
-                    <MudTabs Elevation="2" Rounded="true" PanelClass="pa-0" Centered="true" Style="width: 100%">
+                <MudItem xs="12" sm="7" Class="mx-auto pa-2" Style="width: 100%">
+                    <MudTabs Elevation="2" Rounded="true" PanelClass="pa-2" Centered="true" Style="width: 100%">
                         <MudTabPanel Text="@Localization["BerthPage_BerthPhotosTab_Title"]">
                             <MudCard Style="width: 100%">
                                 @if (_currentBerthPhotos.Any())
@@ -229,15 +229,16 @@
 
     [Parameter]
     public string HarborId { get; set; }
-    
+
     [Parameter]
     public string BerthId { get; set; }
-    
+
     private bool isAdmin = false;
     private bool isOwner = false;
     private bool isAuthorizated = false;
     private MudForm berthEditForm;
     private Guid harborId;
+
     private IEqualityComparer<ShipTypeDto> shipTypeDtoComparer = EqualityComparerFactory
         .Create<ShipTypeDto>(
             x => x.Id.GetHashCode(),
@@ -261,7 +262,7 @@
     private bool _berthPhotoUploadSuccessAlertVisible = false;
     private bool _berthPhotoDeleteSuccessAlertVisible = false;
     private bool _berthPhotoDeleteErrorAlertVisible = false;
-    
+
     private void getBookingsForBerth() => NavManager.NavigateTo(
         string.Format("{0}/{1}/{2}",
             PageNavigateConstants.BookingHistoryPage,
@@ -272,129 +273,169 @@
 
     private async Task deleteBerth()
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
-            Localization["BerthPage_BerthPart_DeleteDialog_Title"],
-            parameters, options)).Result;
-
-        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        try
         {
-            var response = await Client.DeleteAsync(string.Format(
-                "{0}?id={1}",
-                ApiRoutes.Berth.Controller,
-                BerthId));
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-            parameters = new DialogParameters();
-            parameters.Add("Error", await response.Content.ReadAsStringAsync());
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
 
-            if (!response.IsSuccessStatusCode)
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+                Localization["BerthPage_BerthPart_DeleteDialog_Title"],
+                parameters, options)).Result;
+
+            if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
             {
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["BerthPage_BerthPart_ErrorDialog_Title"],
-                    parameters, options)).Result;
+                var response = await Client.DeleteAsync(string.Format(
+                    "{0}?id={1}",
+                    ApiRoutes.Berth.Controller,
+                    BerthId));
 
-                return;
+                parameters = new DialogParameters();
+                parameters.Add("Error", await response.Content.ReadAsStringAsync());
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["BerthPage_BerthPart_ErrorDialog_Title"],
+                        parameters, options)).Result;
+
+                    return;
+                }
+
+                NavManager.NavigateTo((string.Format("{0}/{1}",
+                    PageNavigateConstants.HarborPage,
+                    HarborId)));
             }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-            NavManager.NavigateTo((string.Format("{0}/{1}",
-                PageNavigateConstants.HarborPage,
-                HarborId)));
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
     private async Task berthSave()
     {
-        berthEditForm.Validate();
-
-        if (!berthEditForm.IsValid)
+        try
         {
-            return;
+            berthEditForm.Validate();
+
+            if (!berthEditForm.IsValid)
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var berthDto = new BerthDataDto()
+            {
+                DisplayName = _berthForm.DisplayName,
+                Description = _berthForm.Description,
+                HarborId = Guid.Parse(HarborId),
+                Id = Guid.Parse(BerthId),
+                Price = _berthForm.Price,
+                SuitableShipTypes = _berthForm.SuitableShipTypes.ToList()
+            };
+
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Berth.Controller, berthDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _berthSuccessVisible = true;
+                _berthErrorAlertVisible = false;
+            }
+            else
+            {
+                _berthFormError = await response.Content.ReadAsStringAsync();
+                _berthSuccessVisible = false;
+                _berthErrorAlertVisible = true;
+            }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var berthDto = new BerthDataDto()
-        {
-            DisplayName = _berthForm.DisplayName,
-            Description = _berthForm.Description,
-            HarborId = Guid.Parse(HarborId),
-            Id = Guid.Parse(BerthId),
-            Price = _berthForm.Price,
-            SuitableShipTypes = _berthForm.SuitableShipTypes.ToList()
-        };
-
-        var response = await Client.PutAsJsonAsync(ApiRoutes.Berth.Controller, berthDto);
-
-        if (response.IsSuccessStatusCode)
-        {
-            _berthSuccessVisible = true;
-            _berthErrorAlertVisible = false;
-        }
-        else
-        {
-            _berthFormError = await response.Content.ReadAsStringAsync();
-            _berthSuccessVisible = false;
-            _berthErrorAlertVisible = true;
-        }
 
         StateHasChanged();
     }
 
     private async Task berthPhotoSave()
     {
-        if (_photo == null)
-        {
-            _berthPhotoUploadErrorAlertVisible = true;
-            _berthPhotoUploadSuccessAlertVisible = false;
-            return;
-        }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-
-        var fileDto = new BerthPhotoDataDto()
-        {
-            FileNameWithExtension = _photo.Name,
-            FileStream = _photoContent,
-            BerthId = Guid.Parse(HarborId)
-        };
-
-        HttpResponseMessage response = default;
-
         try
         {
-            response = await Client.PostAsJsonAsync(ApiRoutes.Berth.Photos, fileDto);
+            if (_photo == null)
+            {
+                _berthPhotoUploadErrorAlertVisible = true;
+                _berthPhotoUploadSuccessAlertVisible = false;
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+
+            var fileDto = new BerthPhotoDataDto()
+            {
+                FileNameWithExtension = _photo.Name,
+                FileStream = _photoContent,
+                BerthId = Guid.Parse(HarborId)
+            };
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                response = await Client.PostAsJsonAsync(ApiRoutes.Berth.Photos, fileDto);
+            }
+            catch (Exception e)
+            {
+                _berthUploadPhotoError = e.Message;
+            }
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _berthPhotoUploadSuccessAlertVisible = true;
+                _berthPhotoUploadErrorAlertVisible = false;
+
+                response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
+                _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
+            }
+            else
+            {
+                _berthUploadPhotoError = await response.Content.ReadAsStringAsync();
+                _berthPhotoUploadSuccessAlertVisible = false;
+                _berthPhotoUploadErrorAlertVisible = true;
+            }
         }
         catch (Exception e)
         {
-            _berthUploadPhotoError = e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        if (response.IsSuccessStatusCode)
-        {
-            _berthPhotoUploadSuccessAlertVisible = true;
-            _berthPhotoUploadErrorAlertVisible = false;
-
-            response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
-            _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
-        }
-        else
-        {
-            _berthUploadPhotoError = await response.Content.ReadAsStringAsync();
-            _berthPhotoUploadSuccessAlertVisible = false;
-            _berthPhotoUploadErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -402,39 +443,52 @@
 
     private async Task berthPhotoDelete(BerthPhotoDto berthPhoto)
     {
-        if (DefaultFileLinks.DefaultImage.Equals(berthPhoto.Url))
-        {
-            return;
-        }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        HttpResponseMessage response = default;
-
         try
         {
-            response = await Client.DeleteAsync(ApiRoutes.Berth.Photos + "?id=" + berthPhoto.PhotoId);
+            if (DefaultFileLinks.DefaultImage.Equals(berthPhoto.Url))
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                response = await Client.DeleteAsync(ApiRoutes.Berth.Photos + "?id=" + berthPhoto.PhotoId);
+            }
+            catch (Exception e)
+            {
+                _berthDeletePhotoError = e.Message;
+            }
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _berthPhotoDeleteSuccessAlertVisible = true;
+                _berthPhotoDeleteErrorAlertVisible = false;
+                response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
+                _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
+            }
+            else
+            {
+                _berthDeletePhotoError = await response.Content.ReadAsStringAsync();
+                _berthPhotoDeleteSuccessAlertVisible = false;
+                _berthPhotoDeleteErrorAlertVisible = true;
+            }
         }
         catch (Exception e)
         {
-            _berthDeletePhotoError = e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        if (response.IsSuccessStatusCode)
-        {
-            _berthPhotoDeleteSuccessAlertVisible = true;
-            _berthPhotoDeleteErrorAlertVisible = false;
-            response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
-            _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
-        }
-        else
-        {
-            _berthDeletePhotoError = await response.Content.ReadAsStringAsync();
-            _berthPhotoDeleteSuccessAlertVisible = false;
-            _berthPhotoDeleteErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -442,44 +496,57 @@
 
     private async Task HandlePhotoSelection(IBrowserFile file)
     {
-        _photo = file;
-
-        if (_photo != null)
+        try
         {
-            var maxFileSizeInBytes = _maxPhotoSize;
-            if (_photo.Size > maxFileSizeInBytes)
-            {
-                _photo = null;
-                
-                var parameters = new DialogParameters();
-                parameters.Add("Error", string.Format(
-                    Localization["BerthPage_BerthPhotoTab_NewBerthPhotoSizeError"],
-                    _maxPhotoSize));
-                var options = new DialogOptions { CloseOnEscapeKey = true };
+            _photo = file;
 
-                var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["HomePage_HarborPart_DeleteDialog_Title"],
-                    parameters, options)).Result;
-                
-                return;
-            }
-
-            try
+            if (_photo != null)
             {
-                _photoContent = new byte[_photo.Size];
-                await using (var stream = _photo.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                var maxFileSizeInBytes = _maxPhotoSize;
+                if (_photo.Size > maxFileSizeInBytes)
                 {
-                    await stream.ReadAsync(_photoContent, 0, (int)_photo.Size);
-                }
-            }
-            catch (Exception e)
-            {
-                _berthPhotoUploadSuccessAlertVisible = false;
-                _berthPhotoUploadErrorAlertVisible = true;
-                _berthUploadPhotoError = e.Message;
-            }
+                    _photo = null;
 
-            StateHasChanged();
+                    var parameters = new DialogParameters();
+                    parameters.Add("Error", string.Format(
+                        Localization["BerthPage_BerthPhotoTab_NewBerthPhotoSizeError"],
+                        _maxPhotoSize));
+                    var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                    var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["HomePage_HarborPart_DeleteDialog_Title"],
+                        parameters, options)).Result;
+
+                    return;
+                }
+
+                try
+                {
+                    _photoContent = new byte[_photo.Size];
+                    await using (var stream = _photo.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                    {
+                        await stream.ReadAsync(_photoContent, 0, (int)_photo.Size);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _berthPhotoUploadSuccessAlertVisible = false;
+                    _berthPhotoUploadErrorAlertVisible = true;
+                    _berthUploadPhotoError = e.Message;
+                }
+
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
@@ -513,53 +580,65 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        HttpResponseMessage response;
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
-        
-        if (!string.IsNullOrEmpty(token))
+        try
         {
-            Client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-            response = await Client.GetAsync(ApiRoutes.Account.Controller);
+            HttpResponseMessage response;
 
-            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-            if (userDto == null)
+            if (!string.IsNullOrEmpty(token))
             {
-                await LocalStorageService.RemoveAsync("token");
-                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                Client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+                var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+                if (userDto == null)
+                {
+                    await LocalStorageService.RemoveAsync("token");
+                    NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                }
+
+                response = await Client.GetAsync(ApiRoutes.Berth.ById + "?id=" + BerthId);
+
+                var berthData = await response.Content.ReadFromJsonAsync<BerthPreviewDataDto>();
+
+                _berthForm = new BerthForm()
+                {
+                    DisplayName = berthData.DisplayName,
+                    Description = berthData.Description,
+                    Price = berthData.Price,
+                    SuitableShipTypes = berthData.SuitableShipTypes
+                };
+
+                isOwner = berthData.IsOwner;
+                isAuthorizated = true;
             }
 
-            response = await Client.GetAsync(ApiRoutes.Berth.ById + "?id=" + BerthId);
+            response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
 
-            var berthData = await response.Content.ReadFromJsonAsync<BerthPreviewDataDto>();
+            _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
 
-            _berthForm = new BerthForm()
-            {
-                DisplayName = berthData.DisplayName,
-                Description = berthData.Description,
-                Price = berthData.Price,
-                SuitableShipTypes = berthData.SuitableShipTypes
-            };
-            
-            isOwner = berthData.IsOwner;
-            isAuthorizated = true;
+            response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
         }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
-
-        _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
-        
-        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
-
-        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
-
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
         StateHasChanged();
     }
 

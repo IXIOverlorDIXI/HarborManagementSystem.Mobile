@@ -15,18 +15,18 @@
 @inject IStorageService LocalStorageService
 @inject IDialogService DialogService
 
-
 <MudPaper Class="d-flex flex-row flex-wrap flex-grow-1 gap-1 mx-1 pa-0" Elevation="0">
-    <MudPaper Class="d-flex flex-column align-content-start gap-1 ma-0 pa-0" Elevation="0" MinWidth="200">
-        <MudPaper Style="max-height: 280px" Elevation="0">
+    <MudPaper Class="d-flex flex-column align-content-start gap-1 ma-0 pa-0 w-100" Elevation="0" >
+        <MudPaper Style="max-height: 280px;  width: 100%" Elevation="0">
             <MudSelect T="ShipTypeDto" SelectedValuesChanged="() => ShipTypeFilterChange()"
-                       @bind-Value="@selectedValue" Clearable="true"
+                       @bind-Value="@selectedValue" Clearable="true" 
+                       FullWidth="true" Style="width: 100%" Class="w-100"
                        Label="@Localization["MapPage_ShipType_Label"]"
                        Text="@Localization["MapPage_ShipType_Text"]">
                 @foreach (var type in _shipTypes)
                 {
-                    <MudSelectItem T="ShipTypeDto" Value="@type">
-                        <div class="d-flex flex-column gap-1 ma-0 pa-0">
+                    <MudSelectItem T="ShipTypeDto" Class="w-100" Value="@type" Style="width: 100%" >
+                        <div class="d-flex flex-column gap-1 ma-0 pa-0 w-100">
                             <MudText Typo="Typo.subtitle1">
                                 @Localization["MapPage_TypeName"]:
                                 @type.TypeName
@@ -40,8 +40,8 @@
                 }
             </MudSelect>
         </MudPaper>
-        <MudPaper Class="d-flex flex-column gap-1 my-1 mx-0 pa-0" Elevation="0" Width="200" Height="200"
-                  Style="cursor: pointer; overflow-y: auto; max-height: 200px">
+        <MudPaper Class="d-flex flex-column gap-1 my-1 mx-0 pa-0 w-100" Elevation="0" MinWidth="100" Height="200"
+                  Style="cursor: pointer; overflow-y: auto; max-height: 200px;">
             @foreach (var filteredHarbor in _filteredHarbors)
             {
                 <MudPaper Class="d-flex flex-row justify-space-between flex-grow-1 gap-0"
@@ -114,6 +114,8 @@
     {
         try
         {
+            selectedValue ??= new ShipTypeDto();
+            
             if (_shipTypes.Any(x => x.Id.Equals(selectedValue.Id)))
             {
                 var response = await Client.PostAsJsonAsync(ApiRoutes.Harbor.SuitableHarbors, selectedValue);

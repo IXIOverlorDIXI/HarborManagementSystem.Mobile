@@ -11,6 +11,7 @@
 @inject IStringLocalizer<Localizations.Localization> Localization
 @inject HttpClient Client
 @inject IStorageService LocalStorageService
+@inject IDialogService DialogService
 
 <MudTabs Elevation="1" Rounded="true" PanelClass="pa-1" Centered="true">
     <MudTabPanel Text="@Localization["PaymentHistoryPage_SubscriptionChecksTab_Title"]">
@@ -87,37 +88,50 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            response = await Client.GetAsync(ApiRoutes.SubscriptionCheck.Controller + "?username=" + userDto.Username);
+
+            _subscriptionChecks = await response.Content.ReadFromJsonAsync<List<SubscriptionCheckDto>>();
+
+            response = await Client.GetAsync(ApiRoutes.BookingCheck.Controller + "?username=" + userDto.Username);
+
+            _bookingChecks = await response.Content.ReadFromJsonAsync<List<BookingCheckDataDto>>();
         }
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
-
-        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
-
-        if (userDto == null)
+        catch (Exception e)
         {
-            await LocalStorageService.RemoveAsync("token");
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-
-        response = await Client.GetAsync(ApiRoutes.SubscriptionCheck.Controller + "?username=" + userDto.Username);
-
-        _subscriptionChecks = await response.Content.ReadFromJsonAsync<List<SubscriptionCheckDto>>();
-
-        response = await Client.GetAsync(ApiRoutes.BookingCheck.Controller + "?username=" + userDto.Username);
-
-        _bookingChecks = await response.Content.ReadFromJsonAsync<List<BookingCheckDataDto>>();
     }
 
     private void UpdatePage()

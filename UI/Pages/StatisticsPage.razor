@@ -11,6 +11,7 @@
 @inject NavigationManager NavManager
 @inject HttpClient Client
 @inject IStorageService LocalStorageService
+@inject IDialogService DialogService
 
 <MudContainer>
     <MudGrid JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Height="100%"
@@ -23,7 +24,7 @@
             }
             else
             {
-                <MudExpansionPanel Text="@Localization["StatisticsPage_RelativePositionComponent_Title"]" >
+                <MudExpansionPanel Text="@Localization["StatisticsPage_RelativePositionComponent_Title"]">
                     <MudText Typo="Typo.h5" Align="Align.Start">
                         @Localization["StatisticsPage_RelativePositionComponent_EmptyData"]
                     </MudText>
@@ -38,7 +39,7 @@
             }
             else
             {
-                <MudExpansionPanel Text="@Localization["StatisticsPage_EnvironmentalCondition_Title"]" >
+                <MudExpansionPanel Text="@Localization["StatisticsPage_EnvironmentalCondition_Title"]">
                     <MudText Typo="Typo.h5" Align="Align.Start">
                         @Localization["StatisticsPage_EnvironmentalConditionComponent_EmptyData"]
                     </MudText>
@@ -53,59 +54,73 @@
             }
             else
             {
-                <MudExpansionPanel Text="@Localization["StatisticsPage_StorageEnvironmentalCondition_Title"]" >
+                <MudExpansionPanel Text="@Localization["StatisticsPage_StorageEnvironmentalCondition_Title"]">
                     <MudText Typo="Typo.h5" Align="Align.Start">
                         @Localization["StatisticsPage_StorageEnvironmentalConditionComponent_EmptyData"]
                     </MudText>
                 </MudExpansionPanel>
-                
             }
         </MudExpansionPanels>
-        
+
     </MudGrid>
 </MudContainer>
 
 
 @code {
+
     [Parameter]
     public string Id { get; set; }
 
-    private List<RelativePositionMeteringDto> _relativePositionMeteringData { get; set; } 
+    private List<RelativePositionMeteringDto> _relativePositionMeteringData { get; set; }
         = new List<RelativePositionMeteringDto>();
-    private List<StorageEnvironmentalConditionDto> _storageEnvironmentalConditionData { get; set; } 
+
+    private List<StorageEnvironmentalConditionDto> _storageEnvironmentalConditionData { get; set; }
         = new List<StorageEnvironmentalConditionDto>();
-    private List<EnvironmentalConditionDto> _environmentalConditionData { get; set; } 
+
+    private List<EnvironmentalConditionDto> _environmentalConditionData { get; set; }
         = new List<EnvironmentalConditionDto>();
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.RelativePositionMetering.Controller, Id));
+
+            _relativePositionMeteringData = await response.Content.ReadFromJsonAsync<List<RelativePositionMeteringDto>>();
+
+            response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.EnvironmentalCondition.Controller, Id));
+
+            _environmentalConditionData = await response.Content.ReadFromJsonAsync<List<EnvironmentalConditionDto>>();
+
+            response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.StorageEnvironmentalCondition.Controller, Id));
+
+            _storageEnvironmentalConditionData = await response.Content.ReadFromJsonAsync<List<StorageEnvironmentalConditionDto>>();
         }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.RelativePositionMetering.Controller, Id));
-
-        _relativePositionMeteringData = await response.Content.ReadFromJsonAsync<List<RelativePositionMeteringDto>>();
-
-        response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.EnvironmentalCondition.Controller, Id));
-
-        _environmentalConditionData = await response.Content.ReadFromJsonAsync<List<EnvironmentalConditionDto>>();
-        
-        response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.StorageEnvironmentalCondition.Controller, Id));
-
-        _storageEnvironmentalConditionData = await response.Content.ReadFromJsonAsync<List<StorageEnvironmentalConditionDto>>();
-
-        await InvokeAsync(() => StateHasChanged());
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+        StateHasChanged();
     }
 
     private void UpdatePage()
@@ -115,4 +130,5 @@
 
         StateHasChanged();
     }
+
 }

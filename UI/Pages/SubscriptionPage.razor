@@ -148,18 +148,13 @@
     {
         try
         {
+            _subscriptions = await LocalStorageService.GetAsync<AllSubscriptionsDto>(SavedDataSections.SubscriptionsList)
+                             ?? new AllSubscriptionsDto{Subscriptions = new List<SubscriptionDto>()};
+            
             LocalizationService.CultureChanged += UpdatePage;
             CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
-            {
-                _subscriptions = await LocalStorageService.GetAsync<AllSubscriptionsDto>(SavedDataSections.SubscriptionsList)
-                                 ?? new AllSubscriptionsDto{Subscriptions = new List<SubscriptionDto>()};
-
-                return;
-            }
-            
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             HttpResponseMessage response;
@@ -191,11 +186,6 @@
             {
                 _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
                 await LocalStorageService.SetAsync(SavedDataSections.SubscriptionsList, _subscriptions);
-            }
-            else
-            {
-                _subscriptions = await LocalStorageService.GetAsync<AllSubscriptionsDto>(SavedDataSections.SubscriptionsList)
-                                 ?? new AllSubscriptionsDto{Subscriptions = new List<SubscriptionDto>()};
             }
         }
         catch (Exception e)

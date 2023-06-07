@@ -15,6 +15,7 @@
 @inject LocalizationService LocalizationService
 @inject IStringLocalizer<Localizations.Localization> Localization
 @inject ShipValidator ShipValidator
+@inject IDialogService DialogService
 
 <MudTabs Elevation="2" Rounded="true" PanelClass="pa-6" Centered="true">
     <MudTabPanel Text="@Localization["ShipFormPage_Title"]">
@@ -104,78 +105,103 @@
                 break;
         }
     }
-    
+
     private void toShipPage() => NavManager.NavigateTo((string.Format("{0}/{1}",
         PageNavigateConstants.ShipPage,
         _lastCreatedShipId.Value)));
-    
+
     private async Task shipSave()
     {
-        form.Validate();
-        
-        if (!form.IsValid)
+        try
         {
-            return;
-        }
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
-        
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-        
-        var response = await Client.PostAsJsonAsync(ApiRoutes.Ship.Controller, new ShipDataDto()
-        {
-            DisplayName = _shipForm.DisplayName,
-            ShipTypeId = _shipForm.ShipTypeId
-        });
+            form.Validate();
 
-        if (response.IsSuccessStatusCode)
-        {
-            _createShipError = "";
-            _createShipSuccessAlertVisibile = true;
-            _createShipErrorAlertVisibile = false;
-        }
-        else
-        {
-            _createShipError = await response.Content.ReadAsStringAsync();
-            _createShipSuccessAlertVisibile = false;
-            _createShipErrorAlertVisibile = true;
-        }
+            if (!form.IsValid)
+            {
+                return;
+            }
 
-        _lastCreatedShipId = (await response.Content.ReadFromJsonAsync<ShipDataDto>()).Id;
-        
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.PostAsJsonAsync(ApiRoutes.Ship.Controller, new ShipDataDto()
+            {
+                DisplayName = _shipForm.DisplayName,
+                ShipTypeId = _shipForm.ShipTypeId
+            });
+
+            if (response.IsSuccessStatusCode)
+            {
+                _createShipError = "";
+                _createShipSuccessAlertVisibile = true;
+                _createShipErrorAlertVisibile = false;
+            }
+            else
+            {
+                _createShipError = await response.Content.ReadAsStringAsync();
+                _createShipSuccessAlertVisibile = false;
+                _createShipErrorAlertVisibile = true;
+            }
+
+            _lastCreatedShipId = (await response.Content.ReadFromJsonAsync<ShipDataDto>()).Id;
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
         StateHasChanged();
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
         }
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
-
-        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
-
-        if (userDto == null)
+        catch (Exception e)
         {
-            await LocalStorageService.RemoveAsync("token");
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-
-        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
-
-        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
     }
 
     private void UpdatePage()
@@ -185,4 +211,5 @@
 
         StateHasChanged();
     }
+
 }

@@ -406,76 +406,102 @@
 
     private async Task deleteHarbor()
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
-            Localization["HomePage_HarborPart_DeleteDialog_Title"],
-            parameters, options)).Result;
-
-        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        try
         {
-            var response = await Client.DeleteAsync(string.Format(
-                "{0}?id={1}",
-                ApiRoutes.Harbor.Controller,
-                Id));
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-            if (!response.IsSuccessStatusCode)
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+                Localization["HomePage_HarborPart_DeleteDialog_Title"],
+                parameters, options)).Result;
+
+            if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
             {
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["HomePage_HarborPart_ErrorDialog_Title"],
-                    parameters, options)).Result;
+                var response = await Client.DeleteAsync(string.Format(
+                    "{0}?id={1}",
+                    ApiRoutes.Harbor.Controller,
+                    Id));
 
-                return;
+                if (!response.IsSuccessStatusCode)
+                {
+                    await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["HomePage_HarborPart_ErrorDialog_Title"],
+                        parameters, options)).Result;
+
+                    return;
+                }
+
+                NavManager.NavigateTo(PageNavigateConstants.HomePage);
             }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-            NavManager.NavigateTo(PageNavigateConstants.HomePage);
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
     private async Task harborSave()
     {
-        harborEditForm.Validate();
-
-        if (!harborEditForm.IsValid)
+        try
         {
-            return;
+            harborEditForm.Validate();
+
+            if (!harborEditForm.IsValid)
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var harborDto = new HarborDataDto()
+            {
+                DisplayName = _harborForm.DisplayName,
+                Description = _harborForm.Description,
+                GeolocationLatitude = _harborForm.GeolocationLatitude,
+                GeolocationLongitude = _harborForm.GeolocationLongitude,
+                BIC = _harborForm.BIC,
+                IBAN = _harborForm.IBAN,
+                SupportPhoneNumber = _harborForm.SupportPhoneNumber,
+                SupportEmail = _harborForm.SupportEmail,
+                Id = Guid.Parse(Id)
+            };
+
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Harbor.Controller, harborDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _harborSuccessVisible = true;
+                _harborErrorAlertVisible = false;
+            }
+            else
+            {
+                _harborFormError = await response.Content.ReadAsStringAsync();
+                _harborSuccessVisible = false;
+                _harborErrorAlertVisible = true;
+            }
         }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var harborDto = new HarborDataDto()
+        catch (Exception e)
         {
-            DisplayName = _harborForm.DisplayName,
-            Description = _harborForm.Description,
-            GeolocationLatitude = _harborForm.GeolocationLatitude,
-            GeolocationLongitude = _harborForm.GeolocationLongitude,
-            BIC = _harborForm.BIC,
-            IBAN = _harborForm.IBAN,
-            SupportPhoneNumber = _harborForm.SupportPhoneNumber,
-            SupportEmail = _harborForm.SupportEmail,
-            Id = Guid.Parse(Id)
-        };
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        var response = await Client.PutAsJsonAsync(ApiRoutes.Harbor.Controller, harborDto);
-
-        if (response.IsSuccessStatusCode)
-        {
-            _harborSuccessVisible = true;
-            _harborErrorAlertVisible = false;
-        }
-        else
-        {
-            _harborFormError = await response.Content.ReadAsStringAsync();
-            _harborSuccessVisible = false;
-            _harborErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -483,52 +509,65 @@
 
     private async Task harborPhotoSave()
     {
-        if (_photo == null)
-        {
-            _harborPhotoUploadErrorAlertVisible = true;
-            _harborPhotoUploadSuccessAlertVisible = false;
-            return;
-        }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-
-        var fileDto = new HarborPhotoDataDto()
-        {
-            FileNameWithExtension = _photo.Name,
-            FileStream = _photoContent,
-            HarborId = Guid.Parse(Id)
-        };
-
-        HttpResponseMessage response = default;
-
         try
         {
-            response = await Client.PostAsJsonAsync(ApiRoutes.Harbor.Photos, fileDto);
+            if (_photo == null)
+            {
+                _harborPhotoUploadErrorAlertVisible = true;
+                _harborPhotoUploadSuccessAlertVisible = false;
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+
+            var fileDto = new HarborPhotoDataDto()
+            {
+                FileNameWithExtension = _photo.Name,
+                FileStream = _photoContent,
+                HarborId = Guid.Parse(Id)
+            };
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                response = await Client.PostAsJsonAsync(ApiRoutes.Harbor.Photos, fileDto);
+            }
+            catch (Exception e)
+            {
+                _harborUploadPhotoError = e.Message;
+            }
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _harborPhotoUploadSuccessAlertVisible = true;
+                _harborPhotoUploadErrorAlertVisible = false;
+                _document = null;
+                _documentContent = default;
+
+                response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
+                _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+            }
+            else
+            {
+                _harborUploadPhotoError = await response.Content.ReadAsStringAsync();
+                _harborPhotoUploadSuccessAlertVisible = false;
+                _harborPhotoUploadErrorAlertVisible = true;
+            }
         }
         catch (Exception e)
         {
-            _harborUploadPhotoError = e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        if (response.IsSuccessStatusCode)
-        {
-            _harborPhotoUploadSuccessAlertVisible = true;
-            _harborPhotoUploadErrorAlertVisible = false;
-            _document = null;
-            _documentContent = default;
-
-            response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
-            _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
-        }
-        else
-        {
-            _harborUploadPhotoError = await response.Content.ReadAsStringAsync();
-            _harborPhotoUploadSuccessAlertVisible = false;
-            _harborPhotoUploadErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -536,41 +575,54 @@
 
     private async Task harborPhotoDelete(HarborPhotoDto harborPhoto)
     {
-        if (DefaultFileLinks.DefaultImage.Equals(harborPhoto.Url))
-        {
-            return;
-        }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        HttpResponseMessage response = default;
-
         try
         {
-            response = await Client.DeleteAsync(ApiRoutes.Harbor.Photos + "?id=" + harborPhoto.PhotoId);
+            if (DefaultFileLinks.DefaultImage.Equals(harborPhoto.Url))
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                response = await Client.DeleteAsync(ApiRoutes.Harbor.Photos + "?id=" + harborPhoto.PhotoId);
+            }
+            catch (Exception e)
+            {
+                _harborDeletePhotoError = e.Message;
+            }
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _harborPhotoDeleteSuccessAlertVisible = true;
+                _harborPhotoDeleteErrorAlertVisible = false;
+                _document = null;
+                _documentContent = default;
+                response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
+                _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+            }
+            else
+            {
+                _harborDeletePhotoError = await response.Content.ReadAsStringAsync();
+                _harborPhotoDeleteSuccessAlertVisible = false;
+                _harborPhotoDeleteErrorAlertVisible = true;
+            }
         }
         catch (Exception e)
         {
-            _harborDeletePhotoError = e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        if (response.IsSuccessStatusCode)
-        {
-            _harborPhotoDeleteSuccessAlertVisible = true;
-            _harborPhotoDeleteErrorAlertVisible = false;
-            _document = null;
-            _documentContent = default;
-            response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
-            _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
-        }
-        else
-        {
-            _harborDeletePhotoError = await response.Content.ReadAsStringAsync();
-            _harborPhotoDeleteSuccessAlertVisible = false;
-            _harborPhotoDeleteErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -578,94 +630,120 @@
 
     private async Task HandlePhotoSelection(IBrowserFile file)
     {
-        _photo = file;
-
-        if (_photo != null)
+        try
         {
-            var maxFileSizeInBytes = _maxPhotoSize;
-            if (_photo.Size > maxFileSizeInBytes)
-            {
-                _photo = null;
-                
-                var parameters = new DialogParameters();
-                parameters.Add("Error", string.Format(
-                    Localization["HarborPage_HarborPhotoTab_NewHarborPhotoSizeError"],
-                    _maxPhotoSize));
-                var options = new DialogOptions { CloseOnEscapeKey = true };
+            _photo = file;
 
-                var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["HarborPage_HarborPhotoTab_ErrorDialog_Title"],
-                    parameters, options)).Result;
-                
-                return;
-            }
-
-            try
+            if (_photo != null)
             {
-                _photoContent = new byte[_photo.Size];
-                await using (var stream = _photo.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                var maxFileSizeInBytes = _maxPhotoSize;
+                if (_photo.Size > maxFileSizeInBytes)
                 {
-                    await stream.ReadAsync(_photoContent, 0, (int)_photo.Size);
-                }
-            }
-            catch (Exception e)
-            {
-                _harborPhotoUploadSuccessAlertVisible = false;
-                _harborPhotoUploadErrorAlertVisible = true;
-                _harborUploadPhotoError = e.Message;
-            }
+                    _photo = null;
 
-            StateHasChanged();
+                    var parameters = new DialogParameters();
+                    parameters.Add("Error", string.Format(
+                        Localization["HarborPage_HarborPhotoTab_NewHarborPhotoSizeError"],
+                        _maxPhotoSize));
+                    var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                    var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["HarborPage_HarborPhotoTab_ErrorDialog_Title"],
+                        parameters, options)).Result;
+
+                    return;
+                }
+
+                try
+                {
+                    _photoContent = new byte[_photo.Size];
+                    await using (var stream = _photo.OpenReadStream(maxAllowedSize: _maxPhotoSize))
+                    {
+                        await stream.ReadAsync(_photoContent, 0, (int)_photo.Size);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _harborPhotoUploadSuccessAlertVisible = false;
+                    _harborPhotoUploadErrorAlertVisible = true;
+                    _harborUploadPhotoError = e.Message;
+                }
+
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
     private async Task harborDocumentSave()
     {
-        if (_document == null)
-        {
-            _harborDocumentUploadErrorAlertVisible = true;
-            _harborDocumentUploadSuccessAlertVisible = false;
-            return;
-        }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-
-        var fileDto = new HarborDocumentDataDto()
-        {
-            FileNameWithExtension = _document.Name,
-            FileStream = _documentContent,
-            HarborId = Guid.Parse(Id)
-        };
-
-        HttpResponseMessage response = default;
-
         try
         {
-            response = await Client.PostAsJsonAsync(ApiRoutes.Harbor.Documents, fileDto);
+            if (_document == null)
+            {
+                _harborDocumentUploadErrorAlertVisible = true;
+                _harborDocumentUploadSuccessAlertVisible = false;
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+
+            var fileDto = new HarborDocumentDataDto()
+            {
+                FileNameWithExtension = _document.Name,
+                FileStream = _documentContent,
+                HarborId = Guid.Parse(Id)
+            };
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                response = await Client.PostAsJsonAsync(ApiRoutes.Harbor.Documents, fileDto);
+            }
+            catch (Exception e)
+            {
+                _harborUploadDocumentError = e.Message;
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                _harborDocumentUploadSuccessAlertVisible = true;
+                _harborDocumentUploadErrorAlertVisible = false;
+                _document = null;
+                _documentContent = default;
+
+                response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
+                _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+            }
+            else
+            {
+                _harborUploadDocumentError = await response.Content.ReadAsStringAsync();
+                _harborDocumentUploadSuccessAlertVisible = false;
+                _harborDocumentUploadErrorAlertVisible = true;
+            }
         }
         catch (Exception e)
         {
-            _harborUploadDocumentError = e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        if (response.IsSuccessStatusCode)
-        {
-            _harborDocumentUploadSuccessAlertVisible = true;
-            _harborDocumentUploadErrorAlertVisible = false;
-            _document = null;
-            _documentContent = default;
-
-            response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
-            _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
-        }
-        else
-        {
-            _harborUploadDocumentError = await response.Content.ReadAsStringAsync();
-            _harborDocumentUploadSuccessAlertVisible = false;
-            _harborDocumentUploadErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -673,42 +751,55 @@
 
     private async Task harborDocumentDelete(HarborDocumentDto harborDocument)
     {
-        if (DefaultFileLinks.DefaultImage.Equals(harborDocument.Url))
-        {
-            return;
-        }
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        HttpResponseMessage response = default;
-
         try
         {
-            response = await Client.DeleteAsync(ApiRoutes.Harbor.Documents + "?id=" + harborDocument.DocumentId);
+            if (DefaultFileLinks.DefaultImage.Equals(harborDocument.Url))
+            {
+                return;
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = default;
+
+            try
+            {
+                response = await Client.DeleteAsync(ApiRoutes.Harbor.Documents + "?id=" + harborDocument.DocumentId);
+            }
+            catch (Exception e)
+            {
+                _harborDeleteDocumentError = e.Message;
+            }
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                _harborDocumentDeleteSuccessAlertVisible = true;
+                _harborDocumentDeleteErrorAlertVisible = false;
+                _document = null;
+                _documentContent = default;
+
+                response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
+                _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+            }
+            else
+            {
+                _harborDeleteDocumentError = await response.Content.ReadAsStringAsync();
+                _harborDocumentDeleteSuccessAlertVisible = false;
+                _harborDocumentDeleteErrorAlertVisible = true;
+            }
         }
         catch (Exception e)
         {
-            _harborDeleteDocumentError = e.Message;
-        }
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        if (response.IsSuccessStatusCode)
-        {
-            _harborDocumentDeleteSuccessAlertVisible = true;
-            _harborDocumentDeleteErrorAlertVisible = false;
-            _document = null;
-            _documentContent = default;
-
-            response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
-            _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
-        }
-        else
-        {
-            _harborDeleteDocumentError = await response.Content.ReadAsStringAsync();
-            _harborDocumentDeleteSuccessAlertVisible = false;
-            _harborDocumentDeleteErrorAlertVisible = true;
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
 
         StateHasChanged();
@@ -716,43 +807,56 @@
 
     private async Task HandleDocumentSelection(IBrowserFile file)
     {
-        _document = file;
-
-        if (_document != null)
+        try
         {
-            if (_document.Size > _maxPhotoSize)
-            {
-                _document = null;
-                
-                var parameters = new DialogParameters();
-                parameters.Add("Error", string.Format(
-                    Localization["HarborPage_HarborPhotoTab_NewHarborPhotoSizeError"],
-                    _maxDocumentSize));
-                var options = new DialogOptions { CloseOnEscapeKey = true };
+            _document = file;
 
-                var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["HarborPage_HarborDocumentTab_ErrorDialog_Title"],
-                    parameters, options)).Result;
-                
-                return;
-            }
-
-            try
+            if (_document != null)
             {
-                _documentContent = new byte[_document.Size];
-                await using (var stream = _document.OpenReadStream(maxAllowedSize: _maxDocumentSize))
+                if (_document.Size > _maxPhotoSize)
                 {
-                    await stream.ReadAsync(_documentContent, 0, (int)_document.Size);
-                }
-            }
-            catch (Exception e)
-            {
-                _harborDocumentUploadSuccessAlertVisible = false;
-                _harborDocumentUploadErrorAlertVisible = true;
-                _harborUploadDocumentError = e.Message;
-            }
+                    _document = null;
 
-            StateHasChanged();
+                    var parameters = new DialogParameters();
+                    parameters.Add("Error", string.Format(
+                        Localization["HarborPage_HarborPhotoTab_NewHarborPhotoSizeError"],
+                        _maxDocumentSize));
+                    var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                    var confirmationResult = await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["HarborPage_HarborDocumentTab_ErrorDialog_Title"],
+                        parameters, options)).Result;
+
+                    return;
+                }
+
+                try
+                {
+                    _documentContent = new byte[_document.Size];
+                    await using (var stream = _document.OpenReadStream(maxAllowedSize: _maxDocumentSize))
+                    {
+                        await stream.ReadAsync(_documentContent, 0, (int)_document.Size);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _harborDocumentUploadSuccessAlertVisible = false;
+                    _harborDocumentUploadErrorAlertVisible = true;
+                    _harborUploadDocumentError = e.Message;
+                }
+
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
@@ -800,57 +904,69 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        HttpResponseMessage response;
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (!string.IsNullOrEmpty(token))
+        try
         {
-            Client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-            response = await Client.GetAsync(ApiRoutes.Account.Controller);
+            HttpResponseMessage response;
 
-            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-            if (userDto == null)
+            if (!string.IsNullOrEmpty(token))
             {
-                await LocalStorageService.RemoveAsync("token");
-                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                Client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+                var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+                if (userDto == null)
+                {
+                    await LocalStorageService.RemoveAsync("token");
+                    NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+                }
+
+                response = await Client.GetAsync(ApiRoutes.Harbor.ById + "?id=" + Id);
+
+                var harborData = await response.Content.ReadFromJsonAsync<HarborPreviewDataDto>();
+
+                _harborForm = new HarborForm()
+                {
+                    DisplayName = harborData.DisplayName,
+                    Description = harborData.Description,
+                    GeolocationLatitude = harborData.GeolocationLatitude,
+                    GeolocationLongitude = harborData.GeolocationLongitude,
+                    BIC = harborData.BIC,
+                    IBAN = harborData.IBAN,
+                    SupportPhoneNumber = harborData.SupportPhoneNumber,
+                    SupportEmail = harborData.SupportEmail,
+                };
+
+                isOwner = harborData.IsOwner;
             }
 
-            response = await Client.GetAsync(ApiRoutes.Harbor.ById + "?id=" + Id);
 
-            var harborData = await response.Content.ReadFromJsonAsync<HarborPreviewDataDto>();
+            response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
 
-            _harborForm = new HarborForm()
-            {
-                DisplayName = harborData.DisplayName,
-                Description = harborData.Description,
-                GeolocationLatitude = harborData.GeolocationLatitude,
-                GeolocationLongitude = harborData.GeolocationLongitude,
-                BIC = harborData.BIC,
-                IBAN = harborData.IBAN,
-                SupportPhoneNumber = harborData.SupportPhoneNumber,
-                SupportEmail = harborData.SupportEmail,
-            };
+            _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
 
-            isOwner = harborData.IsOwner;
+            response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
+
+            _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
         }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-
-        response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
-
-        _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
-
-        response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
-
-        _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
-
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
         StateHasChanged();
     }
 

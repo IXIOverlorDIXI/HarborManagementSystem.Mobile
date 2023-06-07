@@ -2,6 +2,8 @@
 {
     public static class SavedDataSections
     {
+        public const string Language = "language";
+        
         public const string Token = "token";
         
         public const string SubscriptionsList = "allSubscriptions";

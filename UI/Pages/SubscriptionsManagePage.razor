@@ -17,7 +17,7 @@
 @inject SubscriptionValidator SubscriptionValidator
 @inject IDialogService DialogService
 
-<MudTabs Elevation="2" Rounded="true" PanelClass="pa-6" Centered="true" ActivePanelIndex="@_activeTab">
+<MudTabs Elevation="2" Rounded="true" PanelClass="pa-2" Centered="true" ActivePanelIndex="@_activeTab">
     <MudTabPanel @onclick="@(() => switchTab(0))" Text="@Localization["SubscriptionsManagePage_ListTab_Title"]">
         <MudGrid>
             <MudItem xs="12" sm="7" Class="mx-auto pa-6">
@@ -55,7 +55,7 @@
                                         @Localization["SubscriptionsManagePage_ListTab_SubscriberAmount"]:
                                         @subscription.SubscriberAmount
                                     </MudText>
-                                    
+
                                 </MudPaper>
                                 <MudPaper Class="d-flex flex-column align-center gap-2" MaxWidth="400" Elevation="0">
                                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning"
@@ -91,19 +91,19 @@
                             <MudNumericField Label="@Localization["SubscriptionsManagePage_CreateTab_MaxHarborAmountLabel"]"
                                              HelperText="@Localization["SubscriptionsManagePage_CreateTab_MaxHarborAmountHelperText"]"
                                              Class="mt-3"
-                                             @bind-Value="_subscriptionFormCreate.MaxHarborAmount" For="@(() => _subscriptionFormCreate.MaxHarborAmount)" />
+                                             @bind-Value="_subscriptionFormCreate.MaxHarborAmount" For="@(() => _subscriptionFormCreate.MaxHarborAmount)"/>
                             <MudNumericField Label="@Localization["SubscriptionsManagePage_CreateTab_TaxOnBookingLabel"]"
                                              HelperText="@Localization["SubscriptionsManagePage_CreateTab_TaxOnBookingHelperText"]"
                                              Class="mt-3"
-                                             @bind-Value="_subscriptionFormCreate.TaxOnBooking" For="@(() => _subscriptionFormCreate.TaxOnBooking)" />
+                                             @bind-Value="_subscriptionFormCreate.TaxOnBooking" For="@(() => _subscriptionFormCreate.TaxOnBooking)"/>
                             <MudNumericField Label="@Localization["SubscriptionsManagePage_CreateTab_TaxOnServicesLabel"]"
                                              HelperText="@Localization["SubscriptionsManagePage_CreateTab_TaxOnServicesHelperText"]"
                                              Class="mt-3"
-                                             @bind-Value="_subscriptionFormCreate.TaxOnServices" For="@(() => _subscriptionFormCreate.TaxOnServices)" />
+                                             @bind-Value="_subscriptionFormCreate.TaxOnServices" For="@(() => _subscriptionFormCreate.TaxOnServices)"/>
                             <MudNumericField Label="@Localization["SubscriptionsManagePage_CreateTab_PriceLabel"]"
                                              HelperText="@Localization["SubscriptionsManagePage_CreateTab_PriceHelperText"]"
                                              Class="mt-3"
-                                             @bind-Value="_subscriptionFormCreate.Price" For="@(() => _subscriptionFormCreate.Price)" />
+                                             @bind-Value="_subscriptionFormCreate.Price" For="@(() => _subscriptionFormCreate.Price)"/>
                         </MudCardContent>
                     </MudForm>
                     <MudCardActions>
@@ -148,19 +148,19 @@
                             <MudNumericField Label="@Localization["SubscriptionsManagePage_EditTab_MaxHarborAmountLabel"]"
                                              HelperText="@Localization["SubscriptionsManagePage_EditTab_MaxHarborAmountHelperText"]"
                                              Class="mt-3"
-                                             @bind-Value="_subscriptionFormEdit.MaxHarborAmount" For="@(() => _subscriptionFormEdit.MaxHarborAmount)" />
+                                             @bind-Value="_subscriptionFormEdit.MaxHarborAmount" For="@(() => _subscriptionFormEdit.MaxHarborAmount)"/>
                             <MudNumericField Label="@Localization["SubscriptionsManagePage_EditTab_TaxOnBookingLabel"]"
                                              HelperText="@Localization["SubscriptionsManagePage_EditTab_TaxOnBookingHelperText"]"
                                              Class="mt-3"
-                                             @bind-Value="_subscriptionFormEdit.TaxOnBooking" For="@(() => _subscriptionFormEdit.TaxOnBooking)" />
+                                             @bind-Value="_subscriptionFormEdit.TaxOnBooking" For="@(() => _subscriptionFormEdit.TaxOnBooking)"/>
                             <MudNumericField Label="@Localization["SubscriptionsManagePage_EditTab_TaxOnServicesLabel"]"
                                              HelperText="@Localization["SubscriptionsManagePage_EditTab_TaxOnServicesHelperText"]"
                                              Class="mt-3"
-                                             @bind-Value="_subscriptionFormEdit.TaxOnServices" For="@(() => _subscriptionFormEdit.TaxOnServices)" />
+                                             @bind-Value="_subscriptionFormEdit.TaxOnServices" For="@(() => _subscriptionFormEdit.TaxOnServices)"/>
                             <MudNumericField Label="@Localization["SubscriptionsManagePage_EditTab_PriceLabel"]"
                                              HelperText="@Localization["SubscriptionsManagePage_EditTab_PriceHelperText"]"
                                              Class="mt-3"
-                                             @bind-Value="_subscriptionFormEdit.Price" For="@(() => _subscriptionFormEdit.Price)" />
+                                             @bind-Value="_subscriptionFormEdit.Price" For="@(() => _subscriptionFormEdit.Price)"/>
                         </MudCardContent>
                     </MudForm>
                     <MudCardActions>
@@ -187,7 +187,7 @@
                 </MudCard>
             </MudItem>
         </MudGrid>
-        
+
     </MudTabPanel>
 </MudTabs>
 
@@ -195,8 +195,8 @@
 @code {
     private MudForm createForm;
     private MudForm editForm;
-    
-    private AllSubscriptionsDto _subscriptions = new AllSubscriptionsDto {Subscriptions = new List<SubscriptionDto>()};
+
+    private AllSubscriptionsDto _subscriptions = new AllSubscriptionsDto { Subscriptions = new List<SubscriptionDto>() };
     private SubscriptionForm _subscriptionFormCreate = new SubscriptionForm();
     private SubscriptionForm _subscriptionFormEdit = new SubscriptionForm();
     private bool _createSubscriptionErrorAlertVisibile = false;
@@ -238,95 +238,119 @@
 
     private async Task subscriptionSave()
     {
-        createForm.Validate();
+        try
+        {
+            createForm.Validate();
 
-        if (!createForm.IsValid)
-        {
-            return;
-        }
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
-        
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-        
-        var response = await Client.PostAsJsonAsync(ApiRoutes.Subscription.Controller, new SubscriptionDto()
-        {
-            Description = _subscriptionFormCreate.Description,
-            Id = _subscriptionFormCreate.Id,
-            DisplayName = _subscriptionFormCreate.DisplayName,
-            MaxHarborAmount = _subscriptionFormCreate.MaxHarborAmount,
-            TaxOnBooking = _subscriptionFormCreate.TaxOnBooking,
-            TaxOnServices = _subscriptionFormCreate.TaxOnServices,
-            Price = _subscriptionFormCreate.Price,
-        });
+            if (!createForm.IsValid)
+            {
+                return;
+            }
 
-        if (response.IsSuccessStatusCode)
-        {
-            _createSubscriptionError = "";
-            _createSubscriptionSuccessAlertVisibile = true;
-            _createSubscriptionErrorAlertVisibile = false;
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.PostAsJsonAsync(ApiRoutes.Subscription.Controller, new SubscriptionDto()
+            {
+                Description = _subscriptionFormCreate.Description,
+                Id = _subscriptionFormCreate.Id,
+                DisplayName = _subscriptionFormCreate.DisplayName,
+                MaxHarborAmount = _subscriptionFormCreate.MaxHarborAmount,
+                TaxOnBooking = _subscriptionFormCreate.TaxOnBooking,
+                TaxOnServices = _subscriptionFormCreate.TaxOnServices,
+                Price = _subscriptionFormCreate.Price,
+            });
+
+            if (response.IsSuccessStatusCode)
+            {
+                _createSubscriptionError = "";
+                _createSubscriptionSuccessAlertVisibile = true;
+                _createSubscriptionErrorAlertVisibile = false;
+            }
+            else
+            {
+                _createSubscriptionError = await response.Content.ReadAsStringAsync();
+                _createSubscriptionSuccessAlertVisibile = false;
+                _createSubscriptionErrorAlertVisibile = true;
+            }
+
+            response = await Client.GetAsync(string.Format("{0}?username={1}",
+                ApiRoutes.Subscription.AllSubscriptions,
+                username));
+
+            _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
         }
-        else
+        catch (Exception e)
         {
-            _createSubscriptionError = await response.Content.ReadAsStringAsync();
-            _createSubscriptionSuccessAlertVisibile = false;
-            _createSubscriptionErrorAlertVisibile = true;
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-        
-        response = await Client.GetAsync(string.Format("{0}?username={1}", 
-            ApiRoutes.Subscription.AllSubscriptions,
-            username));
-        
-        _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
-        
         StateHasChanged();
     }
 
     private async Task subscriptionEdit()
     {
-        editForm.Validate();
+        try
+        {
+            editForm.Validate();
 
-        if (!editForm.IsValid)
-        {
-            return;
-        }
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
-        
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-        
-        var response = await Client.PutAsJsonAsync(ApiRoutes.Subscription.Controller, new SubscriptionDto()
-        {
-            Description = _subscriptionFormEdit.Description,
-            Id = _subscriptionFormEdit.Id,
-            DisplayName = _subscriptionFormEdit.DisplayName,
-            MaxHarborAmount = _subscriptionFormEdit.MaxHarborAmount,
-            TaxOnBooking = _subscriptionFormEdit.TaxOnBooking,
-            TaxOnServices = _subscriptionFormEdit.TaxOnServices,
-            Price = _subscriptionFormEdit.Price,
-        });
+            if (!editForm.IsValid)
+            {
+                return;
+            }
 
-        if (response.IsSuccessStatusCode)
-        {
-            _editSubscriptionError = "";
-            _editSubscriptionSuccessAlertVisibile = true;
-            _editSubscriptionErrorAlertVisibile = false;
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Subscription.Controller, new SubscriptionDto()
+            {
+                Description = _subscriptionFormEdit.Description,
+                Id = _subscriptionFormEdit.Id,
+                DisplayName = _subscriptionFormEdit.DisplayName,
+                MaxHarborAmount = _subscriptionFormEdit.MaxHarborAmount,
+                TaxOnBooking = _subscriptionFormEdit.TaxOnBooking,
+                TaxOnServices = _subscriptionFormEdit.TaxOnServices,
+                Price = _subscriptionFormEdit.Price,
+            });
+
+            if (response.IsSuccessStatusCode)
+            {
+                _editSubscriptionError = "";
+                _editSubscriptionSuccessAlertVisibile = true;
+                _editSubscriptionErrorAlertVisibile = false;
+            }
+            else
+            {
+                _editSubscriptionError = await response.Content.ReadAsStringAsync();
+                _editSubscriptionSuccessAlertVisibile = false;
+                _editSubscriptionErrorAlertVisibile = true;
+            }
+
+            response = await Client.GetAsync(string.Format("{0}?username={1}",
+                ApiRoutes.Subscription.AllSubscriptions,
+                username));
+
+            _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
         }
-        else
+        catch (Exception e)
         {
-            _editSubscriptionError = await response.Content.ReadAsStringAsync();
-            _editSubscriptionSuccessAlertVisibile = false;
-            _editSubscriptionErrorAlertVisibile = true;
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-        
-        response = await Client.GetAsync(string.Format("{0}?username={1}", 
-            ApiRoutes.Subscription.AllSubscriptions,
-            username));
-        
-        _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
-        
         StateHasChanged();
     }
 
@@ -342,89 +366,115 @@
             TaxOnServices = subscription.TaxOnServices,
             Price = subscription.Price,
         };
-        
+
         didEditTabOpen = true;
         _activeTab = 2;
         StateHasChanged();
     }
-    
+
     private async Task subscriptionDeleteAction(SubscriptionDto subscription)
     {
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
-            Localization["SubscriptionsManagePage_DeleteDialog_Title"],
-            parameters, options)).Result;
-
-        if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
+        try
         {
-            var response = await Client.DeleteAsync(string.Format(
-                "{0}?id={1}",
-                ApiRoutes.Subscription.Controller,
-                subscription.Id));
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
-            if (!response.IsSuccessStatusCode)
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var confirmationResult = await (await DialogService.ShowAsync<DeleteDialog>(
+                Localization["SubscriptionsManagePage_DeleteDialog_Title"],
+                parameters, options)).Result;
+
+            if (!confirmationResult.Cancelled && bool.TryParse(confirmationResult.Data.ToString(), out bool resultBool))
             {
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["SubscriptionsManagePage_ErrorDialog_Title"],
-                    parameters, options)).Result;
-            }
+                var response = await Client.DeleteAsync(string.Format(
+                    "{0}?id={1}",
+                    ApiRoutes.Subscription.Controller,
+                    subscription.Id));
 
-            response = await Client.GetAsync(string.Format("{0}?username={1}", 
-                ApiRoutes.Subscription.AllSubscriptions,
-                username));
-        
-            _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
-            
-            if (subscription.Id.Equals(_subscriptionFormEdit.Id))
-            {
-                didEditTabOpen = false;
-                _activeTab = 0;
-            }
+                if (!response.IsSuccessStatusCode)
+                {
+                    await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["SubscriptionsManagePage_ErrorDialog_Title"],
+                        parameters, options)).Result;
+                }
 
-            StateHasChanged();
+                response = await Client.GetAsync(string.Format("{0}?username={1}",
+                    ApiRoutes.Subscription.AllSubscriptions,
+                    username));
+
+                _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+
+                if (subscription.Id.Equals(_subscriptionFormEdit.Id))
+                {
+                    didEditTabOpen = false;
+                    _activeTab = 0;
+                }
+
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
+
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync(SavedDataSections.Token);
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            username = userDto.Username;
+
+            response = await Client.GetAsync(string.Format("{0}?username={1}",
+                ApiRoutes.Subscription.AllSubscriptions,
+                username));
+
+            _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
         }
-
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
-
-        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
-
-        if (userDto == null)
+        catch (Exception e)
         {
-            await LocalStorageService.RemoveAsync("token");
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
-        }
-        
-        username = userDto.Username;
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        response = await Client.GetAsync(string.Format("{0}?username={1}", 
-            ApiRoutes.Subscription.AllSubscriptions,
-            username));
-        
-        _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
 
     private void UpdatePage()
@@ -434,4 +484,5 @@
 
         StateHasChanged();
     }
+
 }

@@ -142,6 +142,8 @@ else
     
     private async Task createReview()
     {
+        try
+        {
         var parameters = new DialogParameters();
         parameters.Add("Review", new ReviewDataDto());
         parameters.Add("IsCreating", true);
@@ -170,12 +172,24 @@ else
         response = await Client.GetAsync(ApiRoutes.Harbor.ById + "?id=" + Id);
 
         _harborData = await response.Content.ReadFromJsonAsync<HarborPreviewDataDto>();
-        
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
         StateHasChanged();
     }
     
     private async Task editReview(ReviewPreviewDataDto review)
     {
+        try
+        {
         var parameters = new DialogParameters();
         parameters.Add("Review", new ReviewDataDto
         {
@@ -212,12 +226,24 @@ else
         response = await Client.GetAsync(ApiRoutes.Harbor.ById + "?id=" + Id);
 
         _harborData = await response.Content.ReadFromJsonAsync<HarborPreviewDataDto>();
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
         StateHasChanged();
     }
 
     private async Task deleteReview(ReviewPreviewDataDto review)
     {
+        try
+        {
         var token = await LocalStorageService.GetAsync<string>("token");
 
         Client.DefaultRequestHeaders.Authorization =
@@ -267,10 +293,23 @@ else
 
             StateHasChanged();
         }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
+        try
+        {
         LocalizationService.CultureChanged += UpdatePage;
         CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
         CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
@@ -313,7 +352,18 @@ else
         }
 
         _reviews = await response.Content.ReadFromJsonAsync<List<ReviewPreviewDataDto>>();
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+        
         StateHasChanged();
     }
 

@@ -25,27 +25,27 @@
         <MudItem xs="12" sm="7" Class="mx-auto pa-6">
             <MudCard>
                 <MudForm @ref="form" Model="@_bookingForm" Validation="@(BookingValidator.ValidateValue)" ValidationDelay="0">
-                <MudCardContent>
-                    <MudSelect T="Guid" @bind-Value="_bookingForm.ShipId" For="() => _bookingForm.ShipId"
-                               Label="@Localization["BookingFormPage_ShipTab_Label"]"
-                               Text="@Localization["BookingFormPage_ShipTab_Text"]">
-                        @foreach (var ship in _ships)
-                        {
-                            <MudSelectItem T="Guid" Value="@ship.Id">
-                                <div class="d-flex flex-column gap-1 ma-0 pa-0">
-                                    <MudText Typo="Typo.subtitle1">
-                                        @Localization["BookingFormPage_ShipTab_ShipTypeName"]:
-                                        @ship.DisplayName
-                                    </MudText>
-                                    <MudText Typo="Typo.subtitle2">
-                                        @Localization["BookingFormPage_ShipTab_ShipDescription"]:
-                                        @ship.ShipTypeName
-                                    </MudText>
-                                </div>
-                            </MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudCardContent>
+                    <MudCardContent>
+                        <MudSelect T="Guid" @bind-Value="_bookingForm.ShipId" For="() => _bookingForm.ShipId"
+                                   Label="@Localization["BookingFormPage_ShipTab_Label"]"
+                                   Text="@Localization["BookingFormPage_ShipTab_Text"]">
+                            @foreach (var ship in _ships)
+                            {
+                                <MudSelectItem T="Guid" Value="@ship.Id">
+                                    <div class="d-flex flex-column gap-1 ma-0 pa-0">
+                                        <MudText Typo="Typo.subtitle1">
+                                            @Localization["BookingFormPage_ShipTab_ShipTypeName"]:
+                                            @ship.DisplayName
+                                        </MudText>
+                                        <MudText Typo="Typo.subtitle2">
+                                            @Localization["BookingFormPage_ShipTab_ShipDescription"]:
+                                            @ship.ShipTypeName
+                                        </MudText>
+                                    </div>
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudCardContent>
                 </MudForm>
                 <MudCardActions Class="d-flex justify-end" Style="width: 100%">
                     @if (!_bookingForm.ShipId.Equals(Guid.Empty))
@@ -65,27 +65,27 @@
         <MudItem xs="12" sm="7" Class="mx-auto pa-6">
             <MudCard>
                 <MudForm @ref="form" Model="@_bookingForm" Validation="@(BookingValidator.ValidateValue)" ValidationDelay="0">
-                <MudCardContent>
-                    <MudSelect T="Guid" @bind-Value="_bookingForm.HarborId" For="() => _bookingForm.HarborId"
-                               Label="@Localization["BookingFormPage_HarborTab_Label"]"
-                               Text="@Localization["BookingFormPage_HarborTab_Text"]">
-                        @foreach (var harbor in _harbors)
-                        {
-                            <MudSelectItem T="Guid" Value="@harbor.Id">
-                                <div class="d-flex flex-column gap-1 ma-0 pa-0">
-                                    <MudText Typo="Typo.subtitle1">
-                                        @Localization["BookingFormPage_HarborTab_DisplayName"]:
-                                        @harbor.DisplayName
-                                    </MudText>
-                                    <MudText Typo="Typo.subtitle2">
-                                        @Localization["BookingFormPage_HarborTab_Description"]:
-                                        @harbor.Description
-                                    </MudText>
-                                </div>
-                            </MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudCardContent>
+                    <MudCardContent>
+                        <MudSelect T="Guid" @bind-Value="_bookingForm.HarborId" For="() => _bookingForm.HarborId"
+                                   Label="@Localization["BookingFormPage_HarborTab_Label"]"
+                                   Text="@Localization["BookingFormPage_HarborTab_Text"]">
+                            @foreach (var harbor in _harbors)
+                            {
+                                <MudSelectItem T="Guid" Value="@harbor.Id">
+                                    <div class="d-flex flex-column gap-1 ma-0 pa-0">
+                                        <MudText Typo="Typo.subtitle1">
+                                            @Localization["BookingFormPage_HarborTab_DisplayName"]:
+                                            @harbor.DisplayName
+                                        </MudText>
+                                        <MudText Typo="Typo.subtitle2">
+                                            @Localization["BookingFormPage_HarborTab_Description"]:
+                                            @harbor.Description
+                                        </MudText>
+                                    </div>
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudCardContent>
                 </MudForm>
 
                 <MudCardActions Class="d-flex justify-space-between flex-grow-1 gap-4" Style="width: 100%">
@@ -110,32 +110,32 @@
         <MudItem xs="12" sm="7" Class="mx-auto pa-6">
             <MudCard>
                 <MudForm @ref="form" Model="@_bookingForm" Validation="@(BookingValidator.ValidateValue)" ValidationDelay="0">
-                <MudCardContent>
-                    <MudSelect T="Guid" @bind-Value="_bookingForm.BerthId" For="() => _bookingForm.BerthId"
-                               Label="@Localization["BookingFormPage_BerthTab_Berth_Label"]"
-                               Text="@Localization["BookingFormPage_BerthTab_Berth_Text"]">
-                        @foreach (var berth in _berths)
-                        {
-                            <MudSelectItem T="Guid" Value="@berth.Id">
-                                <div class="d-flex flex-column gap-1 ma-0 pa-0">
-                                    <MudText Typo="Typo.subtitle1">
-                                        @Localization["BookingFormPage_BerthTab_DisplayName"]:
-                                        @berth.DisplayName
-                                    </MudText>
-                                    <MudText Typo="Typo.subtitle2">
-                                        @Localization["BookingFormPage_BerthTab_Description"]:
-                                        @berth.Description
-                                    </MudText>
-                                    <MudText Typo="Typo.subtitle1">
-                                        @Localization["BookingFormPage_BerthTab_Price"]:
-                                        @berth.Price
-                                    </MudText>
+                    <MudCardContent>
+                        <MudSelect T="Guid" @bind-Value="_bookingForm.BerthId" For="() => _bookingForm.BerthId"
+                                   Label="@Localization["BookingFormPage_BerthTab_Berth_Label"]"
+                                   Text="@Localization["BookingFormPage_BerthTab_Berth_Text"]">
+                            @foreach (var berth in _berths)
+                            {
+                                <MudSelectItem T="Guid" Value="@berth.Id">
+                                    <div class="d-flex flex-column gap-1 ma-0 pa-0">
+                                        <MudText Typo="Typo.subtitle1">
+                                            @Localization["BookingFormPage_BerthTab_DisplayName"]:
+                                            @berth.DisplayName
+                                        </MudText>
+                                        <MudText Typo="Typo.subtitle2">
+                                            @Localization["BookingFormPage_BerthTab_Description"]:
+                                            @berth.Description
+                                        </MudText>
+                                        <MudText Typo="Typo.subtitle1">
+                                            @Localization["BookingFormPage_BerthTab_Price"]:
+                                            @berth.Price
+                                        </MudText>
 
-                                </div>
-                            </MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudCardContent>
+                                    </div>
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudCardContent>
                 </MudForm>
                 <MudCardActions Class="d-flex justify-space-between flex-grow-1 gap-4" Style="width: 100%">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary"
@@ -187,7 +187,7 @@
                                @onclick="backBerthTab">
                         @Localization["BookingFormPage_DateTab_BackButton"]
                     </MudButton>
-                    @if (_bookingForm.StartDate.HasValue 
+                    @if (_bookingForm.StartDate.HasValue
                          && _bookingForm.EndDate.HasValue && form.IsValid)
                     {
                         <MudButton Variant="Variant.Filled" Color="Color.Primary"
@@ -205,32 +205,32 @@
         <MudItem xs="12" sm="7" Class="mx-auto pa-6">
             <MudCard>
                 <MudForm @ref="form" Model="@_bookingForm" Validation="@(BookingValidator.ValidateValue)" ValidationDelay="0">
-                <MudCardContent>
-                    <MudSelect T="ServicePreviewDto" @bind-SelectedValues="_bookingForm.AdditionalServices"
-                               Label="@Localization["BookingFormPage_ServicesTab_Services_Label"]"
-                               Text="@Localization["BookingFormPage_ServicesTab_Services_Text"]"
-                               MultiSelection="true" Comparer="@servicePreviewDtoComparer">
-                        @foreach (var service in _services)
-                        {
-                            <MudSelectItem T="ServicePreviewDto" Value="@service">
-                                <div class="d-flex flex-column gap-1 ma-0 pa-0">
-                                    <MudText Typo="Typo.subtitle1">
-                                        @Localization["BookingFormPage_ServicesTab_DisplayName"]:
-                                        @service.DisplayName
-                                    </MudText>
-                                    <MudText Typo="Typo.subtitle2">
-                                        @Localization["BookingFormPage_ServicesTab_Description"]:
-                                        @service.Description
-                                    </MudText>
-                                    <MudText Typo="Typo.subtitle1">
-                                        @Localization["BookingFormPage_ServicesTab_Price"]:
-                                        @service.Price
-                                    </MudText>
-                                </div>
-                            </MudSelectItem>
-                        }
-                    </MudSelect>
-                </MudCardContent>
+                    <MudCardContent>
+                        <MudSelect T="ServicePreviewDto" @bind-SelectedValues="_bookingForm.AdditionalServices"
+                                   Label="@Localization["BookingFormPage_ServicesTab_Services_Label"]"
+                                   Text="@Localization["BookingFormPage_ServicesTab_Services_Text"]"
+                                   MultiSelection="true" Comparer="@servicePreviewDtoComparer">
+                            @foreach (var service in _services)
+                            {
+                                <MudSelectItem T="ServicePreviewDto" Value="@service">
+                                    <div class="d-flex flex-column gap-1 ma-0 pa-0">
+                                        <MudText Typo="Typo.subtitle1">
+                                            @Localization["BookingFormPage_ServicesTab_DisplayName"]:
+                                            @service.DisplayName
+                                        </MudText>
+                                        <MudText Typo="Typo.subtitle2">
+                                            @Localization["BookingFormPage_ServicesTab_Description"]:
+                                            @service.Description
+                                        </MudText>
+                                        <MudText Typo="Typo.subtitle1">
+                                            @Localization["BookingFormPage_ServicesTab_Price"]:
+                                            @service.Price
+                                        </MudText>
+                                    </div>
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudCardContent>
                 </MudForm>
                 <MudCardActions>
                     @if (_createBookingErrorAlertVisibile)
@@ -250,11 +250,11 @@
                                    @onclick="bookingSave">
                             @if (string.IsNullOrEmpty(Id))
                             {
-                               @Localization["BookingFormPage_CreateButton"] 
+                                @Localization["BookingFormPage_CreateButton"]
                             }
                             else
                             {
-                                @Localization["BookingFormPage_EditButton"] 
+                                @Localization["BookingFormPage_EditButton"]
                             }
                         </MudButton>
                     </MudPaper>
@@ -267,10 +267,12 @@
 </MudTabs>
 
 @code {
+
     [Parameter]
     public string Id { get; set; }
 
     private MudForm form;
+
     private BookingForm _bookingForm = new BookingForm
     {
         AdditionalServices = new List<ServicePreviewDto>()
@@ -299,23 +301,26 @@
     private string _createBookingError = "";
 
     private int _activePanel = 0;
+    private readonly BookingDates _currentDates = new BookingDates();
 
     private bool CheckDateDisabled(DateTime date)
     {
-        if (_booking.StartDate.Date == date.Date || _booking.EndDate.Date == date.Date)
-        {
-            return false;
-        }
-        
-        var isDisabled = _bookings.Any(x =>
-            x.StartDate.Date <= date.Date
-            && x.EndDate.Date >= date.Date);
+        var isDisabled = _bookings
+            .Where(x => x.EndDate.Date != _currentDates.EndDate.Date
+                        && x.StartDate.Date != _currentDates.StartDate.Date)
+            .Any(x =>
+                x.StartDate.Date <= date.Date
+                && x.EndDate.Date >= date.Date);
 
         isDisabled = isDisabled || date.Date <= DateTime.Now.Date;
+
         if (_bookingForm.StartDate.HasValue)
         {
-            var endLimit = _bookings.FirstOrDefault(x => x.EndDate.Date > _bookingForm.StartDate.Value.Date);
-            
+            var endLimit = _bookings
+                .Where(x => x.EndDate.Date != _currentDates.EndDate.Date
+                            && x.StartDate.Date != _currentDates.StartDate.Date)
+                .FirstOrDefault(x => x.EndDate.Date > _bookingForm.StartDate.Value.Date);
+
             if (endLimit != null)
             {
                 isDisabled = isDisabled || endLimit.EndDate < date.Date || _bookingForm.StartDate.Value.Date > date.Date;
@@ -324,14 +329,17 @@
 
         if (_bookingForm.EndDate.HasValue)
         {
-            var startLimit = _bookings.LastOrDefault(x => x.StartDate.Date < _bookingForm.EndDate.Value.Date);
-            
+            var startLimit = _bookings
+                .Where(x => x.EndDate.Date != _currentDates.EndDate.Date
+                            && x.StartDate.Date != _currentDates.StartDate.Date)
+                .LastOrDefault(x => x.StartDate.Date < _bookingForm.EndDate.Value.Date);
+
             if (startLimit != null)
             {
                 isDisabled = isDisabled || startLimit.StartDate > date.Date || _bookingForm.EndDate.Value.Date < date.Date;
             }
         }
-        
+
         return isDisabled;
     }
 
@@ -363,54 +371,67 @@
 
     private async Task bookingSave()
     {
-        form.Validate();
-
-        if (!form.IsValid)
+        try
         {
+            form.Validate();
+
+            if (!form.IsValid)
+            {
+                _createBookingErrorAlertVisibile = true;
+                _createBookingError = "";
+                form.Errors.ToList().ForEach(x => _createBookingError += "\n\t" + x);
+            }
+
+            var token = await LocalStorageService.GetAsync<string>("token");
+
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response;
+            var booking = new BookingDataDto()
+            {
+                AdditionalServices = _bookingForm.AdditionalServices.ToList(),
+                BerthId = _bookingForm.BerthId,
+                ShipId = _bookingForm.ShipId,
+                EndDate = _bookingForm.EndDate.Value,
+                StartDate = _bookingForm.StartDate.Value,
+                Id = string.IsNullOrEmpty(Id) ? Guid.NewGuid() : Guid.Parse(Id)
+            };
+
+            if (string.IsNullOrEmpty(Id))
+            {
+                response = await Client.PostAsJsonAsync(ApiRoutes.Booking.Controller, booking);
+            }
+            else
+            {
+                response = await Client.PutAsJsonAsync(ApiRoutes.Booking.Controller, booking);
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                NavManager.NavigateTo(
+                    string.Format("{0}/{1}",
+                        PageNavigateConstants.BookingHistoryPage,
+                        (int)BookingHistoryPageType.OwnBookings));
+            }
+
+            _createBookingError = await response.Content.ReadAsStringAsync();
             _createBookingErrorAlertVisibile = true;
-            _createBookingError = "";
-            form.Errors.ToList().ForEach(x => _createBookingError += "\n\t" + x);
         }
-        
-        var token = await LocalStorageService.GetAsync<string>("token");
+        catch
+            (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
 
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
-
-        HttpResponseMessage response;
-        var booking = new BookingDataDto()
-        {
-            AdditionalServices = _bookingForm.AdditionalServices.ToList(),
-            BerthId = _bookingForm.BerthId,
-            ShipId = _bookingForm.ShipId,
-            EndDate = _bookingForm.EndDate.Value,
-            StartDate = _bookingForm.StartDate.Value,
-            Id = string.IsNullOrEmpty(Id) ? Guid.NewGuid() : Guid.Parse(Id)
-        };
-        
-        if (string.IsNullOrEmpty(Id))
-        {
-            response = await Client.PostAsJsonAsync(ApiRoutes.Booking.Controller, booking);
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
-        else
-        {
-            response = await Client.PutAsJsonAsync(ApiRoutes.Booking.Controller, booking);
-        }
-        
-        if (response.IsSuccessStatusCode)
-        {
-            NavManager.NavigateTo(
-            string.Format("{0}/{1}",
-                PageNavigateConstants.BookingHistoryPage,
-                (int)BookingHistoryPageType.OwnBookings));
-        }
-
-        _createBookingError = await response.Content.ReadAsStringAsync();
-        _createBookingErrorAlertVisibile = true;
-        
         StateHasChanged();
     }
-    
+
     private async Task nextHarborTab()
     {
         form.Validate();
@@ -423,9 +444,9 @@
         _activePanel = 1;
         isDisabledShipTab = true;
         isDisabledHarborTab = false;
-        
+
         var token = await LocalStorageService.GetAsync<string>("token");
-        
+
         Client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", token);
 
@@ -433,7 +454,7 @@
             _shipTypes.FirstOrDefault(t => t.TypeName.Equals(
                 _ships.FirstOrDefault(x => x.Id
                     .Equals(_bookingForm.ShipId)).ShipTypeName)));
-        
+
         _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
 
         if (!_harbors.Any(x => x.Id.Equals(_bookingForm.HarborId)))
@@ -443,7 +464,7 @@
 
         StateHasChanged();
     }
-    
+
     private async Task nextBerthTab()
     {
         form.Validate();
@@ -452,35 +473,35 @@
         {
             return;
         }
-        
+
         _activePanel = 2;
         isDisabledHarborTab = true;
         isDisabledBerthTab = false;
-        
+
         var token = await LocalStorageService.GetAsync<string>("token");
-        
+
         Client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", token);
 
         var response = await Client.PostAsJsonAsync(ApiRoutes.Berth.SuitableBerth,
-                           new SuitableBerthSearchModel()
-                           {
-                               ShipType = _shipTypes.FirstOrDefault(t => t.TypeName.Equals(
-                                   _ships.FirstOrDefault(x => x.Id
-                                       .Equals(_bookingForm.ShipId)).ShipTypeName)),
-                               HarborId = _bookingForm.HarborId
-                           });
-        
+            new SuitableBerthSearchModel()
+            {
+                ShipType = _shipTypes.FirstOrDefault(t => t.TypeName.Equals(
+                    _ships.FirstOrDefault(x => x.Id
+                        .Equals(_bookingForm.ShipId)).ShipTypeName)),
+                HarborId = _bookingForm.HarborId
+            });
+
         _berths = await response.Content.ReadFromJsonAsync<List<BerthPreviewDataDto>>();
-        
+
         if (!_berths.Any(x => x.Id.Equals(_bookingForm.BerthId)))
         {
             _bookingForm.BerthId = Guid.Empty;
         }
-        
+
         StateHasChanged();
     }
-    
+
     private async Task nextDateTab()
     {
         form.Validate();
@@ -489,7 +510,7 @@
         {
             return;
         }
-        
+
         _activePanel = 3;
         isDisabledBerthTab = true;
         isDisabledDateTab = false;
@@ -499,7 +520,7 @@
         {
             _bookingForm.StartDate = DateTime.Now;
         }
-        
+
         if (_bookingForm.EndDate.Equals(DateTime.MinValue))
         {
             _bookingForm.EndDate = DateTime.Now;
@@ -507,7 +528,7 @@
 
         StateHasChanged();
     }
-    
+
     private async Task nextServicesTab()
     {
         form.Validate();
@@ -516,32 +537,32 @@
         {
             return;
         }
-        
+
         _activePanel = 4;
         isDisabledDateTab = true;
         isDisabledServicesTab = false;
-        
+
         var response = await Client.GetAsync(ApiRoutes.Service.Controller + "?id=" + _bookingForm.HarborId);
-        
+
         _services = await response.Content.ReadFromJsonAsync<List<ServicePreviewDto>>();
 
         _bookingForm.AdditionalServices = _bookingForm.AdditionalServices
             .Where(x => _services.Any(y => y.Id.Equals(x.Id)));
-        
+
         StateHasChanged();
     }
-    
+
     private async Task backDateTab()
     {
         _activePanel = 3;
         isDisabledServicesTab = true;
         isDisabledDateTab = false;
-        
+
         await ExcludeDateTimeRange();
 
         StateHasChanged();
     }
-    
+
     private async Task backBerthTab()
     {
         _activePanel = 2;
@@ -550,7 +571,7 @@
 
         StateHasChanged();
     }
-    
+
     private async Task backHarborTab()
     {
         _activePanel = 1;
@@ -559,7 +580,7 @@
 
         StateHasChanged();
     }
-    
+
     private async Task backShipTab()
     {
         _activePanel = 0;
@@ -571,69 +592,85 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LocalizationService.CultureChanged += UpdatePage;
-        CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
-        CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
-
-        var token = await LocalStorageService.GetAsync<string>("token");
-
-        if (string.IsNullOrEmpty(token))
+        try
         {
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
-        }
+            LocalizationService.CultureChanged += UpdatePage;
+            CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
+            CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
-        Client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", token);
+            var token = await LocalStorageService.GetAsync<string>("token");
 
-        var response = await Client.GetAsync(ApiRoutes.Account.Controller);
-
-        var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
-
-        if (userDto == null)
-        {
-            await LocalStorageService.RemoveAsync("token");
-            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
-        }
-
-        response = await Client.GetAsync(ApiRoutes.Ship.Controller);
-
-        _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
-        
-        response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
-
-        _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
-
-        if (!string.IsNullOrEmpty(Id))
-        {
-            response = await Client.GetAsync(ApiRoutes.Booking.ById + "?id=" + Id);
-
-            if (!response.IsSuccessStatusCode)
+            if (string.IsNullOrEmpty(token))
             {
-                var parameters = new DialogParameters();
-                var options = new DialogOptions { CloseOnEscapeKey = true };
-                
-                parameters.Add("Error", await response.Content.ReadAsStringAsync());
-                    
-                await (await DialogService.ShowAsync<ErrorDialog>(
-                    Localization["BookingFormPage_ErrorDialog_Title"],
-                    parameters, options)).Result;
-                
-                NavManager.NavigateTo(
-                    string.Format("{0}/{1}",
-                        PageNavigateConstants.BookingHistoryPage,
-                        (int)BookingHistoryPageType.OwnBookings));
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
             }
-            
-            _booking = await response.Content.ReadFromJsonAsync<BookingEditDataDto>();
 
-            _bookingForm.StartDate = _booking.StartDate;
-            _bookingForm.EndDate = _booking.EndDate;
-            _bookingForm.AdditionalServices = _booking.AdditionalServices;
-            _bookingForm.BerthId = _booking.BerthId ?? Guid.Empty;
-            _bookingForm.ShipId = _booking.ShipId ?? Guid.Empty;
-            _bookingForm.HarborId = _booking.HarborId ?? Guid.Empty;
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
 
-            StateHasChanged();
+            var response = await Client.GetAsync(ApiRoutes.Account.Controller);
+
+            var userDto = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (userDto == null)
+            {
+                await LocalStorageService.RemoveAsync("token");
+                NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+            }
+
+            response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + userDto.Username);
+
+            _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+
+            response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
+
+            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+
+            if (!string.IsNullOrEmpty(Id))
+            {
+                response = await Client.GetAsync(ApiRoutes.Booking.ById + "?id=" + Id);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var parameters = new DialogParameters();
+                    var options = new DialogOptions { CloseOnEscapeKey = true };
+
+                    parameters.Add("Error", await response.Content.ReadAsStringAsync());
+
+                    await (await DialogService.ShowAsync<ErrorDialog>(
+                        Localization["BookingFormPage_ErrorDialog_Title"],
+                        parameters, options)).Result;
+
+                    NavManager.NavigateTo(
+                        string.Format("{0}/{1}",
+                            PageNavigateConstants.BookingHistoryPage,
+                            (int)BookingHistoryPageType.OwnBookings));
+                }
+
+                _booking = await response.Content.ReadFromJsonAsync<BookingEditDataDto>();
+
+                _currentDates.StartDate = _booking.StartDate;
+                _currentDates.EndDate = _booking.EndDate;
+
+                _bookingForm.StartDate = _booking.StartDate;
+                _bookingForm.EndDate = _booking.EndDate;
+                _bookingForm.AdditionalServices = _booking.AdditionalServices;
+                _bookingForm.BerthId = _booking.BerthId ?? Guid.Empty;
+                _bookingForm.ShipId = _booking.ShipId ?? Guid.Empty;
+                _bookingForm.HarborId = _booking.HarborId ?? Guid.Empty;
+
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
         }
     }
 
@@ -644,4 +681,5 @@
 
         StateHasChanged();
     }
+
 }
