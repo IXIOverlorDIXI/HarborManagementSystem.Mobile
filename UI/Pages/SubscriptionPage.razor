@@ -134,7 +134,7 @@
         var token = await LocalStorageService.GetAsync<string>("token");
 
         HttpResponseMessage response;
-        
+
         if (!string.IsNullOrEmpty(token))
         {
             Client.DefaultRequestHeaders.Authorization =

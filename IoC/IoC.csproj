@@ -13,4 +13,10 @@
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Microsoft.Maui.Essentials">
+        <HintPath>C:\Program Files\dotnet\packs\Microsoft.Maui.Essentials.Ref.ios\7.0.86\ref\net7.0-ios13.6\Microsoft.Maui.Essentials.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

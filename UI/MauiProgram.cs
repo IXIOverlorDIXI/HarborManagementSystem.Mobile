@@ -17,13 +17,16 @@ public static class MauiProgram
             .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); });
 
         builder.Services.AddMauiBlazorWebView();
-            
+
         builder.Services.AddMudServices();
         
-        builder.Services.AddApplicationServices(builder.Configuration);
-            
+        builder.Services.AddApplicationServices(
+            builder.Configuration, 
+            DeviceInfo.Platform, 
+            (new HttpsClientHandlerService()).GetPlatformMessageHandler());
+
         builder.Services.AddLocalization();
-            
+
         builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 #if DEBUG
@@ -34,7 +37,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<UserAuthorizationHelpService>();
         builder.Services.AddSingleton<LocalizationService>();
         builder.Services.AddSingleton<IStorageService, StorageService>();
-        
+
         return builder.Build();
     }
 }
