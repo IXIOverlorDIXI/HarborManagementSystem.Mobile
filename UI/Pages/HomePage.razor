@@ -249,7 +249,11 @@
 
                 response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + _username);
 
-                _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+                if (response.IsSuccessStatusCode)
+                {
+                    _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+                    await LocalStorageService.SetAsync(SavedDataSections.Ships, _ships);
+                }
 
                 StateHasChanged();
             }
@@ -302,7 +306,11 @@
 
                 response = await Client.GetAsync(ApiRoutes.Harbor.OwnHarbors + "?username=" + _username);
 
-                _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+                if (response.IsSuccessStatusCode)
+                {
+                    _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+                    await LocalStorageService.SetAsync(SavedDataSections.Harbors, _harbors);
+                }
 
                 StateHasChanged();
             }
@@ -328,6 +336,10 @@
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            _ships = await LocalStorageService.GetAsync<List<ShipPreviewDataDto>>(SavedDataSections.Ships)
+                             ?? new List<ShipPreviewDataDto>();
+            _harbors = await LocalStorageService.GetAsync<List<HarborPreviewDataDto>>(SavedDataSections.Harbors)
+                     ?? new List<HarborPreviewDataDto>();
 
             if (string.IsNullOrEmpty(token))
             {
@@ -351,12 +363,20 @@
             _username = userDto.Username;
 
             response = await Client.GetAsync(ApiRoutes.Ship.Controller + "?username=" + _username);
-
-            _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+            
+            if (response.IsSuccessStatusCode)
+            {
+                _ships = await response.Content.ReadFromJsonAsync<List<ShipPreviewDataDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.Ships, _ships);
+            }
 
             response = await Client.GetAsync(ApiRoutes.Harbor.OwnHarbors + "?username=" + _username);
 
-            _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.Harbors, _harbors);
+            }
 
             response = await Client.GetAsync(ApiRoutes.Subscription.CurrentSubscription + "?username=" + _username);
 

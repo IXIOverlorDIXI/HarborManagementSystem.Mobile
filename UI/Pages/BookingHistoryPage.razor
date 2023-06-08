@@ -316,8 +316,18 @@
                         break;
                 }
 
-                _bookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
-
+                if (response.IsSuccessStatusCode)
+                {
+                    _bookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
+                    await LocalStorageService
+                        .SetAsync(SavedDataSections.BookingsForType + "-" + ((int)_type) + "-" + Id, _bookings);
+                }
+                else
+                {
+                    _bookings = await LocalStorageService
+                        .GetAsync<List<BookingPreviewDataDto>>(SavedDataSections.BookingsForType + "-" + ((int)_type) + "-" + Id);
+                }
+                
                 StateHasChanged();
             }
         }
@@ -337,6 +347,16 @@
     {
         try
         {
+            _type = (BookingHistoryPageType)Enum
+                .ToObject(typeof(BookingHistoryPageType), Type);
+
+            _ownBookings = await LocalStorageService
+                .GetAsync<List<BookingPreviewDataDto>>(SavedDataSections.OwnBookings)
+                           ?? new List<BookingPreviewDataDto>();
+            _bookings = await LocalStorageService
+                .GetAsync<List<BookingPreviewDataDto>>(SavedDataSections.BookingsForType + "-" + ((int)_type) + "-" + Id) 
+                        ?? new List<BookingPreviewDataDto>();
+            
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             Client.DefaultRequestHeaders.Authorization =
@@ -355,11 +375,12 @@
             username = userDto.Username;
 
             response = await Client.GetAsync(ApiRoutes.Booking.OwnBookings + "?username=" + username);
-
-            _ownBookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
-
-            _type = (BookingHistoryPageType)Enum
-                .ToObject(typeof(BookingHistoryPageType), Type);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                _ownBookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.OwnBookings, _ownBookings);
+            }
 
             switch (_type)
             {
@@ -385,7 +406,12 @@
                     break;
             }
 
-            _bookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _bookings = await response.Content.ReadFromJsonAsync<List<BookingPreviewDataDto>>();
+                await LocalStorageService
+                    .SetAsync(SavedDataSections.BookingsForType + "-" + ((int)_type) + "-" + Id, _bookings);
+            }
         }
         catch (Exception e)
         {

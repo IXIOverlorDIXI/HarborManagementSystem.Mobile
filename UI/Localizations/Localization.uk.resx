@@ -2185,4 +2185,22 @@
     <data name="WifiConnection_Text" xml:space="preserve">
         <value>Відсутнє підключення до Інтернет</value>
     </data>
+    <data name="HarborPage_BerthTab_EmptyData" xml:space="preserve">
+        <value>Немає даних</value>
+    </data>
+    <data name="NavBarComponent_ClearCache" xml:space="preserve">
+        <value>Вивільнити пам'ять</value>
+    </data>
+    <data name="MessageComponent_DialogMessage" xml:space="preserve">
+        <value>Повідомлення</value>
+    </data>
+    <data name="MessageComponent_DialogSubmitButton" xml:space="preserve">
+        <value>Прийняти</value>
+    </data>
+    <data name="MessageComponent_DialogTitle" xml:space="preserve">
+        <value>Сповіщення</value>
+    </data>
+    <data name="ClearCache_Message" xml:space="preserve">
+        <value>Збережені данні успішно очищенні</value>
+    </data>
 </root>

@@ -148,14 +148,13 @@
     {
         try
         {
-            _subscriptions = await LocalStorageService.GetAsync<AllSubscriptionsDto>(SavedDataSections.SubscriptionsList)
-                             ?? new AllSubscriptionsDto{Subscriptions = new List<SubscriptionDto>()};
-            
             LocalizationService.CultureChanged += UpdatePage;
             CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            _subscriptions = await LocalStorageService.GetAsync<AllSubscriptionsDto>(SavedDataSections.SubscriptionsList)
+                             ?? new AllSubscriptionsDto{Subscriptions = new List<SubscriptionDto>()};
 
             HttpResponseMessage response;
 

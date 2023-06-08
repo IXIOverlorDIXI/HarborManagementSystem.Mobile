@@ -280,7 +280,11 @@
                 ApiRoutes.Subscription.AllSubscriptions,
                 username));
 
-            _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+            if (response.IsSuccessStatusCode)
+            {
+                _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+                await LocalStorageService.SetAsync(SavedDataSections.SubscriptionsList, _subscriptions);
+            }
         }
         catch (Exception e)
         {
@@ -339,10 +343,15 @@
                 ApiRoutes.Subscription.AllSubscriptions,
                 username));
 
-            _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+            if (response.IsSuccessStatusCode)
+            {
+                _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+                await LocalStorageService.SetAsync(SavedDataSections.SubscriptionsList, _subscriptions);
+            }
         }
         catch (Exception e)
         {
+    // #if DEBUG
             var parameters = new DialogParameters();
             var options = new DialogOptions { CloseOnEscapeKey = true };
             parameters.Add("Error", e.Message);
@@ -350,6 +359,7 @@
             await (await DialogService.ShowAsync<ErrorDialog>(
                 Localization["GlobalErrorHandling_ErrorDialog_Title"],
                 parameters, options)).Result;
+    // #endif
         }
         StateHasChanged();
     }
@@ -406,7 +416,11 @@
                     ApiRoutes.Subscription.AllSubscriptions,
                     username));
 
-                _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+                if (response.IsSuccessStatusCode)
+                {
+                    _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+                    await LocalStorageService.SetAsync(SavedDataSections.SubscriptionsList, _subscriptions);
+                }
 
                 if (subscription.Id.Equals(_subscriptionFormEdit.Id))
                 {
@@ -439,6 +453,9 @@
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
+            _subscriptions = await LocalStorageService.GetAsync<AllSubscriptionsDto>(SavedDataSections.SubscriptionsList)
+                             ?? new AllSubscriptionsDto { Subscriptions = new List<SubscriptionDto>() };
+
             if (string.IsNullOrEmpty(token))
             {
                 NavManager.NavigateTo(PageNavigateConstants.IndexPage);
@@ -463,7 +480,11 @@
                 ApiRoutes.Subscription.AllSubscriptions,
                 username));
 
-            _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+            if (response.IsSuccessStatusCode)
+            {
+                _subscriptions = await response.Content.ReadFromJsonAsync<AllSubscriptionsDto>();
+                await LocalStorageService.SetAsync(SavedDataSections.SubscriptionsList, _subscriptions);
+            }
         }
         catch (Exception e)
         {

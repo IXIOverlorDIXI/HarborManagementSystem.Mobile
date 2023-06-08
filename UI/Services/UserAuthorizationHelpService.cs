@@ -59,6 +59,12 @@ namespace UI.Services
 
             if (token != null)
             {
+                if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                {
+                    IsUserAuthenticated = true;
+                    return;
+                }
+                
                 HttpResponseMessage response = default;
                 using (var scope = _serviceProvider.CreateScope())
                 {

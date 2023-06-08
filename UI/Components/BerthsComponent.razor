@@ -128,6 +128,12 @@
             }
         </MudPaper>
     }
+    @if (!_berths.Any())
+    {
+        <MudText Typo="Typo.h5" Align="Align.Start">
+            @Localization["HarborPage_BerthTab_EmptyData"]
+        </MudText>
+    }
 </MudPaper>
 
 @code {

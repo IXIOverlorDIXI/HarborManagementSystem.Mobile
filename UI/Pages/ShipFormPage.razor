@@ -169,6 +169,8 @@
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            _shipTypes = await LocalStorageService.GetAsync<List<ShipTypeDto>>(SavedDataSections.ShipTypes) 
+                         ?? new List<ShipTypeDto>();
 
             if (string.IsNullOrEmpty(token))
             {
@@ -190,7 +192,11 @@
 
             response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
 
-            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipTypes, _shipTypes);
+            }
         }
         catch (Exception e)
         {

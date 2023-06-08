@@ -435,6 +435,9 @@
 
                     return;
                 }
+                
+                await LocalStorageService.RemoveAsync(SavedDataSections.HarborPhotos + "-" + Id);
+                await LocalStorageService.RemoveAsync(SavedDataSections.HarborDocuments + "-" + Id);
 
                 NavManager.NavigateTo(PageNavigateConstants.HomePage);
             }
@@ -551,6 +554,7 @@
 
                 response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
                 _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.HarborPhotos + "-" + Id, _currentHarborPhotos);
             }
             else
             {
@@ -606,6 +610,7 @@
                 _documentContent = default;
                 response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
                 _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.HarborPhotos + "-" + Id, _currentHarborPhotos);
             }
             else
             {
@@ -727,6 +732,7 @@
 
                 response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
                 _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.HarborDocuments + "-" + Id, _currentHarborDocuments);
             }
             else
             {
@@ -783,6 +789,7 @@
 
                 response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
                 _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.HarborDocuments + "-" + Id, _currentHarborDocuments);
             }
             else
             {
@@ -913,6 +920,11 @@
             HttpResponseMessage response;
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            
+            _currentHarborPhotos = await LocalStorageService.GetAsync<List<HarborPhotoDto>>(SavedDataSections.HarborPhotos + "-" + Id) 
+                                                  ?? new List<HarborPhotoDto>();
+            _currentHarborDocuments = await LocalStorageService.GetAsync<List<HarborDocumentDto>>(SavedDataSections.HarborDocuments + "-" + Id) 
+                                      ?? new List<HarborDocumentDto>();
 
             if (!string.IsNullOrEmpty(token))
             {
@@ -951,11 +963,20 @@
 
             response = await Client.GetAsync(ApiRoutes.Harbor.Photos + "?id=" + Id);
 
-            _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _currentHarborPhotos = await response.Content.ReadFromJsonAsync<List<HarborPhotoDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.HarborPhotos + "-" + Id, _currentHarborPhotos);
+            }
+
 
             response = await Client.GetAsync(ApiRoutes.Harbor.Documents + "?id=" + Id);
 
-            _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _currentHarborDocuments = await response.Content.ReadFromJsonAsync<List<HarborDocumentDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.HarborDocuments + "-" + Id, _currentHarborDocuments);
+            }
         }
         catch (Exception e)
         {

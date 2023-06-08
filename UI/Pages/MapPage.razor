@@ -175,15 +175,29 @@
             CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
+            _harbors = await LocalStorageService.GetAsync<List<HarborPreviewDataDto>>(SavedDataSections.AllHarborsForMap)
+                       ?? new List<HarborPreviewDataDto>();
+            
+            _shipTypes = await LocalStorageService.GetAsync<List<ShipTypeDto>>(SavedDataSections.ShipTypes) 
+                         ?? new List<ShipTypeDto>();
+
             var response = await Client.GetAsync(ApiRoutes.Harbor.Controller);
 
-            _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
-
+            if (response.IsSuccessStatusCode)
+            {
+                _harbors = await response.Content.ReadFromJsonAsync<List<HarborPreviewDataDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.AllHarborsForMap, _harbors);
+            }
+            
             _filteredHarbors = _harbors;
 
             response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
 
-            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipTypes, _shipTypes);
+            }
 
             await JSRuntime.InvokeVoidAsyncIgnoreErrors(
                 "initMap",

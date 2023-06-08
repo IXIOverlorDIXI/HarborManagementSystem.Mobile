@@ -259,6 +259,8 @@
                     return;
                 }
 
+                await LocalStorageService.RemoveAsync(SavedDataSections.ShipPhoto + "-" + Id);
+                
                 NavManager.NavigateTo(PageNavigateConstants.HomePage);
             }
         }
@@ -339,7 +341,6 @@
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
 
-
             var fileDto = new ShipPhotoDataDto()
             {
                 FileNameWithExtension = _file.Name,
@@ -373,6 +374,7 @@
                 _file = null;
                 _fileContent = default;
                 _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipPhoto + "-" + Id, _currentShipPhoto);
             }
             else
             {
@@ -427,6 +429,7 @@
                 _file = null;
                 _fileContent = default;
                 _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipPhoto + "-" + Id, _currentShipPhoto);
             }
             else
             {
@@ -533,6 +536,10 @@
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            _currentShipPhoto = await LocalStorageService.GetAsync<FileDto>(SavedDataSections.ShipPhoto + "-" + Id) 
+                                ?? new FileDto();
+            _shipTypes = await LocalStorageService.GetAsync<List<ShipTypeDto>>(SavedDataSections.ShipTypes) 
+                         ?? new List<ShipTypeDto>();
 
             if (string.IsNullOrEmpty(token))
             {
@@ -564,11 +571,19 @@
 
             response = await Client.GetAsync(ApiRoutes.Ship.Photo + "?id=" + Id);
 
-            _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
-
+            if (response.IsSuccessStatusCode)
+            {
+                _currentShipPhoto = await response.Content.ReadFromJsonAsync<FileDto>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipPhoto + "-" + Id, _currentShipPhoto);
+            }
+            
             response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
 
-            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipTypes, _shipTypes);
+            }
         }
         catch (Exception e)
         {

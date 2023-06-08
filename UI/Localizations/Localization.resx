@@ -2193,4 +2193,22 @@ Join our service now and discover a new level of convenience and security in bay
     <data name="WifiConnection_Text" xml:space="preserve">
         <value>Network is not working</value>
     </data>
+    <data name="HarborPage_BerthTab_EmptyData" xml:space="preserve">
+        <value>Empty data</value>
+    </data>
+    <data name="NavBarComponent_ClearCache" xml:space="preserve">
+        <value>Clear cache</value>
+    </data>
+    <data name="MessageComponent_DialogSubmitButton" xml:space="preserve">
+        <value>Submit</value>
+    </data>
+    <data name="MessageComponent_DialogMessage" xml:space="preserve">
+        <value>Message</value>
+    </data>
+    <data name="MessageComponent_DialogTitle" xml:space="preserve">
+        <value>Alert</value>
+    </data>
+    <data name="ClearCache_Message" xml:space="preserve">
+        <value>Cache cleared successfully</value>
+    </data>
 </root>

@@ -95,6 +95,11 @@
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            
+            _subscriptionChecks = await LocalStorageService.GetAsync<List<SubscriptionCheckDto>>(SavedDataSections.PaymentForSubscriptions)
+                             ?? new List<SubscriptionCheckDto>();
+            _bookingChecks = await LocalStorageService.GetAsync<List<BookingCheckDataDto>>(SavedDataSections.PaymentForBookings)
+                                  ?? new List<BookingCheckDataDto>();
 
             if (string.IsNullOrEmpty(token))
             {
@@ -115,12 +120,20 @@
             }
 
             response = await Client.GetAsync(ApiRoutes.SubscriptionCheck.Controller + "?username=" + userDto.Username);
-
-            _subscriptionChecks = await response.Content.ReadFromJsonAsync<List<SubscriptionCheckDto>>();
-
+            
+            if (response.IsSuccessStatusCode)
+            {
+                _subscriptionChecks = await response.Content.ReadFromJsonAsync<List<SubscriptionCheckDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.PaymentForSubscriptions, _subscriptionChecks);
+            }
+            
             response = await Client.GetAsync(ApiRoutes.BookingCheck.Controller + "?username=" + userDto.Username);
-
-            _bookingChecks = await response.Content.ReadFromJsonAsync<List<BookingCheckDataDto>>();
+            
+            if (response.IsSuccessStatusCode)
+            {
+                _bookingChecks = await response.Content.ReadFromJsonAsync<List<BookingCheckDataDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.PaymentForBookings, _bookingChecks);
+            }
         }
         catch (Exception e)
         {

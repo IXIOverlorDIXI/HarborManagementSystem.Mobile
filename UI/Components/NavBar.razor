@@ -31,7 +31,7 @@
         <MudButton Variant="Variant.Outlined" @onclick="navigateToMapPage" FullWidth="true" Style="background-color: aliceblue">
             @Localization["NavBarComponent_Map"]
         </MudButton>
-        
+
         @if (UserAuthorizationHelpService.IsUserAuthenticated ?? false)
         {
             <MudButton Variant="Variant.Outlined" @onclick="navigateToHomePage" FullWidth="true" Style="background-color: aliceblue">
@@ -56,6 +56,10 @@
                 @Localization["NavBarComponent_Authorization"]
             </MudButton>
         }
+        <MudButton Variant="Variant.Outlined" @onclick="clearCache" FullWidth="true" Style="background-color: aliceblue">
+            @Localization["NavBarComponent_ClearCache"]
+        </MudButton>
+
     </MudPaper>
 </div>
 
@@ -69,13 +73,54 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
+    private async Task clearCache()
+    {
+        try
+        {
+            var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            LocalStorageService.ClearStorage();
+            await LocalStorageService.SetAsync(SavedDataSections.Token, token);
+
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Message", Localization["ClearCache_Message"].Value);
+
+            await (await DialogService.ShowAsync<MessageDialog>(
+                Localization["MessageComponent_DialogTitle"],
+                parameters, options)).Result;
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
+    }
+
     private async Task logout()
     {
-        UserAuthorizationHelpService.Logout();
-        LocalStorageService.ClearStorage();
-        NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        try
+        {
+            UserAuthorizationHelpService.Logout();
+            LocalStorageService.ClearStorage();
+            NavManager.NavigateTo(PageNavigateConstants.IndexPage);
+        }
+        catch (Exception e)
+        {
+            var parameters = new DialogParameters();
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            parameters.Add("Error", e.Message);
+
+            await (await DialogService.ShowAsync<ErrorDialog>(
+                Localization["GlobalErrorHandling_ErrorDialog_Title"],
+                parameters, options)).Result;
+        }
     }
-    
+
     private void navigateToBookingHistoryPage() =>
         NavManager.NavigateTo(
             string.Format("{0}/{1}",
@@ -91,7 +136,7 @@
     private void navigateToMapPage() => NavManager.NavigateTo(PageNavigateConstants.MapPage);
 
     private void navigateToHomePage() => NavManager.NavigateTo(PageNavigateConstants.HomePage);
-    
+
     private void navigateToPaymentHistoryPage() => NavManager.NavigateTo(PageNavigateConstants.PaymentHistoryPage);
 
     private void navigateToAuthorizationPage() => NavManager.NavigateTo(PageNavigateConstants.AuthorizationPage);

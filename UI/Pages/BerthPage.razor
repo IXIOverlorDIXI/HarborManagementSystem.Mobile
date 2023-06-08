@@ -5,7 +5,6 @@
 @using System.Net.Http.Json
 @using Domain.Dtos
 @using IoC.Constants
-@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Extensions.Localization
 @using UI.FormEntities
 @using UI.FormEntities.Harbor
@@ -243,8 +242,7 @@
         .Create<ShipTypeDto>(
             x => x.Id.GetHashCode(),
             (x, y) => x.Id.Equals(y.Id));
-
-
+    
     private BerthForm _berthForm = new BerthForm();
     private List<ShipTypeDto> _shipTypes { get; set; } = new List<ShipTypeDto>();
     private string _berthFormError = "";
@@ -305,6 +303,8 @@
 
                     return;
                 }
+                
+                await LocalStorageService.RemoveAsync(SavedDataSections.BerthPhotos + "-" + BerthId);
 
                 NavManager.NavigateTo((string.Format("{0}/{1}",
                     PageNavigateConstants.HarborPage,
@@ -419,6 +419,7 @@
 
                 response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
                 _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.BerthPhotos + "-" + BerthId, _currentBerthPhotos);
             }
             else
             {
@@ -472,6 +473,7 @@
                 _berthPhotoDeleteErrorAlertVisible = false;
                 response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
                 _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.BerthPhotos + "-" + BerthId, _currentBerthPhotos);
             }
             else
             {
@@ -589,6 +591,9 @@
             HttpResponseMessage response;
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            
+            _shipTypes = await LocalStorageService.GetAsync<List<ShipTypeDto>>(SavedDataSections.ShipTypes) ?? new List<ShipTypeDto>();
+            _currentBerthPhotos = await LocalStorageService.GetAsync<List<BerthPhotoDto>>(SavedDataSections.BerthPhotos + "-" + BerthId) ?? new List<BerthPhotoDto>();
 
             if (!string.IsNullOrEmpty(token))
             {
@@ -607,27 +612,38 @@
 
                 response = await Client.GetAsync(ApiRoutes.Berth.ById + "?id=" + BerthId);
 
-                var berthData = await response.Content.ReadFromJsonAsync<BerthPreviewDataDto>();
-
-                _berthForm = new BerthForm()
+                if (response.IsSuccessStatusCode)
                 {
-                    DisplayName = berthData.DisplayName,
-                    Description = berthData.Description,
-                    Price = berthData.Price,
-                    SuitableShipTypes = berthData.SuitableShipTypes
-                };
+                    var berthData = await response.Content.ReadFromJsonAsync<BerthPreviewDataDto>();
 
-                isOwner = berthData.IsOwner;
-                isAuthorizated = true;
+                    _berthForm = new BerthForm()
+                    {
+                        DisplayName = berthData.DisplayName,
+                        Description = berthData.Description,
+                        Price = berthData.Price,
+                        SuitableShipTypes = berthData.SuitableShipTypes
+                    };
+
+                    isOwner = berthData.IsOwner;
+                    isAuthorizated = true;
+                }
             }
 
             response = await Client.GetAsync(ApiRoutes.Berth.Photos + "?id=" + BerthId);
 
-            _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
-
+            if (response.IsSuccessStatusCode)
+            {
+                _currentBerthPhotos = await response.Content.ReadFromJsonAsync<List<BerthPhotoDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.BerthPhotos + "-" + BerthId, _currentBerthPhotos);
+            }
+            
             response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
 
-            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipTypes, _shipTypes);
+            }
         }
         catch (Exception e)
         {

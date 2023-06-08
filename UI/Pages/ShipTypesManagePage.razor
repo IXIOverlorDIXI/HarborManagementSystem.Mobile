@@ -219,7 +219,11 @@
 
             response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
 
-            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipTypes, _shipTypes);
+            }
         }
         catch (Exception e)
         {
@@ -272,7 +276,11 @@
 
             response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
 
-            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipTypes, _shipTypes);
+            }
         }
         catch (Exception e)
         {
@@ -338,7 +346,11 @@
 
                 response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
 
-                _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                if (response.IsSuccessStatusCode)
+                {
+                    _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                    await LocalStorageService.SetAsync(SavedDataSections.ShipTypes, _shipTypes);
+                }
 
                 if (shipType.Id.Equals(_shipTypeFormEdit.Id))
                 {
@@ -370,6 +382,8 @@
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
+            _shipTypes = await LocalStorageService.GetAsync<List<ShipTypeDto>>(SavedDataSections.ShipTypes) 
+                         ?? new List<ShipTypeDto>();
 
             Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
@@ -386,7 +400,11 @@
 
             response = await Client.GetAsync(ApiRoutes.ShipType.Controller);
 
-            _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _shipTypes = await response.Content.ReadFromJsonAsync<List<ShipTypeDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.ShipTypes, _shipTypes);
+            }
         }
         catch (Exception e)
         {

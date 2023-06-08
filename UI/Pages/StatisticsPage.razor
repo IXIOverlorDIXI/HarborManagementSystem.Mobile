@@ -88,6 +88,18 @@
             CultureInfo.DefaultThreadCurrentCulture = LocalizationService.GetCulture();
             CultureInfo.DefaultThreadCurrentUICulture = LocalizationService.GetCulture();
 
+            _relativePositionMeteringData = await LocalStorageService
+                .GetAsync<List<RelativePositionMeteringDto>>(SavedDataSections.RelativePositionMeteringData + "-" + Id)
+                                            ?? new List<RelativePositionMeteringDto>();
+            
+            _storageEnvironmentalConditionData = await LocalStorageService
+                .GetAsync<List<StorageEnvironmentalConditionDto>>(SavedDataSections.StorageEnvironmentalConditionData + "-" + Id)
+                                            ?? new List<StorageEnvironmentalConditionDto>();
+            
+            _environmentalConditionData = await LocalStorageService
+                .GetAsync<List<EnvironmentalConditionDto>>(SavedDataSections.EnvironmentalConditionData + "-" + Id)
+                                            ?? new List<EnvironmentalConditionDto>();
+
             var token = await LocalStorageService.GetAsync<string>(SavedDataSections.Token);
 
             if (string.IsNullOrEmpty(token))
@@ -100,15 +112,27 @@
 
             var response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.RelativePositionMetering.Controller, Id));
 
-            _relativePositionMeteringData = await response.Content.ReadFromJsonAsync<List<RelativePositionMeteringDto>>();
+            if (response.IsSuccessStatusCode)
+            {
+                _relativePositionMeteringData = await response.Content.ReadFromJsonAsync<List<RelativePositionMeteringDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.RelativePositionMeteringData + "-" + Id, _relativePositionMeteringData);
+            }
 
             response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.EnvironmentalCondition.Controller, Id));
-
-            _environmentalConditionData = await response.Content.ReadFromJsonAsync<List<EnvironmentalConditionDto>>();
+            
+            if (response.IsSuccessStatusCode)
+            {
+                _environmentalConditionData = await response.Content.ReadFromJsonAsync<List<EnvironmentalConditionDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.EnvironmentalConditionData + "-" + Id, _environmentalConditionData);
+            }
 
             response = await Client.GetAsync(string.Format("{0}?id={1}", ApiRoutes.StorageEnvironmentalCondition.Controller, Id));
-
-            _storageEnvironmentalConditionData = await response.Content.ReadFromJsonAsync<List<StorageEnvironmentalConditionDto>>();
+            
+            if (response.IsSuccessStatusCode)
+            {
+                _storageEnvironmentalConditionData = await response.Content.ReadFromJsonAsync<List<StorageEnvironmentalConditionDto>>();
+                await LocalStorageService.SetAsync(SavedDataSections.StorageEnvironmentalConditionData + "-" + Id, _storageEnvironmentalConditionData);
+            }
         }
         catch (Exception e)
         {
