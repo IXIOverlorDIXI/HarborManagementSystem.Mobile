@@ -102,7 +102,7 @@
             <MudItem xs="12" sm="7" Class="mx-auto pa-6">
                 <MudCard>
                     <MudCardContent>
-                        <MudPaper Class="d-flex flex-row justify-center gap-4" Elevation="0">
+                        <MudPaper Class="d-flex flex-row overflow-auto gap-4" Elevation="0">
                             <MudPaper Class="d-flex flex-column gap-2" Elevation="0">
                                 <MudText Typo="@Typo.subtitle2">@Localization["ShipPage_ShipPhotoTab_CurrentShipPhotoTitle"]</MudText>
                                 <MudImage Src="@_currentShipPhoto.Url" Height="200" Width="200" ObjectFit="ObjectFit.Fill"/>
@@ -152,7 +152,7 @@
                             </MudPaper>
                             <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
                                 <MudPaper Class="d-flex flex-row justify-start flex-grow-1 gap-2" Elevation="0">
-                                    <MudFileUpload T="IBrowserFile" FilesChanged="HandleFileSelection" Accept=".jpg, .jpeg, .png">
+                                    <MudFileUpload T="IBrowserFile" FilesChanged="HandleFileSelection" Accept="" Class="overflow-auto">
                                         <ButtonTemplate>
                                             <MudFab HtmlTag="label"
                                                     Variant="@Variant.Filled"

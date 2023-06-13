@@ -161,7 +161,7 @@
                             <MudTabPanel Text="@Localization["BerthPage_BerthPhotosTab_UploadTab"]">
                                 <MudCard Style="width: 100%">
                                     <MudCardContent Style="width: 100%">
-                                        <MudPaper Class="d-flex flex-row justify-center align-content-center gap-4" Elevation="0">
+                                        <MudPaper Class="d-flex flex-row overflow-auto gap-4" Elevation="0">
                                             @if (_photo != null)
                                             {
                                                 <MudPaper Class="d-flex flex-column justify-center align-content-center gap-2" Elevation="0">
@@ -192,7 +192,7 @@
                                                 }
                                             </MudPaper>
                                             <MudPaper Class="d-flex justify-content-between flex-grow-1 gap-2" Elevation="0">
-                                                <MudFileUpload T="IBrowserFile" FilesChanged="HandlePhotoSelection" Accept=".jpg, .jpeg, .png">
+                                                <MudFileUpload T="IBrowserFile" FilesChanged="HandlePhotoSelection" Accept="">
                                                     <ButtonTemplate>
                                                         <MudFab HtmlTag="label"
                                                                 Variant="@Variant.Filled"
