@@ -27,7 +27,7 @@
                     DataMax="@_airPollutionMaximalData"
                     DataMin="@_airPollutionMinimalData"
                     DataAverage="@_airPollutionData"
-                    DataByOne="@(StorageEnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.AirPollution)) .ToList())"/>
+                    DataByOne="@(StorageEnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.AirPollution)).ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_WaterPollutionChart_DataByOneLocalizationKey"
@@ -38,7 +38,7 @@
                     DataMax="@_waterPollutionMaximalData"
                     DataMin="@_waterPollutionMinimalData"
                     DataAverage="@_waterPollutionData"
-                    DataByOne="@(StorageEnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.WaterPollution)) .ToList())"/>
+                    DataByOne="@(StorageEnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.WaterPollution)).ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_RadiationLevelChart_DataByOneLocalizationKey"
@@ -49,7 +49,7 @@
                     DataMax="@_radiationLevelMaximalData"
                     DataMin="@_radiationLevelMinimalData"
                     DataAverage="@_radiationLevelData"
-                    DataByOne="@(StorageEnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.RadiationLevel)) .ToList())"/>
+                    DataByOne="@(StorageEnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.RadiationLevel)).ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_StorageEnvironmentalCondition_ShipTemperatureChart_DataByOneLocalizationKey"
@@ -60,7 +60,7 @@
                     DataMax="@_shipTemperatureMaximalData"
                     DataMin="@_shipTemperatureMinimalData"
                     DataAverage="@_shipTemperatureData"
-                    DataByOne="@(StorageEnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.ShipTemperature)) .ToList())"/>
+                    DataByOne="@(StorageEnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.ShipTemperature)).ToList())"/>
             </MudPaper>
         }
         else

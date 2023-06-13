@@ -128,7 +128,7 @@
                                         }
                                     </MudPaper>
                                     <MudPaper Class="d-flex flex-column gap-2" Style="width: 100%" Elevation="0">
-                                        <MudPaper Class="d-flex justify-space-between gap-2" Elevation="0">
+                                        <MudPaper Class="d-flex flex-column gap-2" Elevation="0">
                                             <MudText Typo="@Typo.h5">@harbor.DisplayName</MudText>
                                             <MudPaper Class="d-flex flex-column align-center gap-1" Elevation="0">
                                                 <MudRating ReadOnly="true" SelectedValue="@((int)(harbor.AverageRate))"/>
@@ -149,7 +149,7 @@
                                         </MudText>
                                     </MudPaper>
                                 </MudPaper>
-                                <MudPaper Class="d-flex justify-start gap-2" MaxWidth="400" Elevation="0">
+                                <MudPaper Class="d-flex justify-start flex-wrap gap-2" MaxWidth="400" Elevation="0">
                                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Warning"
                                                OnClick="() => editHarbor(harbor)">
                                         @Localization["HomePage_UserPart_HarborPart_EditButton"]

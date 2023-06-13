@@ -27,7 +27,7 @@
                     DataMax="@_temperatureMaximalData"
                     DataMin="@_temperatureMinimalData"
                     DataAverage="@_temperatureData"
-                    DataByOne="@(EnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.Temperature)) .ToList())"/>
+                    DataByOne="@(EnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.Temperature)).ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_AtmospherePressureChart_DataByOneLocalizationKey"
@@ -38,7 +38,7 @@
                     DataMax="@_atmospherePressureMaximalData"
                     DataMin="@_atmospherePressureMinimalData"
                     DataAverage="@_atmospherePressureData"
-                    DataByOne="@(EnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.AtmospherePressure)) .ToList())"/>
+                    DataByOne="@(EnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.AtmospherePressure)).ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataByOneLocalizationKey"
@@ -49,7 +49,7 @@
                     DataMax="@_waveForceMaximalData"
                     DataMin="@_waveForceMinimalData"
                     DataAverage="@_waveForceData"
-                    DataByOne="@(EnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.WaveForce)) .ToList())"/>
+                    DataByOne="@(EnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.WaveForce)).ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_WaveForceChart_DataByOneLocalizationKey"
@@ -60,7 +60,7 @@
                     DataMax="@_waveForceMaximalData"
                     DataMin="@_waveForceMinimalData"
                     DataAverage="@_waveForceData"
-                    DataByOne="@(EnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.WaveForce)) .ToList())"/>
+                    DataByOne="@(EnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.WaveForce)).ToList())"/>
                 <LineChartDiagram
                     ChartDataAverageLocalizationKey="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataAverageLocalizationKey"
                     ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_WindSpeedChart_DataByOneLocalizationKey"
@@ -71,12 +71,12 @@
                     DataMax="@_windSpeedMaximalData"
                     DataMin="@_windSpeedMinimalData"
                     DataAverage="@_windSpeedData"
-                    DataByOne="@(EnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), x.WindSpeed)) .ToList())"/>
+                    DataByOne="@(EnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), x.WindSpeed)).ToList())"/>
                 <LineChartDiagram
                     ChartDataByOneLocalizationKey="StatisticsPage_EnvironmentalCondition_ShipRelativeWindDirectionChart_DataByOneLocalizationKey"
                     ChartTitleLocalizationKey="StatisticsPage_EnvironmentalCondition_ShipRelativeWindDirectionChart_TitleLocalizationKey"
                     GenericModeOff="true"
-                    DataByOne="@(EnvironmentalConditionData .OrderBy(x => x.MeteringDate) .TakeLast(20) .Select(x => new Tuple<string, double>(x.MeteringDate.ToString(), (int)x.ShipRelativeWindDirection)) .ToList())"/>
+                    DataByOne="@(EnvironmentalConditionData.OrderBy(x => x.MeteringDate).TakeLast(5).Select(x => new Tuple<string, double>(x.MeteringDate.ToString("HH:mm:ss"), (int)x.ShipRelativeWindDirection)).ToList())"/>
 
             </MudPaper>
         }
